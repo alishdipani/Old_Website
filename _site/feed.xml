@@ -5,9 +5,133 @@
     <description>Homepage</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Sun, 26 Aug 2018 19:05:20 +0530</pubDate>
-    <lastBuildDate>Sun, 26 Aug 2018 19:05:20 +0530</lastBuildDate>
+    <pubDate>Sat, 01 Sep 2018 04:48:57 +0530</pubDate>
+    <lastBuildDate>Sat, 01 Sep 2018 04:48:57 +0530</lastBuildDate>
     <generator>Jekyll v3.8.3</generator>
+    
+      <item>
+        <title>Neural Style Transfer on Audio Signals</title>
+        <description>&lt;h1 id=&quot;introduction&quot;&gt;&lt;ins&gt;Introduction&lt;/ins&gt;&lt;/h1&gt;
+
+&lt;p&gt;“Style Transfer” on images has recently become very popular and an active research topic, this shows how Convolutional Neural Networks(CNNs) power to adapt to a great variety of tasks. To further explore the adaptability of CNNs which work on non-sequential data like images, CNNs can be used for sequential data considering them as non-sequential for example, using CNNs on audio signals. So, further extending Style Transfer to audio signals, we test how CNNs can be used on sequential data.&lt;/p&gt;
+
+&lt;h1 id=&quot;neural-style-transfer-on-images&quot;&gt;&lt;ins&gt;Neural Style Transfer on Images&lt;/ins&gt;&lt;/h1&gt;
+
+&lt;p&gt;“Neural Style Transfer” was originally made for images, the idea is to use a CNN model for extracting the style of an image called style image and content of another image called content image and generating a new image having the style of the style image and content of the content image. This is done by encoding the two images using a CNN Model and then taking a white noise image and minimizing the loss between this image and content and style images so that it has the content same as the content image and style as style image. &lt;br /&gt;&lt;br /&gt;
+Let &lt;script type=&quot;math/tex&quot;&gt;\vec{p}&lt;/script&gt; be the content image,  &lt;script type=&quot;math/tex&quot;&gt;\vec{a}&lt;/script&gt; be the style image and &lt;script type=&quot;math/tex&quot;&gt;\vec{x}&lt;/script&gt; be the white noise image (i.e. the generated image) which will be the final image.&lt;br /&gt;
+So, total loss is sum of content loss and style loss.&lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \beta L_{style}(\vec{a},\vec{x})&lt;/script&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cnn-model&quot;&gt;CNN Model&lt;/h3&gt;
+
+&lt;p&gt;A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://www.pyimagesearch.com/wp-content/uploads/2018/08/neural_style_transfer_gatys.jpg&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;content-loss&quot;&gt;Content Loss&lt;/h3&gt;
+
+&lt;!---
+Add i,j and the dimensions of images
+---&gt;
+
+&lt;p&gt;For a layer &lt;script type=&quot;math/tex&quot;&gt;l&lt;/script&gt; and the input image be &lt;script type=&quot;math/tex&quot;&gt;\vec{x}&lt;/script&gt;.&lt;br /&gt;
+&lt;script type=&quot;math/tex&quot;&gt;L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{ij})^{2}&lt;/script&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;style-loss&quot;&gt;Style Loss&lt;/h3&gt;
+
+&lt;!---
+Add Gram Matrix Formula and style loss formula
+---&gt;
+
+&lt;p&gt;For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix&lt;/p&gt;
+
+&lt;h3 id=&quot;hyperparameter-tuning&quot;&gt;Hyperparameter tuning&lt;/h3&gt;
+
+&lt;p&gt;To calculate &lt;script type=&quot;math/tex&quot;&gt;L_{total}&lt;/script&gt;, &lt;script type=&quot;math/tex&quot;&gt;L_{content}&lt;/script&gt; is weighted by &lt;script type=&quot;math/tex&quot;&gt;\alpha&lt;/script&gt; and &lt;script type=&quot;math/tex&quot;&gt;L_{style}&lt;/script&gt; is weighted by &lt;script type=&quot;math/tex&quot;&gt;\beta&lt;/script&gt;.&lt;br /&gt;
+The ratio of &lt;script type=&quot;math/tex&quot;&gt;\alpha/\beta&lt;/script&gt; is generally kept &lt;script type=&quot;math/tex&quot;&gt;10^{-3} or 10^{-4}&lt;/script&gt;, this prevents the style from dominating and therefore preventing the loss of content.&lt;/p&gt;
+
+&lt;h1 id=&quot;neural-style-transfer-on-audio-signals&quot;&gt;&lt;ins&gt;Neural Style Transfer on Audio Signals&lt;/ins&gt;&lt;/h1&gt;
+
+&lt;p&gt;The base idea for Neural Style algorithm for audio signals is same as for images, the extracted style of te style audio is to be applied to the generated audio. Here, the content audio is directly used for generation instead of noise audio as this prevents calculation of content loss and eliminates the noise from the generated audio.&lt;/p&gt;
+
+&lt;h3 id=&quot;model-selection&quot;&gt;Model Selection&lt;/h3&gt;
+&lt;p&gt;For Audio signals 1 Dimensional Convolutions are used as they have different spatial features than images. So, models having 1-D CNN layers is used.&lt;br /&gt;
+It is observed that shallow models perform better than deep models and so a shallow model having only one layer but high filters is used.&lt;/p&gt;
+
+&lt;h3 id=&quot;pre-processing&quot;&gt;Pre-processing&lt;/h3&gt;
+&lt;p&gt;An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals.&lt;br /&gt;
+So, Short time fourier transform is used on the audios to convert them to frequency domain.&lt;/p&gt;
+
+&lt;h3 id=&quot;post-processing&quot;&gt;Post-processing&lt;/h3&gt;
+&lt;p&gt;After generation of audio phase reconstruction is done so as to convert the audio back to time domain from frequency domain.
+Also, instead of using white noise to generate the final audio, the content audio is used which also prevents calculations as content loss is no longer needed, only style loss is used which is similar to images.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/7c592e7e00422dc7a76ead5932e34eafb5bef704/2-Figure2-1.png&quot; alt=&quot;alt text&quot; /&gt;&lt;/p&gt;
+
+&lt;!---
+# &lt;ins&gt;Implementation&lt;/ins&gt;
+---&gt;
+
+&lt;h1 id=&quot;technology-overview&quot;&gt;&lt;ins&gt;Technology Overview&lt;/ins&gt;&lt;/h1&gt;
+
+&lt;p&gt;Python 2.7 is used for implementation and the model is implemented using Deep Learning library PyTorch. Librosa is used for audio analysis. The model is executed on Intel® AI DevCloud which is 3x to 4x faster than the workstation being used, Intel® AI DevCloud runs the models and processes on high-performance and effecient Intel® Xeon® processors.&lt;/p&gt;
+
+&lt;!---
+# &lt;ins&gt;Conclusion&lt;/ins&gt;
+
+Convolutional Neural Networks 
+
+---&gt;
+&lt;h1 id=&quot;future-work&quot;&gt;&lt;ins&gt;Future Work&lt;/ins&gt;&lt;/h1&gt;
+
+&lt;p&gt;With the coming of new generative models like Generative Adverserial Networks the neural style transfer algorithm can be modified and can be used for better results.&lt;/p&gt;
+
+&lt;h1 id=&quot;references&quot;&gt;&lt;ins&gt;References&lt;/ins&gt;&lt;/h1&gt;
+
+&lt;h3 id=&quot;papers-&quot;&gt;Papers :&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. “Image style transfer using convolutional neural networks.” Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016.&lt;/li&gt;
+  &lt;li&gt;Grinstein, Eric, et al. “Audio style transfer.” arXiv preprint arXiv:1710.11385 (2017).&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;blogs-&quot;&gt;Blogs :&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://dmitryulyanov.github.io/audio-texture-synthesis-and-style-transfer/&quot;&gt;Audio texture synthesis and style transfer by Dmitry Ulyanov and Vadim Lebedev&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;code-implementations-&quot;&gt;Code Implementations :&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;http://pytorch.org/tutorials/advanced/neural_style_tutorial.html#sphx-glr-advanced-neural-style-tutorial-py&quot;&gt;Advanced Pytorch Tutorial for Neural Style Transfer&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;technical-components-&quot;&gt;Technical Components :&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://librosa.github.io/librosa/&quot;&gt;Librosa&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://pytorch.org/&quot;&gt;Pytorch&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://software.intel.com/en-us/ai-academy/devcloud&quot;&gt;Intel AI DevCloud&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;project-resources-&quot;&gt;Project Resources :&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;https://devmesh.intel.com/projects/neural-style-transfer-on-audio-signals&quot;&gt;Intel DevMesh Project&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/alishdipani/Neural-Style-Transfer-Audio&quot;&gt;Github Repository&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Thu, 30 Aug 2018 03:02:18 +0530</pubDate>
+        <link>http://localhost:4000/signal_processing/2018/08/30/Neural-Style-Transfer-Audio/</link>
+        <guid isPermaLink="true">http://localhost:4000/signal_processing/2018/08/30/Neural-Style-Transfer-Audio/</guid>
+        
+        <category>Project</category>
+        
+        
+        <category>Signal_Processing</category>
+        
+      </item>
     
   </channel>
 </rss>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neural Style Transfer on Audio Signals</title>
+<meta name="description" content="Homepage">
+
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" media="all" href="/css/style.css" />
+<link rel="stylesheet" type="text/css" media="all" href="/css/jquery.mmenu.all.css" />
+<link rel="stylesheet" href="/css/highlightjs.piperita.css">
+
+<!-- Favicons generated at http://realfavicongenerator.net/ -->
+<link rel="apple-touch-icon" sizes="57x57" href="/favicons/apple-touch-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/favicons/apple-touch-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/favicons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/favicons/apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/favicons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/favicons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/favicons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon-180x180.png">
+<link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/favicons/android-chrome-192x192.png" sizes="192x192">
+<link rel="icon" type="image/png" href="/favicons/favicon-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
+<link rel="manifest" href="/favicons/manifest.json">
+<link rel="shortcut icon" href="/favicons/favicon.ico">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-TileImage" content="/favicons/mstile-144x144.png">
+<meta name="msapplication-config" content="/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+
+
+<!-- MathJax for LaTeX -->
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</head>
+
+
+    <body>
+
+    <nav id="my-menu">
+  <div>
+    <p>Alish Dipani</p>
+
+    <ul class="pages">
+      <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+      <li><a href="/posts/"><i class="fa fa-archive"></i> All Posts</a></li>
+      <li><a href="/search/"><i class="fa fa-search"></i> Search</a></li>
+    </ul>
+
+    <p class="links">
+  
+  <a href="https://www.linkedin.com/in/alish-dipani/" target="_new"><i class="fa fa-linkedin"></i></a>
+  
+  
+  
+  <a href="https://github.com/alishdipani" target="_new"><i class="fa fa-github-alt"></i></a>
+  
+  
+  
+  
+  <a href="https://devmesh.intel.com/users/alish-dipani" target="_new"><i class="fa fa-th-large"></i></a>
+  
+  <a href="https://drive.google.com/open?id=1n93N_m47miXbX5KnYSLxW8JbxBOlPnlo" target="_new"><i class="fa fa-download"></i></a>
+  
+  <a href="mailto: f20160005@goa.bits-pilani.ac.in" target="_new"><i class="fa fa-at"></i></a>
+  
+  <a href="/feed.xml" target="_new"><i class="fa fa-rss"></i></a>
+</p>
+
+  </div>
+</nav>
+<div class="menu-button" href="#menu"><i class="fa fa-bars"></i></div>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      
+
+<div class="container-fluid single">
+  <div class="row">
+
+    <div itemscope itemtype="http://schema.org/Article" class="col-md-12 article">
+      
+      <div class="thumb">
+        <i class="fa fa-music fa-4x"></i>
+      </div>
+      
+
+      <h1 class="header" itemprop="name">Neural Style Transfer on Audio Signals</h1>
+
+      <div class="author">
+        <small><i>
+          
+          on <span itemprop="datePublished" content="2014-08-28">August 30, 2018</span>
+           under Signal_Processing
+        </i></small>
+      </div>
+
+      <div class="read-time">
+        <small>
+          4 minute read
+        </small>
+      </div>
+
+      <div class="content-panel content">
+
+        
+
+        <span itemprop="articleBody"><h1 id="introduction"><ins>Introduction</ins></h1>
+
+<p>“Style Transfer” on images has recently become very popular and an active research topic, this shows how Convolutional Neural Networks(CNNs) power to adapt to a great variety of tasks. To further explore the adaptability of CNNs which work on non-sequential data like images, CNNs can be used for sequential data considering them as non-sequential for example, using CNNs on audio signals. So, further extending Style Transfer to audio signals, we test how CNNs can be used on sequential data.</p>
+
+<h1 id="neural-style-transfer-on-images"><ins>Neural Style Transfer on Images</ins></h1>
+
+<p>“Neural Style Transfer” was originally made for images, the idea is to use a CNN model for extracting the style of an image called style image and content of another image called content image and generating a new image having the style of the style image and content of the content image. This is done by encoding the two images using a CNN Model and then taking a white noise image and minimizing the loss between this image and content and style images so that it has the content same as the content image and style as style image. <br /><br />
+Let <script type="math/tex">\vec{p}</script> be the content image,  <script type="math/tex">\vec{a}</script> be the style image and <script type="math/tex">\vec{x}</script> be the white noise image (i.e. the generated image) which will be the final image.<br />
+So, total loss is sum of content loss and style loss.<br />
+<script type="math/tex">L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \beta L_{style}(\vec{a},\vec{x})</script></p>
+
+<h3 id="cnn-model">CNN Model</h3>
+
+<p>A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers.</p>
+
+<p><img src="https://www.pyimagesearch.com/wp-content/uploads/2018/08/neural_style_transfer_gatys.jpg" alt="alt text" /></p>
+
+<h3 id="content-loss">Content Loss</h3>
+
+<!---
+Add i,j and the dimensions of images
+--->
+
+<p>For a layer <script type="math/tex">l</script> and the input image be <script type="math/tex">\vec{x}</script>.<br />
+<script type="math/tex">L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{ij})^{2}</script></p>
+
+<h3 id="style-loss">Style Loss</h3>
+
+<!---
+Add Gram Matrix Formula and style loss formula
+--->
+
+<p>For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix</p>
+
+<h3 id="hyperparameter-tuning">Hyperparameter tuning</h3>
+
+<p>To calculate <script type="math/tex">L_{total}</script>, <script type="math/tex">L_{content}</script> is weighted by <script type="math/tex">\alpha</script> and <script type="math/tex">L_{style}</script> is weighted by <script type="math/tex">\beta</script>.<br />
+The ratio of <script type="math/tex">\alpha/\beta</script> is generally kept <script type="math/tex">10^{-3} or 10^{-4}</script>, this prevents the style from dominating and therefore preventing the loss of content.</p>
+
+<h1 id="neural-style-transfer-on-audio-signals"><ins>Neural Style Transfer on Audio Signals</ins></h1>
+
+<p>The base idea for Neural Style algorithm for audio signals is same as for images, the extracted style of te style audio is to be applied to the generated audio. Here, the content audio is directly used for generation instead of noise audio as this prevents calculation of content loss and eliminates the noise from the generated audio.</p>
+
+<h3 id="model-selection">Model Selection</h3>
+<p>For Audio signals 1 Dimensional Convolutions are used as they have different spatial features than images. So, models having 1-D CNN layers is used.<br />
+It is observed that shallow models perform better than deep models and so a shallow model having only one layer but high filters is used.</p>
+
+<h3 id="pre-processing">Pre-processing</h3>
+<p>An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals.<br />
+So, Short time fourier transform is used on the audios to convert them to frequency domain.</p>
+
+<h3 id="post-processing">Post-processing</h3>
+<p>After generation of audio phase reconstruction is done so as to convert the audio back to time domain from frequency domain.
+Also, instead of using white noise to generate the final audio, the content audio is used which also prevents calculations as content loss is no longer needed, only style loss is used which is similar to images.</p>
+
+<p><img src="https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/7c592e7e00422dc7a76ead5932e34eafb5bef704/2-Figure2-1.png" alt="alt text" /></p>
+
+<!---
+# <ins>Implementation</ins>
+--->
+
+<h1 id="technology-overview"><ins>Technology Overview</ins></h1>
+
+<p>Python 2.7 is used for implementation and the model is implemented using Deep Learning library PyTorch. Librosa is used for audio analysis. The model is executed on Intel® AI DevCloud which is 3x to 4x faster than the workstation being used, Intel® AI DevCloud runs the models and processes on high-performance and effecient Intel® Xeon® processors.</p>
+
+<!---
+# <ins>Conclusion</ins>
+
+Convolutional Neural Networks 
+
+--->
+<h1 id="future-work"><ins>Future Work</ins></h1>
+
+<p>With the coming of new generative models like Generative Adverserial Networks the neural style transfer algorithm can be modified and can be used for better results.</p>
+
+<h1 id="references"><ins>References</ins></h1>
+
+<h3 id="papers-">Papers :</h3>
+
+<ol>
+  <li>Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. “Image style transfer using convolutional neural networks.” Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016.</li>
+  <li>Grinstein, Eric, et al. “Audio style transfer.” arXiv preprint arXiv:1710.11385 (2017).</li>
+</ol>
+
+<h3 id="blogs-">Blogs :</h3>
+
+<ol>
+  <li><a href="https://dmitryulyanov.github.io/audio-texture-synthesis-and-style-transfer/">Audio texture synthesis and style transfer by Dmitry Ulyanov and Vadim Lebedev</a></li>
+</ol>
+
+<h3 id="code-implementations-">Code Implementations :</h3>
+
+<ol>
+  <li><a href="http://pytorch.org/tutorials/advanced/neural_style_tutorial.html#sphx-glr-advanced-neural-style-tutorial-py">Advanced Pytorch Tutorial for Neural Style Transfer</a></li>
+</ol>
+
+<h3 id="technical-components-">Technical Components :</h3>
+
+<ol>
+  <li><a href="https://librosa.github.io/librosa/">Librosa</a></li>
+  <li><a href="https://pytorch.org/">Pytorch</a></li>
+  <li><a href="https://software.intel.com/en-us/ai-academy/devcloud">Intel AI DevCloud</a></li>
+</ol>
+
+<h3 id="project-resources-">Project Resources :</h3>
+
+<ol>
+  <li><a href="https://devmesh.intel.com/projects/neural-style-transfer-on-audio-signals">Intel DevMesh Project</a></li>
+  <li><a href="https://github.com/alishdipani/Neural-Style-Transfer-Audio">Github Repository</a></li>
+</ol>
+</span>
+
+        
+
+        
+
+        
+        <div class="tags">
+          <small>
+          <i class="fa fa-tags"></i>
+            Project
+          </small>
+        </div>
+        
+
+      </div>
+
+      
+
+      
+
+      
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="footer clearfix">
+  <div class="col-md-6">
+    
+  </div>
+  <div class="col-md-6">
+    
+  </div>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="/js/jquery.mmenu.min.all.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">
+   $(document).ready(function() {
+      $("#my-menu").mmenu().on( "closed.mm", function() {
+            $(".menu-button").show();
+         });
+      $(".menu-button").click(function() {
+        $(".menu-button").hide();
+        $("#my-menu").trigger("open.mm");
+      });
+   });
+</script>
+
+
+
+
+
+
+    </body>
+</html>
