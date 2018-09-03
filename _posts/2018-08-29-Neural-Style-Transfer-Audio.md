@@ -32,7 +32,7 @@ A deep CNN model is chosen to extract the features of images. Deep CNN models pr
 derivative?
 --->
 The content loss is the Mean squared error between the encoding of the white noise image and the content image.  
-For layer $$ l $$ and the input image $$ \vec{x} $$, let the number of filters be $$ N_{l} $$ and so the output(or encoded) image will have $$ N_{l} $$ feature maps, each of size $$ M_{l} $$, where $$ M_{l} $$ is the area i.e. height times width. So, the encoded image of layer can be stored in a matrix $$ F_{l}  \epsilon  R^{ N_{l}xM_{l} } $$. Where $$ F^{l}_{ij} $$ is the activation of $$ i^{th} $$ filter at position $$ j $$ in layer $$ l $$.  
+For a layer $$ l $$ and the input image $$ \vec{x} $$, let the number of filters be $$ N_{l} $$ and so the output(or encoded) image will have $$ N_{l} $$ feature maps, each of size $$ M_{l} $$, where $$ M_{l} $$ is the height times width. So, the encoded image of layer can be stored in a matrix $$ F_{l}  \epsilon  R^{ N_{l}xM_{l} } $$. Where $$ F^{l}_{ij} $$ is the activation of $$ i^{th} $$ filter at position $$ j $$ in layer $$ l $$.  
 $$ L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{ij})^{2}$$ 
 
 ### Style Loss 
