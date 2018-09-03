@@ -22,7 +22,7 @@ $$ L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \b
 
 ### CNN Model
 
-A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers. 
+A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers. Pre-trained model is used as they provide proper encoding.
 
 ![alt text](https://www.pyimagesearch.com/wp-content/uploads/2018/08/neural_style_transfer_gatys.jpg)
 
@@ -32,7 +32,7 @@ A deep CNN model is chosen to extract the features of images. Deep CNN models pr
 Add i,j and the dimensions of images
 --->
 
-For a layer $$ l $$ and the input image be $$ \vec{x} $$.  
+For a layer $$ l $$ and the input image $$ \vec{x} $$, let the number of filters be $$ N_{l} $$ and so the output( or encoded) image will have $$ N_{l} $$ feature maps, each of size $$ M_{l} $$, where $$ M_{l} $$ is the area i.e. height times width. So, the encoded image of layer can be stored in a matrix $$ F_{l} \epsilon R^{ N_{l}xM_{l} } $$. Where $$ F^{l}_{ij} $$ is the activation of $$ i^{th} $$ filter at position j in layer l.  
 $$ L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{ij})^{2}$$ 
 
 ### Style Loss 
