@@ -52,6 +52,7 @@ where $$ w_{l} $$ are the weighting factor of each layer.
 
 ### Hyperparameter tuning
 
+To calculate the style and content loss, standard error back-propogation is done.
 To calculate $$ L_{total} $$, $$ L_{content} $$ is weighted by $$ \alpha $$ and $$ L_{style} $$ is weighted by $$ \beta $$.  
 The ratio of $$ \frac{\alpha}{\beta} $$ is generally kept $$ 10^{-3} $$ or $$ 10^{-4} $$, this prevents the style from dominating and therefore preventing the loss of content.
 
