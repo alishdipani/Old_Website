@@ -42,7 +42,7 @@ Add Gram Matrix Formula and style loss formula
 --->
 
 For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix $$ G^{l} \epsilon R^{ N_{l}xN_{l} } $$, where $$ G^{l}_{ij} $$ is the inner product between the feature maps $$ i $$ adn $$ j $$ represented by vectors in layer $$ l $$.  
-$$ G^{l}_{ij}= /sum_{k}F^{l}_{ik}F^{l}_{jk} $$.  
+$$ G^{l}_{ij}= \sum_{k}F^{l}_{ik}F^{l}_{jk} $$.  
 
 
 
