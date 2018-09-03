@@ -29,10 +29,10 @@ A deep CNN model is chosen to extract the features of images. Deep CNN models pr
 ### Content Loss
 
 <!---
-Add i,j and the dimensions of images
+derivative?
 --->
 
-For a layer $$ l $$ and the input image $$ \vec{x} $$, let the number of filters be $$ N_{l} $$ and so the output( or encoded) image will have $$ N_{l} $$ feature maps, each of size $$ M_{l} $$, where $$ M_{l} $$ is the area i.e. height times width. So, the encoded image of layer can be stored in a matrix $$ F_{l} \epsilon R^{ N_{l}xM_{l} } $$. Where $$ F^{l}_{ij} $$ is the activation of $$ i^{th} $$ filter at position j in layer l.  
+For a layer $$ l $$ and the input image $$ \vec{x} $$, let the number of filters be $$ N_{l} $$ and so the output( or encoded) image will have $$ N_{l} $$ feature maps, each of size $$ M_{l} $$, where $$ M_{l} $$ is the area i.e. height times width. So, the encoded image of layer can be stored in a matrix $$ F_{l} \epsilon R^{ N_{l}xM_{l} } $$. Where $$ F^{l}_{ij} $$ is the activation of $$ i^{th} $$ filter at position $$ j $$ in layer $$ l $$.  
 $$ L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{ij})^{2}$$ 
 
 ### Style Loss 
@@ -41,13 +41,15 @@ $$ L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{i
 Add Gram Matrix Formula and style loss formula
 --->
 
-For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix
+For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix $$ G^{l} \epsilon R^{ N_{l}xN_{l} } $$, where $$ G^{l}_{ij} $$ is the inner product between the feature maps $$ i $$ adn $$ j $$ represented by vectors in layer $$ l $$.  
+$$ G^{l}_{ij}= /sum_{k}F^{l}_{ik}F^{l}_{jk} $$.  
+
 
 
 ### Hyperparameter tuning
 
 To calculate $$ L_{total} $$, $$ L_{content} $$ is weighted by $$ \alpha $$ and $$ L_{style} $$ is weighted by $$ \beta $$.  
-The ratio of $$ \alpha/\beta $$ is generally kept $$ 10^{-3} or 10^{-4} $$, this prevents the style from dominating and therefore preventing the loss of content.
+The ratio of $$ \alpha/\beta $$ is generally kept $$ 10^{-3} $$ or $$ 10^{-4} $$, this prevents the style from dominating and therefore preventing the loss of content.
 
 # <ins>Neural Style Transfer on Audio Signals</ins>
 
