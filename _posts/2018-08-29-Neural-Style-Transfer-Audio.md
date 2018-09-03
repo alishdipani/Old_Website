@@ -31,19 +31,21 @@ A deep CNN model is chosen to extract the features of images. Deep CNN models pr
 <!---
 derivative?
 --->
-
+The content loss is the Mean squared error between the encoding of the white noise image and the content image.  
 For a layer $$ l $$ and the input image $$ \vec{x} $$, let the number of filters be $$ N_{l} $$ and so the output( or encoded) image will have $$ N_{l} $$ feature maps, each of size $$ M_{l} $$, where $$ M_{l} $$ is the area i.e. height times width. So, the encoded image of layer can be stored in a matrix $$ F_{l} \epsilon R^{ N_{l}xM_{l} } $$. Where $$ F^{l}_{ij} $$ is the activation of $$ i^{th} $$ filter at position $$ j $$ in layer $$ l $$.  
 $$ L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{ij})^{2}$$ 
 
 ### Style Loss 
 
 <!---
-Add Gram Matrix Formula and style loss formula
+Add style loss formula, derivative ?
 --->
 
 For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix $$ G^{l} \epsilon R^{ N_{l}xN_{l} } $$, where $$ G^{l}_{ij} $$ is the inner product between the feature maps $$ i $$ adn $$ j $$ represented by vectors in layer $$ l $$.  
 $$ G^{l}_{ij}= \sum_{k}F^{l}_{ik}F^{l}_{jk} $$.  
-
+And so the Style loss is the Mean squared error between the gram matrices of Style image and the white noise image.  
+Let $$ \vec{a} $$ be the style image and $$ \vec{x} $$ be the white noise image. Let $$ A^{l} $$ and $$ X^{l} $$ be the style representations of of style image and white noise image in layer $$ l $$. So, Total style loss of a layer $$ l $$ is $$ E_{l} $$.  
+$$ E_{l} = \frac{\sum_{i,j}(X^{l}_{ij}-A^{l}_{ij})^{2}}{4N^{2}_{l}M^{2}_{l}} $$
 
 
 ### Hyperparameter tuning
