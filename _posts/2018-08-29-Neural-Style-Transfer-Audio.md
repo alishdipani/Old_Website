@@ -13,7 +13,7 @@ tags:
 
 "Style Transfer" on images has recently become very popular and an active research topic, this shows how Convolutional Neural Networks(CNNs) have the power to adapt to a great variety of tasks. Here, we extend and modify this algorithm for audio signals and use the power of CNNs and generate new audio from a style audio that can be the tune or the beat and a content audio that can be someone just speaking the lyrics of a song. 
 
-![Graph](https://github.com/alishdipani/Neural-Style-Transfer-Audio/blob/master/Figure_1.png)
+![alt text](https://github.com/alishdipani/Neural-Style-Transfer-Audio/blob/master/Figure_1.png)
 
 # <ins>Neural Style Transfer on Images</ins>
 
