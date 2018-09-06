@@ -26,7 +26,7 @@ $$ L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \b
 
 A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers. Pre-trained model is used as they provide proper encoding.
 
-![alt text](https://www.pyimagesearch.com/wp-content/uploads/2018/08/neural_style_transfer_gatys.jpg)
+![alt text](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/Neural_Style_Transfer_For_Audio/1.jpg)
 
 ### Content Loss
 
@@ -62,7 +62,7 @@ It is observed that shallow models perform better than deep models and so a shal
 ### Pre-processing
 An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals. The raw audio is converted to spectogram via Short Time Fourier Transform(STFT). Spectogram is a 2D Representation of a 1D signal, Spectogram has $$ C $$ channels and $$ S $$ samples for every channel. So, a spectogram can be considered as an $$ 1xS $$ image with $$ C $$ channels.
 
-![alt text](https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/7c592e7e00422dc7a76ead5932e34eafb5bef704/2-Figure2-1.png)
+![alt text](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/Neural_Style_Transfer_For_Audio/2.png)
 
 ### Content Loss
 
