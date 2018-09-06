@@ -11,11 +11,11 @@ tags:
 
 # <ins>Introduction</ins>
 
-"Style Transfer" on images has recently become very popular and an active research topic, this shows how Convolutional Neural Networks(CNNs) power to adapt to a great variety of tasks. To further explore the adaptability of CNNs which work on non-sequential data like images, CNNs can be used for sequential data considering them as non-sequential for example, using CNNs on audio signals. So, further extending Style Transfer to audio signals, we test how CNNs can be used on sequential data.
+"Style Transfer" on images has recently become very popular and an active research topic, this shows how Convolutional Neural Networks(CNNs) have the power to adapt to a great variety of tasks. Here, we extend and modify this algorithm for audio signals and use the power of CNNs and generate new audio from a style audio that can be the tune or the beat and a content audio that can be someone just speaking the lyrics of a song. 
 
 # <ins>Neural Style Transfer on Images</ins>
 
-"Neural Style Transfer" was originally made for images, the idea is to use a CNN model for extracting the style of an image called style image and content of another image called content image and generating a new image having the style of the style image and content of the content image. This is done by encoding the two images using a CNN Model and then taking a white noise image and minimizing the loss between this image and content and style images so that it has the content same as the content image and style as style image. <br><br>
+"Neural Style Transfer" was originally for images, the idea is to use a CNN model for extracting the style of an image called style image and content of another image called content image and generating a new image having the style of the style image and content of the content image. This is done by encoding the two images using a CNN Model and then taking a white noise image and minimizing the loss between this image and content and style images so that it has the content same as the content image and style as style image. <br><br>
 Let $$ \vec{p} $$ be the content image,  $$ \vec{a} $$ be the style image and $$ \vec{x} $$ be the white noise image (i.e. the generated image) which will be the final image.  
 So, total loss is sum of content loss and style loss.  
 $$ L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \beta L_{style}(\vec{a},\vec{x})$$
@@ -28,20 +28,13 @@ A deep CNN model is chosen to extract the features of images. Deep CNN models pr
 
 ### Content Loss
 
-<!---
-derivative?
---->
 The content loss is the Mean squared error between the encoding of the white noise image and the content image.  
 For a layer $$ l $$ and the input image $$ \vec{x} $$, let the number of filters be $$ N_{l} $$ and so the output(or encoded) image will have $$ N_{l} $$ feature maps, each of size $$ M_{l} $$, where $$ M_{l} $$ is the height times width. So, the encoded image of layer can be stored in a matrix $$ F_{l}  \epsilon  R^{ N_{l}xM_{l} } $$. Where $$ F^{l}_{ij} $$ is the activation of $$ i^{th} $$ filter at position $$ j $$ in layer $$ l $$.  
 $$ L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{ij})^{2}$$ 
 
 ### Style Loss 
 
-<!---
-Add style loss formula, derivative ?
---->
-
-For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix $$ G^{l} \epsilon R^{ N_{l}xN_{l} } $$, where $$ G^{l}_{ij} $$ is the inner product between the feature maps $$ i $$ adn $$ j $$ represented by vectors in layer $$ l $$.  
+For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix $$ G^{l} \epsilon R^{ N_{l}xN_{l} } $$, where $$ G^{l}_{ij} $$ is the inner product between the feature maps $$ i $$ and $$ j $$ represented by vectors in layer $$ l $$ and $$ N_{l} $$ is the number of feature maps.  
 $$ G^{l}_{ij}= \sum_{k}F^{l}_{ik}F^{l}_{jk} $$.  
 And so the Style loss is the Mean squared error between the gram matrices of Style image and the white noise image.  
 Let $$ \vec{a} $$ be the style image and $$ \vec{x} $$ be the white noise image. Let $$ A^{l} $$ and $$ X^{l} $$ be the style representations of of style image and white noise image in layer $$ l $$. So, Total style loss of a layer $$ l $$ is $$ E_{l} $$.  
@@ -62,35 +55,50 @@ The base idea for Neural Style algorithm for audio signals is same as for images
 
 ### Model Selection
 For Audio signals 1 Dimensional Convolutions are used as they have different spatial features than images. So, models having 1-D CNN layers is used.  
-It is observed that shallow models perform better than deep models and so a shallow model having only one layer but high filters is used.
+It is observed that shallow models perform better than deep models and so a shallow model having only one layer but having large number of filters is used. The models are not pretrained and have random weights as it is observed that it does not make a difference as we only need the encoding.
 
 ### Pre-processing
-An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals.  
-So, Short time fourier transform is used on the audios to convert them to frequency domain.
-
-### Post-processing
-After generation of audio phase reconstruction is done so as to convert the audio back to time domain from frequency domain.
-Also, instead of using white noise to generate the final audio, the content audio is used which also prevents calculations as content loss is no longer needed, only style loss is used which is similar to images.
+An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals. The raw audio is converted to spectogram via Short Time Fourier Transform(STFT). Spectogram is a 2D Representation of a 1D signal, Spectogram has $$ C $$ channels and $$ S $$ samples for every channel. So, a spectogram can be considered as an $$ 1xS $$ image with $$ C $$ channels.
 
 ![alt text](https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/7c592e7e00422dc7a76ead5932e34eafb5bef704/2-Figure2-1.png)
+
+### Content Loss
+
+Here, as the content audio is used for generation of the new audio i.e. the generated audio, content loss is not taken into consideration. However, it can be taken into consideration.
+
+### Style Loss
+
+For style extraction, gram matrices are used same as in images. Gram Matrix $$ G \epsilon R^{ NxN } $$, where $$ G_{ij} $$ is the inner product between the feature maps $$ i $$ and $$ j $$ represented by vectors and $$ N $$ is the number feature maps. The difference here is that the feature maps here are 1- Dimensional whereas in images they are 2D. Also, as we are using a model with only one layer, there is no notation of $$ l $$. Let $$ F_{ij} $$ be the spectogram i.e. the encoding of the audio of $$ i^{th} $$ filter at $$ j^{th} $$ position.  
+$$ G_{ij}= \sum_{k}F_{ik}F_{jk} $$.  
+Style loss is the Mean squared error between the gram matrices of Style audio and the generated audio i.e. content audio.  
+Let $$ \vec{a} $$ be the style audio and $$ \vec{x} $$ be the generated audio. Let $$ A $$ and $$ X $$ be the style representations of of style audio and generated audio with $$ N $$ number of channels(or number of filters) and $$ M $$ number of samples. So, Total style loss  is $$ L(\vec{a},\vec{x})_{style} $$.  
+$$ L(\vec{a},\vec{x})_{style} = \frac{\sum_{i,j}(X_{ij}-A_{ij})^{2}}{4N^{2}M^{2}} $$.  
+Here, only one layer is present so there's no significance of weighting of layer.
+
+
+### Post-processing
+After generation of audio phase reconstruction is done so as to convert the audio back to time domain from frequency domain. Griffin-Lim algorithm is used for reconstruction.
+Also, instead of using white noise to generate the final audio, the content audio is used which also prevents calculations as content loss is no longer needed, only style loss is used which is similar to images.
+
 
 <!---
 # <ins>Implementation</ins>
 --->
 
-# <ins>Technology Overview</ins>
-
-Python 2.7 is used for implementation and the model is implemented using Deep Learning library PyTorch. Librosa is used for audio analysis. The model is executed on Intel® AI DevCloud which is 3x to 4x faster than the workstation being used, Intel® AI DevCloud runs the models and processes on high-performance and effecient Intel® Xeon® processors.
-
 <!---
 # <ins>Conclusion</ins>
 
-Convolutional Neural Networks 
+Convolutional Neural Networks can be used for 
 
 --->
+
 # <ins>Future Work</ins>
 
 With the coming of new generative models like Generative Adverserial Networks the neural style transfer algorithm can be modified and can be used for better results.
+
+# <ins>Technology Overview</ins>
+
+Python 2.7 is used for implementation and the model is implemented using Deep Learning library PyTorch. Librosa is used for audio analysis. The model is executed on Intel® AI DevCloud which is 3x to 4x faster than the workstation being used, Intel® AI DevCloud runs the models and processes on high-performance and effecient Intel® Xeon® processors.
 
 # <ins>References</ins>
 
