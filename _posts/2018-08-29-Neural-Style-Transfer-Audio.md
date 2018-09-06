@@ -62,7 +62,7 @@ It is observed that shallow models perform better than deep models and so a shal
 ### Pre-processing
 An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals. The raw audio is converted to spectogram via Short Time Fourier Transform(STFT). Spectogram is a 2D Representation of a 1D signal, Spectogram has $$ C $$ channels and $$ S $$ samples for every channel. So, a spectogram can be considered as an $$ 1xS $$ image with $$ C $$ channels.
 
-![alt text](/_posts/Resources/Neural_Style_Transfer_For_Audio/2.png)
+![alt text](https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/7c592e7e00422dc7a76ead5932e34eafb5bef704/2-Figure2-1.png)
 
 ### Content Loss
 
