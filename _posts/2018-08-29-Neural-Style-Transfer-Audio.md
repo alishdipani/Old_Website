@@ -26,7 +26,7 @@ $$ L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \b
 
 A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers. Pre-trained model is used as they provide proper encoding.
 
-![alt text](/_posts/Resources/Neural_Style_Transfer_For_Audio/1.jpg)
+![alt text](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/Neural_Style_Transfer_For_Audio/1.jpg)
 
 ### Content Loss
 
