@@ -26,7 +26,7 @@ $$ L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \b
 
 A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers. Pre-trained model is used as they provide proper encoding.
 
-![alt text](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/Neural_Style_Transfer_For_Audio/1.jpg)
+![alt text](/_posts/Resources/Neural_Style_Transfer_For_Audio/1.jpg)
 
 ### Content Loss
 
@@ -62,11 +62,12 @@ It is observed that shallow models perform better than deep models and so a shal
 ### Pre-processing
 An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals. The raw audio is converted to spectogram via Short Time Fourier Transform(STFT). Spectogram is a 2D Representation of a 1D signal, Spectogram has $$ C $$ channels and $$ S $$ samples for every channel. So, a spectogram can be considered as an $$ 1xS $$ image with $$ C $$ channels.
 
-![alt text](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/Neural_Style_Transfer_For_Audio/2.png)
+![alt text](/_posts/Resources/Neural_Style_Transfer_For_Audio/2.png)
 
 ### Content Loss
 
-Here, as the content audio is used for generation of the new audio i.e. the generated audio, content loss is not taken into consideration. However, it can be taken into consideration.
+Here, as the content audio is used for generation of the new audio i.e. the generated audio, content loss is not taken into consideration. However, it can be taken into consideration.  
+So, here total loss is just the style loss
 
 ### Style Loss
 
@@ -82,6 +83,9 @@ Here, only one layer is present so there's no significance of weighting of layer
 After generation of audio phase reconstruction is done so as to convert the audio back to time domain from frequency domain. Griffin-Lim algorithm is used for reconstruction.
 Also, instead of using white noise to generate the final audio, the content audio is used which also prevents calculations as content loss is no longer needed, only style loss is used which is similar to images.
 
+### Hyperparameter tuning
+
+To calculate the style loss, standard error back-propogation is done.
 
 <!---
 # <ins>Implementation</ins>
