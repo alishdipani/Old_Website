@@ -34,7 +34,7 @@ $$ L_{content}(\vec{p},\vec{x},l) = \frac{1}{2} \sum_{i,j}(F^{l}_{ij} - P^{l}_{i
 
 ### Style Loss 
 
-For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extend of the input image. These feature correlations are given by Gram Matrix $$ G^{l} \epsilon R^{ N_{l}xN_{l} } $$, where $$ G^{l}_{ij} $$ is the inner product between the feature maps $$ i $$ and $$ j $$ represented by vectors in layer $$ l $$ and $$ N_{l} $$ is the number of feature maps.  
+For capturing the style a style representation is used which computer the correlations between the different filter responses, where the expectation is taken over the spatial extent of the input image. These feature correlations are given by Gram Matrix $$ G^{l} \epsilon R^{ N_{l}xN_{l} } $$, where $$ G^{l}_{ij} $$ is the inner product between the feature maps $$ i $$ and $$ j $$ represented by vectors in layer $$ l $$ and $$ N_{l} $$ is the number of feature maps.  
 $$ G^{l}_{ij}= \sum_{k}F^{l}_{ik}F^{l}_{jk} $$.  
 And so the Style loss is the Mean squared error between the gram matrices of Style image and the white noise image.  
 Let $$ \vec{a} $$ be the style image and $$ \vec{x} $$ be the white noise image. Let $$ A^{l} $$ and $$ X^{l} $$ be the style representations of of style image and white noise image in layer $$ l $$. So, Total style loss of a layer $$ l $$ is $$ E_{l} $$.  
@@ -45,20 +45,20 @@ where $$ w_{l} $$ are the weighting factor of each layer.
 
 ### Hyperparameter tuning
 
-To calculate the style and content loss, standard error back-propogation is done.
+To calculate the style and content loss, standard error back-propagation is done.
 To calculate $$ L_{total} $$, $$ L_{content} $$ is weighted by $$ \alpha $$ and $$ L_{style} $$ is weighted by $$ \beta $$.  
 The ratio of $$ \frac{\alpha}{\beta} $$ is generally kept $$ 10^{-3} $$ or $$ 10^{-4} $$, this prevents the style from dominating and therefore preventing the loss of content.
 
 # <ins>Neural Style Transfer on Audio Signals</ins>
 
-The base idea for Neural Style algorithm for audio signals is same as for images, the extracted style of te style audio is to be applied to the generated audio. Here, the content audio is directly used for generation instead of noise audio as this prevents calculation of content loss and eliminates the noise from the generated audio.
+The base idea for Neural Style algorithm for audio signals is same as for images, the extracted style of the style audio is to be applied to the generated audio. Here, the content audio is directly used for generation instead of noise audio as this prevents calculation of content loss and eliminates the noise from the generated audio.
 
 ### Model Selection
 For Audio signals 1 Dimensional Convolutions are used as they have different spatial features than images. So, models having 1-D CNN layers is used.  
-It is observed that shallow models perform better than deep models and so a shallow model having only one layer but having large number of filters is used. The models are not pretrained and have random weights as it is observed that it does not make a difference as we only need the encoding.
+It is observed that shallow models perform better than deep models and so a shallow model having only one layer but having large number of filters is used. The models are not pre-trained and have random weights as it is observed that it does not make a difference as we only need the encoding.
 
 ### Pre-processing
-An audio signal has to be converted to frequency domain from time domain beacuse the frequencies have the spatial features of audio signals. The raw audio is converted to spectogram via Short Time Fourier Transform(STFT). Spectogram is a 2D Representation of a 1D signal, Spectogram has $$ C $$ channels and $$ S $$ samples for every channel. So, a spectogram can be considered as an $$ 1xS $$ image with $$ C $$ channels.
+An audio signal has to be converted to frequency domain from time domain because the frequencies have the spatial features of audio signals. The raw audio is converted to spectrogram via Short Time Fourier Transform(STFT). Spectrogram is a 2D Representation of a 1D signal, Spectrogram has $$ C $$ channels and $$ S $$ samples for every channel. So, a spectrogram can be considered as an $$ 1xS $$ image with $$ C $$ channels.
 
 ![alt text](https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/7c592e7e00422dc7a76ead5932e34eafb5bef704/2-Figure2-1.png)
 
@@ -69,7 +69,7 @@ So, here total loss is just the style loss
 
 ### Style Loss
 
-For style extraction, gram matrices are used same as in images. Gram Matrix $$ G \epsilon R^{ NxN } $$, where $$ G_{ij} $$ is the inner product between the feature maps $$ i $$ and $$ j $$ represented by vectors and $$ N $$ is the number feature maps. The difference here is that the feature maps here are 1- Dimensional whereas in images they are 2D. Also, as we are using a model with only one layer, there is no notation of $$ l $$. Let $$ F_{ij} $$ be the spectogram i.e. the encoding of the audio of $$ i^{th} $$ filter at $$ j^{th} $$ position.  
+For style extraction, gram matrices are used same as in images. Gram Matrix $$ G \epsilon R^{ NxN } $$, where $$ G_{ij} $$ is the inner product between the feature maps $$ i $$ and $$ j $$ represented by vectors and $$ N $$ is the number feature maps. The difference here is that the feature maps here are 1- Dimensional whereas in images they are 2D. Also, as we are using a model with only one layer, there is no notation of $$ l $$. Let $$ F_{ij} $$ be the spectrogram i.e. the encoding of the audio of $$ i^{th} $$ filter at $$ j^{th} $$ position.  
 $$ G_{ij}= \sum_{k}F_{ik}F_{jk} $$.  
 Style loss is the Mean squared error between the gram matrices of Style audio and the generated audio i.e. content audio.  
 Let $$ \vec{a} $$ be the style audio and $$ \vec{x} $$ be the generated audio. Let $$ A $$ and $$ X $$ be the style representations of of style audio and generated audio with $$ N $$ number of channels(or number of filters) and $$ M $$ number of samples. So, Total style loss  is $$ L(\vec{a},\vec{x})_{style} $$.  
@@ -83,7 +83,7 @@ Also, instead of using white noise to generate the final audio, the content audi
 
 ### Hyperparameter tuning
 
-To calculate the style loss, standard error back-propogation is done.
+To calculate the style loss, standard error back-propagation is done.
 
 <!---
 # <ins>Implementation</ins>
@@ -98,11 +98,11 @@ Convolutional Neural Networks can be used for
 
 # <ins>Future Work</ins>
 
-With the coming of new generative models like Generative Adverserial Networks the neural style transfer algorithm can be modified and can be used for better results.
+With the coming of new generative models like Generative Adversarial Networks the neural style transfer algorithm can be modified and can be used for better results.
 
 # <ins>Technology Overview</ins>
 
-Python 2.7 is used for implementation and the model is implemented using Deep Learning library PyTorch. Librosa is used for audio analysis. The model is executed on Intel® AI DevCloud which is 3x to 4x faster than the workstation being used, Intel® AI DevCloud runs the models and processes on high-performance and effecient Intel® Xeon® processors.
+Python 2.7 is used for implementation and the model is implemented using Deep Learning library PyTorch. Librosa is used for audio analysis. The model is executed on Intel® AI DevCloud which is 3x to 4x faster than the workstation being used, Intel® AI DevCloud runs the models and processes on high-performance and efficient Intel® Xeon® processors.
 
 # <ins>References</ins>
 
