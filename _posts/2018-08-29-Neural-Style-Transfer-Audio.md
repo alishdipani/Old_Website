@@ -13,8 +13,6 @@ tags:
 
 "Style Transfer" on images has recently become very popular and an active research topic, this shows how Convolutional Neural Networks(CNNs) have the power to adapt to a great variety of tasks. Here, we extend and modify this algorithm for audio signals and use the power of CNNs and generate new audio from a style audio that can be the tune or the beat and a content audio that can be someone just speaking the lyrics of a song. 
 
-![alt text](https://github.com/alishdipani/Neural-Style-Transfer-Audio/blob/master/Figure_1.png)
-
 # <ins>Neural Style Transfer on Images</ins>
 
 "Neural Style Transfer" was originally for images, the idea is to use a CNN model for extracting the style of an image called style image and content of another image called content image and generating a new image having the style of the style image and content of the content image. This is done by encoding the two images using a CNN Model and then taking a white noise image and minimizing the loss between this image and content and style images so that it has the content same as the content image and style as style image. <br><br>
@@ -26,7 +24,7 @@ $$ L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \b
 
 A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers. Pre-trained model is used as they provide proper encoding.
 
-![alt text](https://drive.google.com/file/d/1FzlgrK9br33dP4hG1w69KqxbZVrquPhS/view?usp=sharing)
+![alt text](https://www.pyimagesearch.com/wp-content/uploads/2018/08/neural_style_transfer_gatys.jpg)
 
 ### Content Loss
 
