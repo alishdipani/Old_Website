@@ -20,11 +20,13 @@ Let $$ \vec{p} $$ be the content image,  $$ \vec{a} $$ be the style image and $$
 So, total loss is sum of content loss and style loss.  
 $$ L_{total}(\vec{p},\vec{a},\vec{x}) = \alpha L_{content}(\vec{p},\vec{x}) + \beta L_{style}(\vec{a},\vec{x})$$
 
-### CNN Model
+![Imgur](https://i.imgur.com/g9JCrOU.png)
+
+### Model Selection
 
 A deep CNN model is chosen to extract the features of images. Deep CNN models provide proper encoding for the features of images. A Model like VGG-19 is chosen having a large number of convolutional layers. Pre-trained model is used as they provide proper encoding.
 
-![alt text](https://www.pyimagesearch.com/wp-content/uploads/2018/08/neural_style_transfer_gatys.jpg)
+![Imgur](https://i.imgur.com/NEk5DMH.png)
 
 ### Content Loss
 
@@ -49,9 +51,13 @@ To calculate the style and content loss, standard error back-propagation is done
 To calculate $$ L_{total} $$, $$ L_{content} $$ is weighted by $$ \alpha $$ and $$ L_{style} $$ is weighted by $$ \beta $$.  
 The ratio of $$ \frac{\alpha}{\beta} $$ is generally kept $$ 10^{-3} $$ or $$ 10^{-4} $$, this prevents the style from dominating and therefore preventing the loss of content.
 
+![Imgur](https://i.imgur.com/6X9j1ue.png)
+
 # <ins>Neural Style Transfer on Audio Signals</ins>
 
 The base idea for Neural Style algorithm for audio signals is same as for images, the extracted style of the style audio is to be applied to the generated audio. Here, the content audio is directly used for generation instead of noise audio as this prevents calculation of content loss and eliminates the noise from the generated audio.
+
+![Imgur](https://i.imgur.com/416KZo3.png)
 
 ### Model Selection
 For Audio signals 1 Dimensional Convolutions are used as they have different spatial features than images. So, models having 1-D CNN layers is used.  
@@ -59,8 +65,6 @@ It is observed that shallow models perform better than deep models and so a shal
 
 ### Pre-processing
 An audio signal has to be converted to frequency domain from time domain because the frequencies have the spatial features of audio signals. The raw audio is converted to spectrogram via Short Time Fourier Transform(STFT). Spectrogram is a 2D Representation of a 1D signal, Spectrogram has $$ C $$ channels and $$ S $$ samples for every channel. So, a spectrogram can be considered as an $$ 1xS $$ image with $$ C $$ channels.
-
-![alt text](https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/7c592e7e00422dc7a76ead5932e34eafb5bef704/2-Figure2-1.png)
 
 ### Content Loss
 
@@ -85,6 +89,8 @@ Also, instead of using white noise to generate the final audio, the content audi
 
 To calculate the style loss, standard error back-propagation is done.
 
+![Imgur](https://i.imgur.com/cOOol8i.png)
+
 <!---
 # <ins>Implementation</ins>
 --->
@@ -106,6 +112,11 @@ Python 2.7 is used for implementation and the model is implemented using Deep Le
 
 # <ins>References</ins>
 
+### Project Resources :
+
+1. [Intel DevMesh Project](https://devmesh.intel.com/projects/neural-style-transfer-on-audio-signals)
+2. [Github Repository](https://github.com/alishdipani/Neural-Style-Transfer-Audio)
+
 ### Papers :
 
 1. Gatys, Leon A., Alexander S. Ecker, and Matthias Bethge. "Image style transfer using convolutional neural networks." Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. 2016.
@@ -124,8 +135,3 @@ Python 2.7 is used for implementation and the model is implemented using Deep Le
 1. [Librosa](https://librosa.github.io/librosa/)
 2. [Pytorch](https://pytorch.org/)
 3. [Intel AI DevCloud](https://software.intel.com/en-us/ai-academy/devcloud)
-
-### Project Resources :
-
-1. [Intel DevMesh Project](https://devmesh.intel.com/projects/neural-style-transfer-on-audio-signals)
-2. [Github Repository](https://github.com/alishdipani/Neural-Style-Transfer-Audio)
