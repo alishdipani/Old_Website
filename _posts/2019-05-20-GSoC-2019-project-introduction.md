@@ -29,3 +29,7 @@ My project is to add Magick backend and additional functionalities to Rubyplot. 
 1. **ImageMagick support**:  Support for Imagemagick back-end will be added in addition to the currently supported back-end GR, the front-end of the library will be back-end agnostic and the current overall integrity of the library will be preserved.
 2. **Plotting and show function**: A new **plot** function will be added which plots markers (for example circles) to form a scatter plot or a line plot with just the points as inputs. A new function **show** will be added which will allow viewing of a plot without saving it. This plot function will be back-end agnostic and hence will support both GR and Magick back-end.
 3. **Integration with iruby notebooks**: Rubyplot will be integrated with iruby notebooks supporting all backends and allowing inline plotting.  
+  
+More details about my project and implementation details can be found in my up-to-date proposal [[Link]](https://github.com/alishdipani/rubyplot/wiki/GSoC-2019-Proposal)  
+  
+Stay tuned for more blogs with more technical depth and chalenges which I faced during the project :)
