@@ -4,9 +4,7 @@ email: f20160005@goa.bits-pilani.ac.in
 description: "Homepage"
 baseurl: ""
 url: "http://carte-noire.jacobtomlinson.co.uk/"
-title_description: "3rd Year Computer Science Undergrad at BITS Goa.
-AI Enthusiast.
- Intel Student Ambassador for Artificial Intelligence."
+title_description: "Computer Science Undergrad at BITS Goa. || Working on interdiscplinary applications of Artificial Intelligence in Biology and Neuroscience. || GSoC'19 student developer with Ruby Science Foundation. || Intel Student Ambassador for Artificial Intelligence."
 title_image: "https://avatars0.githubusercontent.com/u/21101992?s=460&v=4"
 google_analytics: 
 #disqus_account: cartenoire
@@ -27,7 +25,7 @@ facebook_link:
 
 intelDevMesh_link: https://devmesh.intel.com/users/alish-dipani
 gmail_link: f20160005@goa.bits-pilani.ac.in
-CV_link : https://drive.google.com/open?id=1n93N_m47miXbX5KnYSLxW8JbxBOlPnlo
+CV_link : https://drive.google.com/file/d/1qSLwNRHp0uGyrPDYPRteDlYZpPczjw-d/view?usp=sharing
 #kaggle_link : https://www.kaggle.com/alu57202               ADD THIS
 #intel_devmesh_link:
 
