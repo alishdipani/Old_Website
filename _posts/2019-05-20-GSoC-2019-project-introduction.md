@@ -30,7 +30,7 @@ Till now you have fixed what all will be in the paintings and have not actually 
 Now, you draw the painting(call write in Rubyplot)(in Rubyplot when write is called everything is drawn on the corresponding area including shapes, text, X and Y axis,etc.).  
   
 An example code would be:
-'''ruby
+```ruby
 require 'Rubyplot'
 @xdata = [1, 2, 3, 4, 5] # Defining X data
 @ydata = [11, 2, 33, 4, 65] # Defining Y data
@@ -46,7 +46,7 @@ axes.title = "Nice plot" # defining title of the plot
 axes.x_title = "X data" # defining title of X axis
 axes.y_title = "Y data" # defining title of Y axis
 @figure.write("scatterplot.png") # Drawing the figure and saving it
-'''
+```
 
 Output of this is for GR backend is:  
 ![Scatter-plot with GR backend](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/GSoC_2019_project_introduction/scatter_GR.png)
