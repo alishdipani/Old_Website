@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      setting up basics for Magick backend
+title:      Setting up basics for Magick backend
 date:       2019-06-05 21:32:18
 summary:    Introducing my project for GSoC 2019.
 categories: GSoC2019
