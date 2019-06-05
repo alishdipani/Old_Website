@@ -49,9 +49,9 @@ axes.y_title = "Y data" # defining title of Y axis
 ```
 
 Output of this is for GR backend is:  
-![Scatter-plot with GR backend](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/GSoC_2019_project_introduction/scatter_GR.png)
+![Scatter-plot with GR backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_GR.png)
 Output of this is for Magick backend is:  
-![Scatter-Plot with Magick backend](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)
+![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)
 
 ## My Project  
 My project is to add Magick backend and additional functionalities to Rubyplot. The outcomes of my project would be :
