@@ -182,8 +182,8 @@ The inputs are the figure to which this axes belongs which was given by self, ax
 
 ```ruby
 def add_subplot!(nrow, ncol)
-  plottable_width = (@max_x - (@left_spacing + @right_spacing)).to_f
-  plottable_length = (@max_y - (@top_spacing + @bottom_spacing)).to_f
+  @plottable_width = (@max_x - (@left_spacing + @right_spacing)).to_f
+  @plottable_length = (@max_y - (@top_spacing + @bottom_spacing)).to_f
   @subplots[nrow][ncol]
 end
 ```
