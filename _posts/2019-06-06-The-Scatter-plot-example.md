@@ -121,7 +121,7 @@ After creating the figure, we move to adding subplots. To add a subplot the func
 axes = @figure.add_subplot! 0,0
 ```
 But first we need to call the function **add_subplots!** to create the space for subplots i.e. initialize the *subplots* array and define the number of subplots. In this example 0,0 specifies that only 1 subplot is to be created and we have already created the space for it(during initialization of the Figure) and so we don't need to do it again.  
-Now, the function **add_subplot!** is called for our figure object.
+Now, the function **add_subplot!** is called for our figure object:  
 ```ruby
 def add_subplot!(nrow, ncol)
   plottable_width = (@max_x - (@left_spacing + @right_spacing)).to_f
