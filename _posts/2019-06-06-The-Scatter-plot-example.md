@@ -178,13 +178,58 @@ def initialize(figure, abs_x:, abs_y:, width:, height:)
   @legend_box_position = :top
 end
 ```
-The inputs are the figure to which this axes belongs which was given by self, axs_x and abs_y are the X and Y coordinate of this axes's origin in Rubyplot coordinates
-
+The inputs are the figure to which this axes belongs which was given by self, axs_x and abs_y are the X and Y coordinate of this axes's lower left corner in Rubyplot coordinates and the *width* and *height* are the allowed space for this subplot i.e. the area in which this subplot is to be drawn.  
+Other important variables initialized margin variables which define the margin for this subplot(axes object), *plots* array which stores the plots to be drawn in this subplot, *xaxis* and *yaxis* which are an object of *XAxis* and *YAxis* respectively.  
+So, after initializing this axes object is stored in *axes* variable and *subplots* array at index 0,0.  
+  
+## The Plot
+Now, we have defined the subplot i.e. the axes object in which we want to draw our plot. The next lines of code are:
 ```ruby
-def add_subplot!(nrow, ncol)
-  @plottable_width = (@max_x - (@left_spacing + @right_spacing)).to_f
-  @plottable_length = (@max_y - (@top_spacing + @bottom_spacing)).to_f
-  @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(self, abs_x: @left_spacing + (plottable_width / @ncols) * ncol, abs_y: @bottom_spacing + (plottable_length / @nrows) * nrow, width: plottable_width / @ncols, height: plottable_length / @nrows)
-  @subplots[nrow][ncol]
+axes.scatter! do |p| # Setting scatter as the type of subplot
+  p.data @x1, @y1 # setting data to be plotted
+  p.label = "data1" # defining label for the data
+  p.marker_fill_color = :blue # defining colour of the markers
+  p.marker_type = :circle # defining marker type
 end
 ```
+So, the function **scatter!** is called for the axes object. The block associated with the **scatter!** function is:
+```ruby
+p.data @x1, @y1 # setting data to be plotted
+p.label = "data1" # defining label for the data
+p.marker_fill_color = :blue # defining colour of the markers
+p.marker_type = :circle # defining marker type
+```
+The block is a block of lines having commands which in this example are used for specifying properties of the plot in the subplot. This block is given to the **scatter!** function as an input:
+  
+```ruby
+def scatter!(*_args, &block)
+  add_plot! :Scatter, &block
+end
+```
+This function calls the private **add_plot!** function:
+```ruby
+def add_plot! klass, &block
+  plot = Kernel.const_get("Rubyplot::Artist::Plot::#{klass}").new self
+  yield(plot) if block_given?
+  @plots << plot
+end
+```
+The **add_plot!** function takes input as the class name for the plot which is Scatter in this example and the block is passed, then using Kernel a new object of the input class is created and is stored in *plot* variable which in this example is Scatter plot and so a *Scatter* object is created and stored in *plot* variable.  
+Then yield executes the block if block is given i.e. block_given?==true. After executing the block i.e. creating the plot and setting up the characteristics of the blog, the *plot* is appended in *plots* array.  
+  
+## Scatter Plot
+Now, before executing to the block, a Scatter object is initialized:
+```ruby
+def initialize(*)
+  super
+  @marker_size = 1.0
+  @marker_type = :circle
+  @marker_border_color = :black
+  # set fill to nil for the benefit of hollow markers so that legend
+  # color defaults to :black in case user does not specify.
+  @marker_fill_color = nil
+end
+```
+
+  
+  
