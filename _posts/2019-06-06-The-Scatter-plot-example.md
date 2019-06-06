@@ -179,3 +179,18 @@ def initialize(figure, abs_x:, abs_y:, width:, height:)
 end
 ```
 The inputs are the figure to which this axes belongs which was given by self, axs_x and abs_y are the X and Y coordinate of this axes's origin in Rubyplot coordinates
+
+```ruby
+def add_subplot!(nrow, ncol)
+  plottable_width = (@max_x - (@left_spacing + @right_spacing)).to_f
+  plottable_length = (@max_y - (@top_spacing + @bottom_spacing)).to_f
+  @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(
+    self,
+    abs_x: @left_spacing + (plottable_width / @ncols) * ncol,
+    abs_y: @bottom_spacing + (plottable_length / @nrows) * nrow,
+    width: plottable_width / @ncols,
+    height: plottable_length / @nrows
+  )
+  @subplots[nrow][ncol]
+end
+```
