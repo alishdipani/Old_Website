@@ -113,6 +113,26 @@ def add_subplots!(nrows, ncols)
 end
 ```
 The *subplots* array is of dimension *nrows* x *ncols*.  
-
+  
 ## Adding a subplot
-After creating the figure, we move to adding subplots.
+After creating the figure, we move to adding subplots. To add a subplot the function **add_subplot!** is called
+```ruby
+axes = @figure.add_subplot! 0,0
+```
+But first we need to call the function **add_subplots!** to create the space for subplots i.e. initialize the *subplots* array and define the number of subplots. In this example 0,0 specifies that only 1 subplot is to be created and we have already created the space for it(during initialization of the Figure) and so we don't need to do it again.  
+Now, the function **add_subplot!** is called for our figure object.
+```ruby
+def add_subplot!(nrow, ncol)
+  plottable_width = (@max_x - (@left_spacing + @right_spacing)).to_f
+  plottable_length = (@max_y - (@top_spacing + @bottom_spacing)).to_f
+  @subplots[nrow][ncol] = Rubyplot::Artist::Axes.new(
+    self,
+    abs_x: @left_spacing + (plottable_width / @ncols) * ncol,
+    abs_y: @bottom_spacing + (plottable_length / @nrows) * nrow,
+    width: plottable_width / @ncols,
+    height: plottable_length / @nrows
+  )
+  @subplots[nrow][ncol]
+end
+```
+This function takes input the row and coloumn for the subplot which is 1,1 in our case but is stored as 0,0 in the *subplots* array. First, *plottable_width* and *plottable_length* are calculated in Rubyplot coordinate units which define the total space measurements in which plotting is allowed i.e. incorporating the spacing for the figure. Then a new Axes object is made
