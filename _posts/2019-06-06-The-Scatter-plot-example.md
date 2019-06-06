@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      GSoC 2019 The Scatter plot example
+title:      The Scatter plot example
 date:       2019-06-06 21:32:18
 summary:    Explaining the scatter plot example.
 categories: GSoC2019
@@ -112,7 +112,7 @@ def add_subplots!(nrows, ncols)
   @subplots = Array.new(@nrows) { Array.new(@ncols) { nil } }
 end
 ```
-The *subplots* array is of dimension *nrows*x*ncols*.  
+The *subplots* array is of dimension *nrows* x *ncols*.  
 
 ## Adding a subplot
 After creating the figure, we move to adding subplots.
