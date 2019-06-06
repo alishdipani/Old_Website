@@ -44,7 +44,8 @@ require 'Rubyplot'
 @xdata = [1, 2, 3, 4, 5] # Defining X data
 @ydata = [11, 2, 33, 4, 65] # Defining Y data
 ```
-First Rubyplot is included which is similar to import in Python, this allows us to use Rubyplot.  Next we define 2 arrays xdata and ydata which store the X and Y coordinates to be plotted.  
+First Rubyplot is included which is similar to import in Python, this allows us to use Rubyplot.  Next we define 2 arrays *xdata* and *ydata* which store the X and Y coordinates to be plotted. So, the points to be plotted are (1,11), (2,2), (3,33), (4,4) and (5,65).  
+  
 ## Figure
 After this we create a new Figure object which will act as the canvas on which image will be drawn.
 ```ruby
@@ -135,4 +136,46 @@ def add_subplot!(nrow, ncol)
   @subplots[nrow][ncol]
 end
 ```
-This function takes input the row and coloumn for the subplot which is 1,1 in our case but is stored as 0,0 in the *subplots* array. First, *plottable_width* and *plottable_length* are calculated in Rubyplot coordinate units which define the total space measurements in which plotting is allowed i.e. incorporating the spacing for the figure. Then a new Axes object is made
+This function takes input the row and coloumn for the subplot which is 1,1 in our case but is stored as 0,0 in the *subplots* array. First, *plottable_width* and *plottable_length* are calculated in Rubyplot coordinate units which define the total space measurements in which plotting is allowed i.e. incorporating the spacing for the figure. Then a new Axes object is made and is stored in the *subplots* array at the index 0,0. The function then returns the *subplots* array at index 0,0 which is stored in *axes* variable.  
+  
+## Axes
+Now the *axes* variable contains an initialized Axes object which is also stored in *subplots* array at index 0,0. The Axes initialization is as follows:
+```ruby
+def initialize(figure, abs_x:, abs_y:, width:, height:)
+  @figure = figure
+  @abs_x = abs_x
+  @abs_y = abs_y
+  @width = width
+  @height = height
+
+  @x_title = ''
+  @y_title = ''
+  @top_margin = 5.0
+  @left_margin = 10.0
+  @bottom_margin = 10.0
+  @right_margin = 5.0
+  @title = ''
+  @title_shift = 0
+  @title_margin = TITLE_MARGIN
+  @text_font = :default
+  @grid = true
+  @bounding_box = true
+  @plots = []
+  @raw_rows = width * (height/width)
+  @theme = Rubyplot::Themes::CLASSIC_WHITE
+  @font = :times_roman
+  @font_color = :black
+  @font_size = 15.0
+  @legend_font_size = 20.0
+  @legend_margin = LEGEND_MARGIN
+  @title_font_size = 25.0
+  @plot_colors = []
+  @legends = []
+  @lines = []
+  @texts = []
+  @x_axis = Rubyplot::Artist::XAxis.new(self)
+  @y_axis = Rubyplot::Artist::YAxis.new(self)
+  @legend_box_position = :top
+end
+```
+The inputs are the figure to which this axes belongs which was given by self, axs_x and abs_y are the X and Y coordinate of this axes's origin in Rubyplot coordinates
