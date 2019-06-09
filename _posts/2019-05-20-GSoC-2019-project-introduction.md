@@ -39,7 +39,8 @@ axes = @figure.add_subplot! 0,0 # Adding a subplot (0,0 as only one subplot is t
 axes.scatter! do |p| # Setting scatter as the type of subplot
   p.data @x1, @y1 # setting data to be plotted
   p.label = "data1" # defining label for the data
-  p.marker_fill_color = :blue # defining colour of the markers
+  p.marker_border_color = :blue # defining border colour of the markers
+  p.marker_fill_color = :blue # defining fill colour of the markers
   p.marker_type = :circle # defining marker type
 end
 axes.title = "Nice plot" # defining title of the plot
@@ -53,7 +54,7 @@ Output of this is for GR backend is:
 Output of this is for Magick backend is:  
 ![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)
 
-P.S. - The version of library used to run this code is of the date 5 June and Magick backend was not suppoted at the time of start of my project.  
+P.S. - The version of library used to run this code is of the date 9 June and Magick backend was not suppoted at the time of start of my project.  
 So, currently Rubyplot supports GR fully and Magick backend partially(notice the ticks on axes are not implemented).
 
 ## My Project  
