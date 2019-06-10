@@ -351,3 +351,20 @@ def write(file_name, device: :file)
   Rubyplot.backend.stop_output_device
 end
 ```
+Now, we start using the backend and setting its properties, first the variables *canvas_height* and *canvas_width* are sset as the height and width of the canvas (figure), then the *figure* variable points to the Figure object.  
+Now a function **set_background_gradient** is called which is exclusive to Magick backend and its purpose is to make the canvas i.e. an Magick::Image object (P.S. - In future this function will be shifted to the backend so that both backends are consistent).  
+  
+Now, the **set_background_gradient** function is:
+```ruby
+def set_background_gradient
+  Rubyplot.backend.set_base_image_gradient(
+    Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][0]],
+    Rubyplot::Color::COLOR_INDEX[@theme_options[:background_colors][1]],
+    @width,
+    @height,
+    @theme_options[:background_direction]
+  )
+end
+```
+Gradeint background
+This fucntion calls the **set_base_image_gradient** function in the backend, the inputs given are the background colour for the figure (*theme_options* hash is used which will be introduced later in the blog) the top_color and the bottom_color, then the width and height of the figure and finally the theme
