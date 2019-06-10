@@ -108,14 +108,12 @@ end
 ```
 First a *defaults* hash is defined which stores the default values of *marker_color* as the symbol *:white* which represents white colour, *font_color* as *:black* and *background_image* colour as nil. Then the empty *theme_options* hash is merged with a hash present in Themes module named *CLASSIC_WHITE*:
 ```ruby
-# Plain White back ground with no gradient.
+# Plain White background with no gradient.
 CLASSIC_WHITE = {
   marker_color: 'black',
   font_color: 'black',
   background_colors: %I[white white],
-  label_colors: %I[strong_blue vivid_orange dark_lime_green strong_red slightly_desaturated_violet \
-dark_grey strong_yellow strong_cyan yellow maroon grey]
-
+  label_colors: %I[strong_blue vivid_orange dark_lime_green strong_red slightly_desaturated_violet dark_grey strong_yellow strong_cyan yellow maroon grey]
 }.freeze
 ```
 This hash which is now equal to *theme_options* has default values and represents a White background with no gradient.  
@@ -365,9 +363,19 @@ def write(file_name, device: :file)
   Rubyplot.backend.stop_output_device
 end
 ```
-Now, we start using the backend and setting its properties, first the variables *canvas_height* and *canvas_width* are sset as the height and width of the canvas (figure), then the *figure* variable points to the Figure object.  
-Now a function **set_background_gradient** is called which is exclusive to Magick backend and its purpose is to make the canvas i.e. an Magick::Image object (P.S. - In future this function will be shifted to the backend so that both backends are consistent).  
+Now, we start using the backend (it is initialized) and setting its properties, first the variables *canvas_height* and *canvas_width* are sset as the height and width of the canvas (figure), then the *figure* variable points to the Figure object.  
+Now the function **set_background_gradient** is called which is exclusive to Magick backend and its purpose is to make the canvas i.e. an Magick::Image object (P.S. - In future this function will be shifted to the backend so that both backends are consistent).  
   
+## Initializing the backend
+When any function or variable of the backend is called for the first time, the backend is initialized and its constructor is called:
+```ruby
+def initialize
+  @axes_map = {}
+end
+```
+In Magick backend, during initialization an *axes_map* hash is defined which will later be used to store properties for X and Y axis corresponding to this particular axes which is currently being used.  
+  
+## Setting up the background gradient
 Now, the **set_background_gradient** function is:
 ```ruby
 def set_background_gradient
@@ -380,8 +388,189 @@ def set_background_gradient
   )
 end
 ```
-Gradeint background
 This function calls the **set_base_image_gradient** function in the backend which creates the *base_image* variable which stores the Magick::Image object which is the canvas on which everything will be drawn, the canvas backgroung can have any solid colour or a gradient of two colours.   
 The first inputs given are the background top and botton colour for the background gradient of the figure (*theme_options* hash was set up while initializing the figure), then the width and height of the figure and finally the gradient direction is set which is nil currently and will get take on the default value later.  
   
+Now, the **set_base_image_gradient** function is:
+```ruby
+def set_base_image_gradient(top_color, bottom_color, width, height, direct=:top_bottom)
+  @base_image = render_gradient top_color, bottom_color, width, height, direct
+end
+```
+So the inputs to this is as explained above and the direction of gradient is set to the symbol *:top_bottom*. So, the variable *base_image* is created which stores the Magick::Image object which is the figure, the value of *base_image* is returned by the function which is **render_gradient** which takes the same inputs as **set_base_image_gradient**, this function is:
+```ruby
+# Render a gradient and return an Image.
+def render_gradient(top_color, bottom_color, width, height, direct)
+  width, height = scale_figure(width, height)
+  gradient_fill = case direct
+                  when :bottom_top
+                    GradientFill.new(0, 0, 100, 0, bottom_color, top_color)
+                  when :left_right
+                    GradientFill.new(0, 0, 0, 100, top_color, bottom_color)
+                  when :right_left
+                    GradientFill.new(0, 0, 0, 100, bottom_color, top_color)
+                  when :topleft_bottomright
+                    GradientFill.new(0, 100, 100, 0, top_color, bottom_color)
+                  when :topright_bottomleft
+                    GradientFill.new(0, 0, 100, 100, bottom_color, top_color)
+                  else
+                    GradientFill.new(0, 0, 100, 0, top_color, bottom_color)
+                  end
+  Magick::Image.new(width, height, gradient_fill)
+end
+```
+Now first the **scale_figure** function is called which scales the figure according to the unit of dimensions of the figure (stored in *figsize_units*) to pixels as Magick backend uses pixels as its unit. After scaling the figure the gradient of the figure background is stored in *gradient_fill*, this is a GradientFill object from ImageMagick which takes the inputs x,y coordinates of starting and ending of the gradient and the starting and ending colours.  
+Now, a new Magick::Image object is created (with the properties set) and returned which gets stored in *base_image*. 
+  
+The **scale_figure** function is:
+```ruby
+# Function to convert figure size to pixels
+def scale_figure(width, height)
+  [width * PIXEL_MULTIPLIERS[@figure.figsize_unit], height * PIXEL_MULTIPLIERS[@figure.figsize_unit]]
+end
+```
+So, in this function the width and height are multiplied with constants stored in *PIXEL_MULTIPLIERS* hash, i.e. to convert from inch to pixels, the width and size are multiplied with a constant. The *PIXEL_MULTIPLIERS* hash is:
+```ruby
+# Multiplier needed to convert given unit into pixels. (Magick default).
+PIXEL_MULTIPLIERS = {
+  inch: 96,
+  cm: 39.7953,
+  pixel: 1
+}.freeze
+```
+  
+## Setting up Output device
+After setting up the background gradient, the **init_output_device** function is called:
+```ruby
+Rubyplot.backend.init_output_device(file_name, device: :file)
+```
+This function takes input as the name of the image to be written and saved and the device to which it is to be saved which by default is *:file* symbol which represents the current folder of Rubyplot (device attribute is not used currently). The **init_output_device** function is:
+```ruby
+def init_output_device file_name, device: :file
+  @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
+  @draw = Magick::Draw.new
+  @axes = Magick::Draw.new
+  @text = Magick::Draw.new
+  @file_name = file_name
+end
+```
+This first modifies the *canvas_width* and the *canvas_height* variables according to the unit of the figure (**scale_figure** function was explained earlier). Then three new variables are defined *draw*, *axes* and *text* which are Magick::Draw objects which are used to draw shapes, X/Y axes and text respectively. Finally the *file_name* variable stores the file name string.  
+  
+## Drawing the subplots
+Now, the subplots are actually drawn:
+```ruby
+@subplots.each { |i| i.each(&:process_data) }
+@subplots.each { |i| i.each(&:draw) }
+```
+But first the data is processed to set important properties required for plotting the subplot. For each subplot (axes object) stored in *subplots* array the function **process_data** is called:
+```ruby
+def process_data
+  assign_default_label_colors
+  consolidate_plots
+  @plots.each(&:process_data)
+  set_axes_ranges
+end
+```
+This first calls the function **assign_default_label_colors** which sets the default colours for the each of the plots in this subplot, the function is:
+```ruby
+def assign_default_label_colors
+  @plots.each_with_index do |p, i|
+    if p.color == :default
+      p.color = @figure.theme_options[:label_colors][
+        i % @figure.theme_options[:label_colors].size]
+    end
+  end
+end
+```
+In this function, for each plot in *plots* array (in this example only 1 scatter plot) the default colours are set, the value returned by the **color** function is checked and if it is *:default* then the default colours are set, the **color** function is:
+```ruby
+def color
+  @marker_fill_color || @marker_border_color || :default
+end
+```
+This function returns the first value which is not nil (will return *:default* if both variables are nil).  
+So, this returns :default which causes the **assign_default_label_colors** function to go into the if case, and a colour is set using the **color** function, the colour set is decided by the *theme_options* hash using the key *:label_colors* which has an array of colours and the colour at the index ` i % @figure.theme_options[:label_colors].size` and in this example i = 0 since there is only one plot and the *:label_colors* variable is set to default (so 0 index is chosen and the colour present at 0 index is strong_blue). The **color** function used for setting colours is:
+```ruby
+# Set both marker_fill_color and marker_border_color to the same color.
+def color= color
+  @marker_fill_color = color
+  @marker_border_color = color
+end
+```
+So, *marker_fill_color* and *marker_border_color* are set to the colour which was chosen as default i.e. strong_blue in this example.  
+  
+Now, next the function **consolidate_plots** is called:
+```ruby
+def consolidate_plots
+  bars = @plots.grep(Rubyplot::Artist::Plot::Bar)
+  unless bars.empty?
+    @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::Bar) }
+    @plots << Rubyplot::Artist::Plot::MultiBars.new(self, bar_plots: bars)
+  end
+
+  stacked_bars = @plots.grep(Rubyplot::Artist::Plot::StackedBar)
+  unless stacked_bars.empty?
+    @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::StackedBar) }
+    @plots << Rubyplot::Artist::Plot::MultiStackedBar.new(self, stacked_bars: stacked_bars)
+  end
+
+  candle_sticks = @plots.grep(Rubyplot::Artist::Plot::CandleStick)
+  unless candle_sticks.empty?
+    @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::CandleStick) }
+    @plots << Rubyplot::Artist::Plot::MultiCandleStick.new(self,
+      candle_sticks: candle_sticks)
+  end
+
+  box_plots = @plots.grep(Rubyplot::Artist::Plot::BoxPlot)
+  unless box_plots.empty?
+    @plots.delete_if { |p| p.is_a?(Rubyplot::Artist::Plot::BoxPlot) }
+    @plots << Rubyplot::Artist::Plot::MultiBoxPlot.new(self,
+      box_plots: box_plots)
+  end        
+end
+```
+This function checks if multiple bar plots/stacked bar plots/candle stick plots/box plots are present and if there are multiple of these plots then a new multi bar plot/multi stacked bar plot/multi candle stick plot/multi box plot is created correspondingly. In this example no such plot is present and hence the function does not do anything.  
+  
+Next, for each plot present in this subplot i.e. in the *plots* array, the **process_data** function is called. In this example only one scatter plot is present and hence the **process_data** function of scatter plot is called (which is inherited from the base and is present in the base):
+```ruby
+def process_data
+  @y_min = @data[:y_values].min
+  @y_max = @data[:y_values].max
+  @x_min = @data[:x_values].min
+  @x_max = @data[:x_values].max
+end
+```
+This function stores the maximum and minimum X and Y values in the corresponding variables.  
+  
+Finally, the **set_axes_ranges** function is called:
+```ruby
+def set_axes_ranges
+  set_xrange
+  set_yrange
+end
+```
+This function calls the functions **set_xrange** and **set_yrange** which are:
+```ruby
+def set_xrange
+  if @x_axis.min_val.nil?
+    @x_axis.min_val = @plots.map(&:x_min).min
+  end
+
+  if @x_axis.max_val.nil?
+    @x_axis.max_val = @plots.map(&:x_max).max
+  end
+end
+
+def set_yrange
+  if @y_axis.min_val.nil?
+    @y_axis.min_val = @plots.map(&:y_min).min
+  end
+
+  if @y_axis.max_val.nil?
+    @y_axis.max_val = @plots.map(&:y_max).max
+  end
+end
+```
+Both of these functions first check if the corresponding maximum and minimum values are nil or not (which they are by default) in *x_axis* and *y_axis* which store the XAxis and YAxis objects respectively, and if they are nil (which they are in this example currently) then it calculates the minimum and maximum values across all the plots present in this subplot(i.e. in the *plots* array) and then sets the corresponding variables to the corresponding values.
+
 
