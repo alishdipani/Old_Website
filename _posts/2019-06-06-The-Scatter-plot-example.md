@@ -12,7 +12,8 @@ tags:
  - Rubyplot
 ---
 In the project introduction blog a scatter plot example was given, I will be explaining the technical details for that example which involves explaining the code for the library using **Magick backend**.  
-P.S. - Thr version of library used for this example is of date 6 June.  
+**P.S. - This blog is targeted twoards new developers who want to get familiar with the codebase of the library or anyone who is exteremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot.**
+P.S. - The version of library used for this example is of date 9 June.  
   
 The example code : 
 ```ruby
@@ -24,7 +25,8 @@ axes = @figure.add_subplot! 0,0 # Adding a subplot (0,0 as only one subplot is t
 axes.scatter! do |p| # Setting scatter as the type of subplot
   p.data @x1, @y1 # setting data to be plotted
   p.label = "data1" # defining label for the data
-  p.marker_fill_color = :blue # defining colour of the markers
+  p.marker_border_color = :blue # defining border colour of the markers
+  p.marker_fill_color = :blue # defining fill colour of the markers
   p.marker_type = :circle # defining marker type
 end
 axes.title = "Nice plot" # defining title of the plot
@@ -181,6 +183,37 @@ end
 The inputs are the figure to which this axes belongs which was given by self, axs_x and abs_y are the X and Y coordinate of this axes's lower left corner in Rubyplot coordinates and the *width* and *height* are the allowed space for this subplot i.e. the area in which this subplot is to be drawn.  
 Other important variables initialized margin variables which define the margin for this subplot(axes object), *plots* array which stores the plots to be drawn in this subplot, *xaxis* and *yaxis* which are an object of *XAxis* and *YAxis* respectively.  
 So, after initializing this axes object is stored in *axes* variable and *subplots* array at index 0,0.  
+
+## X Axis and Y axis
+We have initialized the variables *x_axis* and *y_axis* with new XAxis and YAxis objects, so when these objects are created, their constructor is called i.e. initialize function:
+```ruby
+# X Axis constructor
+def initialize axes
+  super
+end
+
+# Y axis constructor
+def initialize(*)
+  super
+end
+```
+So, both these classes inherit the Base of Axis and in constructor of both of these classes, the constructor of Base is called:
+```ruby
+def initialize axes
+  @axes = axes
+  @title = ''
+  @min_val = nil
+  @max_val = nil
+  @major_ticks_count = 5
+  @minor_ticks_count = 2
+  @texts = []
+  @lines = []
+  @major_ticks = nil
+  @minor_ticks = nil
+  @title_font_size = 25.0
+end
+```
+This constructor sets various useful properties of X and Y axes to their default values. It takes the axes object as an input to store it into *axes* variable to store the axes object to which it belongs, next the *title* is set to empty and the *max_val* and the *min_val* are stored to nil which store the maximum and minimum value of the X and the Y axes, next the number of major and minor ticks (between two major ticks) are stored, then two arrays are initialized *texts* and *lines* (not actually used) to store the texts and lines (tick lines not actual axis lines) for the X and Y axes, then the variables *major_ticks* and *minor_ticks* are set to nil which are used as arrays to store XTick and YTick objects corresponding to major(and minor) ticks of X axis and major(and minor) ticks of Y axis respectively. Finally the font size of the title is set to 25 points.
   
 ## The Plot
 Now, we have defined the subplot i.e. the axes object in which we want to draw our plot. The next lines of code are:
@@ -188,7 +221,8 @@ Now, we have defined the subplot i.e. the axes object in which we want to draw o
 axes.scatter! do |p| # Setting scatter as the type of subplot
   p.data @x1, @y1 # setting data to be plotted
   p.label = "data1" # defining label for the data
-  p.marker_fill_color = :blue # defining colour of the markers
+  p.marker_border_color = :blue # defining border colour of the markers
+  p.marker_fill_color = :blue # defining fill colour of the markers
   p.marker_type = :circle # defining marker type
 end
 ```
@@ -196,7 +230,8 @@ So, the function **scatter!** is called for the axes object. The block associate
 ```ruby
 p.data @x1, @y1 # setting data to be plotted
 p.label = "data1" # defining label for the data
-p.marker_fill_color = :blue # defining colour of the markers
+p.marker_border_color = :blue # defining border colour of the markers
+p.marker_fill_color = :blue # defining fill colour of the markers
 p.marker_type = :circle # defining marker type
 ```
 The block is a block of lines having commands which in this example are used for specifying properties of the plot in the subplot. This block is given to the **scatter!** function as an input:
@@ -230,6 +265,89 @@ def initialize(*)
   @marker_fill_color = nil
 end
 ```
-
+This first calls the base class which is inherited by Scatter, the initialize function is called. After that, different properties of the plot are set to default values which are stored in variables like marker size (set to 1), marker type (set to circle) which can be of different types like, traingle, plus, star, etc. (around 35 types available), marker border colour (set to black) and marker fill colour (set to nil). Now, the initialize function is:
+```ruby
+def initialize axes
+super(axes.abs_x, axes.abs_y)
+  @axes = axes
+  @data = {
+    label: '',
+    color: :default
+  }
+  @normalized_data = {
+    y_values: nil,
+    x_values: nil
+  }
+  @stroke_width = 4.0
+  @stroke_opacity = 0.0
+end
+```
+This again calls the base class of artist which is inherited by this base class, the initialize function is called. After that, an *axes* variable is initialized to store the axes pointer, a *data* hash is initialized which stores different properties of the subplot like label and colour for the legend, a *normalized_data* hash is initialized to store normalised data (not used), stroke width and stroke opacity (i.e. border width and opacity) are initialized with values 4 and 0 respectively. The initialize function is:
+```ruby
+def initialize(abs_x, abs_y)
+  @abs_x = abs_x
+  @abs_y = abs_y
+end
+```
+This initialized function sets the absolute values (i.e. in Rubyplot coordinates) of the origin of this axes object i.e. of this subplot (which is upper left corner for Magick backend).  
   
+## The Block
+Now, the scatter object has been initialized and the block will be executed which sets the data to be plotted and other properties of the scatter plot. The block is:  
+```ruby
+p.data @x1, @y1 # setting data to be plotted
+p.label = "data1" # defining label for the data
+p.marker_border_color = :blue # defining border colour of the markers
+p.marker_fill_color = :blue # defining fill colour of the markers
+p.marker_type = :circle # defining marker type
+```
+Here p is the scatter plot object. First the data is set to the *x1* and the *y1* arrays defined earlier:
+```ruby
+# Function in base of plots
+def data(x_values, y_values)
+  @data[:x_values] = x_values
+  @data[:y_values] = y_values
+end
+```
+This stores the *x_vales* and *y_values* in the *data* hash. Then the label of the scatter plot is set:
+```ruby
+# Function in base of plots
+def label=(label)
+  @data[:label] = label
+end
+```
+This overwrites the value of *label* in *data* hash.  
+Next, marker border colour is set which is a variable of scatter plot which describes the colour of thr border of the markers. So, in this example the colour is set to blue i.e. the variable *marker_border_color* is set to the symbol *:blue*.  
+Next, marker fill colour is set which is a variable of scatter plot which describes the colour to be filled in the markers. So, in this example the colour is set to blue i.e. the variable *marker_fill_color* is set to the symbol *:blue*.  
+Finally the marker type is set to circle i.e. the variable *marker_type* is set to the symbol *:circle*.  
   
+## Axes properties
+Finally after setting the scatter plot properties, the properties of the subplot i.e. the axes object are set:
+```ruby
+axes.title = "Nice plot" # defining title of the plot
+axes.x_title = "X data" # defining title of X axis
+axes.y_title = "Y data" # defining title of Y axis
+```
+Axes object has these variables *title*, *x_title*, *y_title* which store a string which defines the title of the subplot, title of X axis and title of Y axis respectively.  
+  
+## Writing the Figure
+Till now we have only defined the properties and the data of the figure and have not actually plotted anything. Also notice that till now we haven't actually made of use of backend and have only used the frontend, one aim of Rubyplot is having a backend agnostic frontend i.e. frontend should not be dependent on backend.  
+Now the we finally call the write function of the figure which actually draws everything and stores the figure as an Image:
+```ruby
+@figure.write("scatterplot.png") # Drawing the figure and saving it
+```
+Now, the write function of figure is:
+```ruby
+def write(file_name, device: :file)
+  Rubyplot.backend.canvas_height = @height
+  Rubyplot.backend.canvas_width = @width
+  Rubyplot.backend.figure = self
+  if ENV["RUBYPLOT_BACKEND"] == "MAGICK"
+    set_background_gradient
+  end
+  Rubyplot.backend.init_output_device(file_name, device: :file)
+  @subplots.each { |i| i.each(&:process_data) }
+  @subplots.each { |i| i.each(&:draw) }
+  Rubyplot.backend.write
+  Rubyplot.backend.stop_output_device
+end
+```
