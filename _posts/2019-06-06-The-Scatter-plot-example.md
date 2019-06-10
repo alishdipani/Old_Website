@@ -106,6 +106,20 @@ def setup_default_theme
   @font_color = @theme_options[:font_color] || @marker_color
 end
 ```
+First a *defaults* hash is defined which stores the default values of *marker_color* as the symbol *:white* which represents white colour, *font_color* as *:black* and *background_image* colour as nil. Then the empty *theme_options* hash is merged with a hash present in Themes module named *CLASSIC_WHITE*:
+```ruby
+# Plain White back ground with no gradient.
+CLASSIC_WHITE = {
+  marker_color: 'black',
+  font_color: 'black',
+  background_colors: %I[white white],
+  label_colors: %I[strong_blue vivid_orange dark_lime_green strong_red slightly_desaturated_violet \
+dark_grey strong_yellow strong_cyan yellow maroon grey]
+
+}.freeze
+```
+This hash which is now equal to *theme_options* has default values and represents a White background with no gradient.  
+After merging the values of *marker_color* and *theme_color* are set according to the *theme_options* hash defaults.  
   
 Now the function **add_subplots!** is called which creates and initializes the *subplots* array:
 ```ruby
@@ -367,4 +381,7 @@ def set_background_gradient
 end
 ```
 Gradeint background
-This fucntion calls the **set_base_image_gradient** function in the backend, the inputs given are the background colour for the figure (*theme_options* hash is used which will be introduced later in the blog) the top_color and the bottom_color, then the width and height of the figure and finally the theme
+This function calls the **set_base_image_gradient** function in the backend which creates the *base_image* variable which stores the Magick::Image object which is the canvas on which everything will be drawn, the canvas backgroung can have any solid colour or a gradient of two colours.   
+The first inputs given are the background top and botton colour for the background gradient of the figure (*theme_options* hash was set up while initializing the figure), then the width and height of the figure and finally the gradient direction is set which is nil currently and will get take on the default value later.  
+  
+
