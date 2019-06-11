@@ -683,6 +683,9 @@ def initialize(abs_x, abs_y)
 end
 ```
 which just sets the lower right coorindates of the legend box, next *axes* is set to its owner i.e. the subplot and then *border_color* of the legend box i.e. colour of the outer rectangle of the legend box i.e. colour of the box. Then the array *legends* is created which stores the legend objects. Next the function **configure_dimensions**  is called:
+
+-- To be modified --
+
 ```ruby
 def configure_legend_box
   @bounding_box = Rubyplot::Artist::Rectangle.new(
@@ -696,7 +699,21 @@ def configure_legend_box
   )
 end
 ```
-This function creates the bounding box which is the outer rectangle 
+This function creates the bounding box which is the outer rectangle of the legend box. The *bounding_box* is a Rectangle object and the inputs given to it are the x,y coordinates of the lower left and upper right corners, the border colour and abs representing if the coordinates are in Rubyplot coordinates(abs = true) or not(abs = false). The **initialize** function of Rectangle is:
+```ruby
+def initialize(owner,x1:,y1:,x2:,y2:,border_color:,fill_color: nil, abs: false)
+  @x1 = x1
+  @x2 = x2
+  @y1 = y1
+  @y2 = y2
+  @border_color = border_color
+  @fill_color = fill_color
+  @abs = abs
+end
+```
+This just sets all the variables of the rectangle either through the input given or the default values.  
+  
+Next, the function **configure_dimensions** is called which sets the dimensions for the legend box:
 ```ruby
 def configure_dimensions
   @legends_height = @axes.plots.size * per_legend_height
@@ -705,6 +722,7 @@ def configure_dimensions
   @width = @legends_width + left_margin + right_margin
 end
 ```
+
 ```ruby
 def configure_legends
   @axes.plots.each_with_index do |plot, count|
