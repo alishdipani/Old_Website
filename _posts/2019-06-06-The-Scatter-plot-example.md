@@ -808,9 +808,182 @@ def configure_legend_box
   )
 end
 ```
-This function creates the bounding box which is the outer rectangle of the legend box. The *bounding_box* is a Rectangle object (which was discussed earlier).
+This function creates the bounding box which is the outer rectangle of the legend box. The *bounding_box* is a Rectangle object (which was discussed earlier).  
   
+Finally, the LegendBox object is created and we continue to the draw function of the axes i.e. the subplot.  
+Next the functions **assign_x_ticks** and **assign_y_ticks** are called which assign the ticks to the X and Y axes. The functions are:
+```ruby
+def assign_x_ticks
+  value_distance = @x_axis.spread / (@x_axis.major_ticks_count.to_f - 1)
+  unless @x_axis.major_ticks # create labels if not present
+    @x_axis.major_ticks = @x_axis.major_ticks_count.times.map do |i|
+      @x_axis.min_val + i * value_distance
+    end
+  end
 
+  unless @x_axis.major_ticks.all? { |t| t.is_a?(Rubyplot::Artist::XTick) }
+    @x_axis.major_ticks.map!.with_index do |tick_label, i|
+      Rubyplot::Artist::XTick.new(
+        self,
+        coord: i * value_distance + @x_axis.min_val,
+        label: Rubyplot::Utils.format_label(tick_label)
+      )
+    end
+  end
+end
 
+def assign_y_ticks
+  value_distance = @y_axis.spread / (@y_axis.major_ticks_count.to_f-1)
+  unless @y_axis.major_ticks
+    @y_axis.major_ticks = (y_range[0]..y_range[1]).step(value_distance).map { |i| i }
+  end
 
+  unless @y_axis.major_ticks.all? { |t| t.is_a?(Rubyplot::Artist::YTick) }
+    @y_axis.major_ticks.map!.with_index do |tick_label, i|
+      Rubyplot::Artist::YTick.new(
+        self,
+        coord: @y_axis.min_val + i * value_distance,
+        label: Rubyplot::Utils.format_label(tick_label)
+      )
+    end
+  end
+end
+```
+These functions decide the coorindates for the ticks according to the number of ticks required and then these function create an array to store the ticks which are *XTick* and *YTick* objects. The ticks are of two types (both for X and Y axes), minor tick and major tick which represent a smaller and a bigger tick relatively (the size of the major tick is twice the size of minor tick).  
+**P.S. - Currently the ticks are not implemented for Magick backend and changes are required in the frontend of ticks as well and hence ticks will be discussed in detial in a later blog.**  
+  
+Now, returning to the draw function of the axes, we actually start to draw the plots (Notice, till now we haven't actually drawn anything). So the next lines of code are:
+```ruby
+@x_axis.draw
+@y_axis.draw
+```
+The **draw** function of XAxis and YAxis objects (which were stored in the variables *x_axis* and *y_axis* respectively) is called to draw the axes:
+```ruby
+# X Axis
+def draw
+  configure_title
+  Rubyplot.backend.draw_x_axis(
+    origin: @axes.origin[0],
+    major_ticks: @major_ticks,
+    minor_ticks: @minor_ticks,
+    major_ticks_count: @major_ticks_count
+  )
+  @texts.each(&:draw)
+end
 
+# Y Axis
+def draw
+  configure_title
+  Rubyplot.backend.draw_y_axis(
+    origin: @axes.origin[1],
+    major_ticks: @major_ticks,
+    minor_ticks: @minor_ticks,
+    major_ticks_count: @major_ticks_count
+  )
+  @texts.each(&:draw)
+end
+```
+First both the X and Y axes call the function **configure_title** which sets the title of X axis and Y axis respectively:
+```ruby
+# X Axis
+def configure_title
+  @title = 'X axis' if @title == ''
+  @texts << Rubyplot::Artist::Text.new(
+    @title,
+    self,
+    size: @title_font_size,
+    abs_y: @axes.abs_y,
+    abs_x: @axes.abs_x + @axes.width/2
+  )
+end
+
+# Y Axis
+def configure_title
+  @title = 'Y axis' if @title == ''
+  @texts << Rubyplot::Artist::Text.new(
+    @title,
+    self,
+    rotation: -90.0,
+    abs_x: @axes.abs_x,
+    abs_y: @axes.abs_y + @axes.height / 2,
+    size: @title_font_size
+  )
+end
+```
+This function first checks if the title is empty and if it is the title is set to 'X axis' and 'Y axis' for X axis and Y axis respectively, this is done to set the default titles. After modifying the *title* variable if needed, a new Text object (which was discussed earlier) for the title is added to the *texts* array for both X and Y axes.  
+One thing to note is that roatation is given to the Text object for Y axis as text is to be printed vertically.  
+  
+After configuring the title, the backend functions **draw_x_axis** and **draw_y_axis** are called:
+```ruby
+def draw_x_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+  if @axes_map[active_axes.object_id].nil?
+    @axes_map[@active_axes.object_id]={
+      axes: @active_axes,
+      x_origin: origin
+    }
+  else
+    @axes_map[@active_axes.object_id].merge!(x_origin: origin)
+  end
+end
+
+def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
+  if @axes_map[@active_axes.object_id].nil?
+    @axes_map[@active_axes.object_id]={
+      axes: @active_axes,
+      y_origin: origin
+    }
+  else
+    @axes_map[@active_axes.object_id].merge!(y_origin: origin)
+  end
+end
+```
+The inputs given to the functions are the array for minor ticks (having XTick or YTick objects), the origin, the array for major ticks (having XTick or YTick objects) and finally the number of major ticks to be drawn.  
+The functions first check if the *axes_map* hash (initialized in the initialize function of the magick wrapper i.e. the backend) is empty (i.e. if they key for the current axes object stored in *active_axes* is not present) and if it is then a new key,value pair is created otherwise the value is added. The value for a key i.e. an subplot (axes) object is an array which stores the axes to which this value belongs, the origin of x axis and y axis.  
+Note that there is only one value array for both x axis and y axis for an axes object i.e. a subplot.  
+So, the origins are stored in a hash and after that in the **draw** function for both the axes, this command is called:
+```ruby
+@texts.each(&:draw)
+```
+This command calls the **draw** function for each of the Text objects present in *texts* array. The **draw** function of the Text object is:
+```ruby
+def draw
+  Rubyplot.backend.draw_text(
+    @text,
+    color: @color,
+    font: @font,
+    size: @size,
+    abs_x: @abs_x,
+    abs_y: @abs_y,
+    rotation: @rotation,
+    halign: @halign,
+    valign: @valign
+  )
+end
+```
+This function calls the **draw_text** of the backend and passes all the useful variables, the **draw_text** is:
+```ruby
+def draw_text(text,color: :default,font: nil,size:,
+        font_weight: Magick::NormalWeight, halign:, valign:,
+        abs_x:,abs_y:,rotation: nil, stroke: 'transparent', abs: true)
+  unless text.empty?
+    within_window(abs) do
+      x = transform_x(x: abs_x, abs: abs)
+      y = transform_y(y: abs_y, abs: abs)
+
+      @text.fill = Rubyplot::Color::COLOR_INDEX[color]
+      @text.font = font.to_s if font
+      @text.pointsize = size
+      @text.font_weight = font_weight
+      # @text.gravity = GRAVITY_MEASURE[gravity] || Magick::ForgetGravity
+      @text.stroke stroke
+      @text.stroke_antialias false
+      @text.text_antialias = false
+      modify_draw(@text, x_shift: x.to_i, y_shift: y.to_i, rotation: rotation) do |draw|
+        draw.text(0,0, text.gsub('%', '%%'))
+      end
+    end
+  end
+end
+```
+Apart from the self-explanatory, the other variables are *font_weight* which represents Magick's weight properties(currently not used), *halign* and *valign* whcih represent horizontal and vertical alignments respectively, rotation if the text is to be rotated  and the stroke which defines the pattern for the text (does not make a difference currently) and the absolute flag as abs.  
+This function first checks whether the text argument is given or not and only proceeds if it is given. Next the **within_window** function is called which 
