@@ -456,13 +456,12 @@ end
 ```
 This first modifies the *canvas_width* and the *canvas_height* variables according to the unit of the figure (**scale_figure** function was explained earlier). Then three new variables are defined *draw*, *axes* and *text* which are Magick::Draw objects which are used to draw shapes, X/Y axes and text respectively. Finally the *file_name* variable stores the file name string.  
   
-## Drawing the subplots
-Now, the subplots are actually drawn:
+## Processing the data in subplots
+Now, First the data in subplots is processed:
 ```ruby
 @subplots.each { |i| i.each(&:process_data) }
-@subplots.each { |i| i.each(&:draw) }
 ```
-But first the data is processed to set important properties required for plotting the subplot. For each subplot (axes object) stored in *subplots* array the function **process_data** is called:
+For each subplot (axes object) stored in *subplots* array the function **process_data** is called:
 ```ruby
 def process_data
   assign_default_label_colors
@@ -571,6 +570,151 @@ def set_yrange
   end
 end
 ```
-Both of these functions first check if the corresponding maximum and minimum values are nil or not (which they are by default) in *x_axis* and *y_axis* which store the XAxis and YAxis objects respectively, and if they are nil (which they are in this example currently) then it calculates the minimum and maximum values across all the plots present in this subplot(i.e. in the *plots* array) and then sets the corresponding variables to the corresponding values.
+Both of these functions first check if the corresponding maximum and minimum values are nil or not (which they are by default) in *x_axis* and *y_axis* which store the XAxis and YAxis objects respectively, and if they are nil (which they are in this example currently) then it calculates the minimum and maximum values across all the plots present in this subplot(i.e. in the *plots* array) and then sets the corresponding variables to the corresponding values.  
+  
+## Drawing the Subplots
+Next each subplot in *subplots* array is drawn:
+```ruby
+@subplots.each { |i| i.each(&:draw) }
+```
 
+The draw function of axes is:
+```ruby
+# Write an image to a file by communicating with the backend.
+def draw
+  Rubyplot.backend.active_axes = self
+  configure_title
+  configure_legends
+  assign_x_ticks
+  assign_y_ticks
+  @x_axis.draw
+  @y_axis.draw
+  @texts.each(&:draw)
+  @legend_box.draw
+  @plots.each(&:draw)
+end
+```
+First the *active_axes* variable is set to the current axes object which is to be drawn, next the function **configure_title** is called:
+```ruby
+# Figure out the co-ordinates of the title text w.r.t Axes.
+def configure_title
+  @texts << Rubyplot::Artist::Text.new(
+    @title, self,
+    abs_x: abs_x + width / 2, abs_y: abs_y + height,
+    font: @font, color: @font_color,
+    size: @title_font_size, internal_label: 'axes title.')
+end
+```
+This function sets the title of this subplot (in this example the title is set to 'Nice plot'). So a new Text object is added to the *texts* array of the active axes, the inputs for initializing the Text object are first the text, then the owner of this text i.e. the active axes, then the x coordinate and y coordinate in Rubyplot coordinates, then the font, font colour, font size (in points) and an internal label. Currently, the position of title is kept static and is at the center of the width and at maximum height of the axes (adding these with the x and y origin values of the axes gives the Rubyplot coordinates of the text). The initialize function of Text is:  
+```ruby
+def initialize(text, owner, abs_x:, abs_y:,font: :times_roman,
+  color: :black, size:, internal_label: '', rotation: nil,
+  weight: nil, halign: :normal, valign: :normal, direction: :left_right)
+  @abs_x = abs_x
+  @abs_y = abs_y
+  @text = text
+  @owner = owner
+  @font = font
+  @color = color
+  @size = size
+  @internal_label = internal_label
+  @rotation = rotation
+  if HAlignment.include? halign
+    @halign = halign
+  else
+    raise "Invalid horizontal alignment #{halign}."
+  end
+
+  if VAlignment.include? valign
+    @valign = valign
+  else
+    raise "Invalid vertical alignment #{valign}."
+  end
+end
+```
+This sets all the required variables including the rotation for text if required and the alignment too.  
+  
+After configuring the label, the function **configure_legends** is called:
+```ruby
+# Figure out co-ordinates of the legends
+def configure_legends
+  @legend_box = Rubyplot::Artist::LegendBox.new(
+    self, abs_x: legend_box_ix, abs_y: legend_box_iy
+  )
+end
+```
+This function creates a new LegendBox object which defines the legend of the subplot, the inputs given are the owner of this legend box i.e. the subplot, then the absolute value (i.e. in Rubyplot coordinates) of x and y coordinates which correspond to the lower right corner of the legend box. The functions **legend_box_ix** and **legend_box_ix** are called to give the absolute X and Y coordinate for the lower right corner of the legend box. The functions are:
+```ruby
+# X co-ordinate of the legend box depending on value of @legend_box_position.
+def legend_box_ix
+  case @legend_box_position
+  when :top
+    abs_x + width / 2
+  end
+end
+
+# Y co-ordinate of the legend box depending on value of @legend_box_position.
+def legend_box_iy
+  case @legend_box_position
+  when :top
+    abs_y + height - top_margin - legend_margin
+  end
+end
+```
+These functions set the X coordinate to center of width and Y coordinate to the maximum height of the axes excluding the corresponding margins.  
+  
+The initialize function of the LegendBox is:
+```ruby
+def initialize(axes, abs_x:, abs_y:)
+  super(abs_x, abs_y)
+  @axes = axes
+  @border_color = :black
+  @legends = []
+  configure_dimensions
+  configure_legends
+  configure_legend_box
+end
+```
+This first calls the initialize of parent class i.e. base:
+```ruby
+def initialize(abs_x, abs_y)
+  @abs_x = abs_x
+  @abs_y = abs_y
+end
+```
+which just sets the lower right coorindates of the legend box, next *axes* is set to its owner i.e. the subplot and then *border_color* of the legend box i.e. colour of the outer rectangle of the legend box i.e. colour of the box. Then the array *legends* is created which stores the legend objects. Next the functions **configure_dimensions**, **configure_legends** and **configure_legend_box** are called:
+```ruby
+def configure_legend_box
+  @bounding_box = Rubyplot::Artist::Rectangle.new(
+    self,
+    x1: @abs_x,
+    y1: @abs_y,
+    x2: @abs_x + @width,
+    y2: @abs_y + @height,
+    border_color: @border_color,
+    abs: true
+  )
+end
+
+def configure_dimensions
+  @legends_height = @axes.plots.size * per_legend_height
+  @legends_width = 0.2 * @axes.width
+  @height = @legends_height + top_margin + bottom_margin
+  @width = @legends_width + left_margin + right_margin
+end
+
+def configure_legends
+  @axes.plots.each_with_index do |plot, count|
+    next unless plot.label != ''      
+    @legends << Rubyplot::Artist::Legend.new(
+      self,
+      @axes,
+      text: plot.label,
+      color: plot.color,
+      abs_x: @abs_x + left_margin,
+      abs_y: @abs_y + count * per_legend_height + bottom_margin,
+    )
+  end
+end
+```
 
