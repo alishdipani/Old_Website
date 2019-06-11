@@ -12,7 +12,7 @@ tags:
  - Rubyplot
 ---
 In the project introduction blog a scatter plot example was given, I will be explaining the technical details for that example which involves explaining the code for the library using **Magick backend**.  
-**P.S. - This blog is targeted twoards new developers who want to get familiar with the codebase of the library or anyone who is exteremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot.**
+**P.S. - This blog is targeted twoards new developers who want to get familiar with the codebase of the library or anyone who is exteremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot and rmagick.**
 P.S. - The version of library used for this example is of date 9 June.  
   
 The example code : 
@@ -682,7 +682,7 @@ def initialize(abs_x, abs_y)
   @abs_y = abs_y
 end
 ```
-which just sets the lower right coorindates of the legend box, next *axes* is set to its owner i.e. the subplot and then *border_color* of the legend box i.e. colour of the outer rectangle of the legend box i.e. colour of the box. Then the array *legends* is created which stores the legend objects. Next the functions **configure_dimensions**, **configure_legends** and **configure_legend_box** are called:
+which just sets the lower right coorindates of the legend box, next *axes* is set to its owner i.e. the subplot and then *border_color* of the legend box i.e. colour of the outer rectangle of the legend box i.e. colour of the box. Then the array *legends* is created which stores the legend objects. Next the function **configure_dimensions**  is called:
 ```ruby
 def configure_legend_box
   @bounding_box = Rubyplot::Artist::Rectangle.new(
@@ -695,14 +695,17 @@ def configure_legend_box
     abs: true
   )
 end
-
+```
+This function creates the bounding box which is the outer rectangle 
+```ruby
 def configure_dimensions
   @legends_height = @axes.plots.size * per_legend_height
   @legends_width = 0.2 * @axes.width
   @height = @legends_height + top_margin + bottom_margin
   @width = @legends_width + left_margin + right_margin
 end
-
+```
+```ruby
 def configure_legends
   @axes.plots.each_with_index do |plot, count|
     next unless plot.label != ''      
