@@ -1216,6 +1216,73 @@ MARKER_TYPES = {
     draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
     draw.circle(x,y, x + size,y)
   },
-  ...
+  ... # Code for rest of the markers is not shown beacuse of space constraints
 }
 ```
+The *:circle* Lambda first sets the colour of the border and the colour to be filled and then it calls the **circle** function for the Magick::Draw object stored in *draw* local variable to draw a circle. The function takes in inputs as the x,y coordinates for the center and a point at the circumference (in pixel values). So, the marker is drawn in the *draw* variable.  
+  
+We now return to the **write** function of the Figure.  
+  
+## Writing the Figure
+Now, the **write** function of the backend is called:
+```ruby
+def write
+  draw_axes
+  @draw.draw(@base_image)
+  @text.draw(@base_image)
+  @base_image.write(@file_name)
+end
+```
+This function first calls the **draw_axes** which will draw the *axes* Magick::Draw object onto the Magick::Image object *base_image* which is the canvas. Then the **draw** funntion is called for the Magick::Draw objects *draw* and *text* and the input given is *base_image*, so the Magick::Draw objects are drawn onto the canvas i.e. Magick::Image object. And finally the **write** function is called for *base_image* which is a Magick::Image, the function takes the input a string which would be the name of the file(image) when saved and so the *base_image* is written onto the device.  
+The **draw_axes** function is:
+```ruby
+def draw_axes
+  @axes_map.each_value do |v|
+    axes = v[:axes]
+    @active_axes = axes
+    within_window do
+      # Plot the X and Y axes
+      @axes.polyline(
+        transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: axes.x_range[1]),transform_y(y: v[:y_origin]),
+        transform_x(x: v[:x_origin]),transform_y(y: v[:y_origin]), transform_x(x: v[:x_origin]),transform_y(y: axes.y_range[1])
+      )
+    end
+  end
+  @axes.draw(@base_image)
+end
+```
+This function is used to draw the X and Y axis using the *axes_map* hash. Now, for every key in the *axes_map* hash first the *axes* variable is set as the subplot(axes) for which the X and Y axes is to be drawn, then the *active_axes* is set as the subplot. Then the **within_window** function is called (explained earlier) and then the **polyline** function is called for *axes* magick::Draw object which draws multiple line by taking the inputs as multiple x,y coordinate pairs for starting and ending points of the lines (in pixels). So, the inputs given to draw the X axis are the transformed points origin of the *axes* and the maximum value of X, Y origin. For the Y axis, the inputs given are the transformed points origin of the *axes* and the X origin, maximum value of Y.  
+  
+Finally, the *axes* Magick::Draw object is drawn using the **draw** function on the *base_image* Magick::image object (canvas).  
+  
+We now return to the **write** function of the Figure to execute the last line of code. Notice that we have already drawn and saved the figure.  
+  
+## Finishing up 
+Finally the backend's **stop_output_device** function is called:
+```ruby
+def stop_output_device
+  @canvas_width, @canvas_height = unscale_figure(@canvas_width, @canvas_height)
+  flush
+end
+```
+This function first scales the canvas dimensions to its original values by calling **unscale_figure** which were scaled according to the *figsize_units* variable. Then the **flush** function is called which clears the memory by disposing data which is no longer useful.  
+  
+The **unscale_figure** function is:
+```ruby
+def unscale_figure(width, height)
+  [width / PIXEL_MULTIPLIERS[@figure.figsize_unit], height / PIXEL_MULTIPLIERS[@figure.figsize_unit]]
+end
+```
+The width and the height are divided by the conversion constants set in the *PIXEL_MULTIPLIERS* hash (explained earlier). So, the Figure dimensions are scaled back to its original values.  
+  
+The **flush** function is:
+```ruby
+# Refresh this backend and remove all previously set data.
+def flush
+  @axes_map = {}
+  @file_name = nil
+end
+```
+First the *axes_map* is cleared and then the *file_name* is cleared. This refreshes the backend and clears the memory.  
+  
+**So, we have finally drawn, written and saved our figure.**
