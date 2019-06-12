@@ -12,8 +12,8 @@ tags:
  - Rubyplot
 ---
 In the project introduction blog a scatter plot example was given, I will be explaining the technical details for that example which involves explaining the code for the library using **Magick backend**.  
-**P.S. - This blog is targeted twoards new developers who want to get familiar with the codebase of the library or anyone who is exteremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot and rmagick.**  
-P.S. - The version of library used for this example is of date 9 June.  
+**P.S. - This blog is targeted towards new developers who want to get familiar with the codebase of the library or anyone who is extremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot and rmagick.**  
+P.S. - The version of the library used for this example is of date 9 June.  
   
 The example code : 
 ```ruby
@@ -46,10 +46,10 @@ require 'Rubyplot'
 @xdata = [1, 2, 3, 4, 5] # Defining X data
 @ydata = [11, 2, 33, 4, 65] # Defining Y data
 ```
-First Rubyplot is included which is similar to import in Python, this allows us to use Rubyplot.  Next we define 2 arrays *xdata* and *ydata* which store the X and Y coordinates to be plotted. So, the points to be plotted are (1,11), (2,2), (3,33), (4,4) and (5,65).  
+First Rubyplot is included which is similar to import in Python, this allows us to use Rubyplot.  Next, we define 2 arrays *xdata* and *ydata* which store the X and Y coordinates to be plotted. So, the points to be plotted are (1,11), (2,2), (3,33), (4,4) and (5,65).  
   
 ## Figure
-After this we create a new Figure object which will act as the canvas on which image will be drawn.
+After this, we create a new Figure object which will act as the canvas on which image will be drawn.
 ```ruby
 @figure = Rubyplot::Figure.new # Creating the canvas
 ```
@@ -75,7 +75,7 @@ end
 ```
 Here, *height* and *width* represent the height and width of the canvas to be made respectively. *figsize_unit* is for saving the unit for measurement which are pixel, centimeter or inch (default is cm).  
 Now, the Figure class inherits the Base class which initializes the origin for the figure in Rubyplot Coordinates which is set to 0,0.  
-After this default values are given to the required variables which include *width* and *height* set at 40 cm, spacing variables are for the margin for the figure (in pixels), *nrows* and *ncols* are the number of rows and coloumns in which each (row, coloumn) represents a subplot, *subplots* variable is an 2-D array for storing subplots(which are axes objects), *title* is the title of the figure. Now, the function **set_rubyplot_artist_coords!** is called:
+After this default values are given to the required variables which include *width* and *height* set at 40 cm, spacing variables are for the margin for the figure (in pixels), *nrows* and *ncols* are the number of rows and columns in which each (row, column) represents a subplot, *subplots* variable is a 2-D array for storing subplots(which are axes objects), *title* is the title of the figure. Now, the function **set_rubyplot_artist_coords!** is called:
 ```ruby
 def set_rubyplot_artist_coords!
   @max_x = 100.0
@@ -91,9 +91,9 @@ def set_rubyplot_artist_coords!
   end
 end
 ```
-This sets the maximum and minimum coordinates for Rubyplot in Rubyplot coordinates and so the figure has an X and Y range as [0,max] for both X and Y coordinates in Rubyplot coordinates. Then this function defines the *aspect_ratio* and then changes the maximum value and the range for X or Y depending on the canvas height and width.  
+This sets the maximum and minimum coordinates for Rubyplot in Rubyplot coordinates and so the figure has an X and Y range as [0, max] for both X and Y coordinates in Rubyplot coordinates. Then this function defines the *aspect_ratio* and then changes the maximum value and the range for X or Y depending on the canvas height and width.  
   
-After this, the function **setup_default_theme** is called which initializes some useful variables for colour of the figure:
+After this, the function **setup_default_theme** is called which initializes some useful variables for the colour of the figure:
 ```ruby
 def setup_default_theme
   defaults = {
@@ -134,7 +134,7 @@ After creating the figure, we move to adding subplots. To add a subplot the func
 ```ruby
 axes = @figure.add_subplot! 0,0
 ```
-But first we need to call the function **add_subplots!** to create the space for subplots i.e. initialize the *subplots* array and define the number of subplots. In this example 0,0 specifies that only 1 subplot is to be created and we have already created the space for it(during initialization of the Figure) and so we don't need to do it again.  
+But first, we need to call the function **add_subplots!** to create the space for subplots i.e. initialize the *subplots* array and define the number of subplots. In this example, 0,0 specifies that only 1 subplot is to be created and we have already created the space for it(during initialization of the Figure) and so we don't need to do it again.  
 Now, the function **add_subplot!** is called for our figure object:  
 ```ruby
 def add_subplot!(nrow, ncol)
@@ -209,7 +209,7 @@ def initialize(*)
   super
 end
 ```
-So, both these classes inherit the Base of Axis and in constructor of both of these classes, the constructor of Base is called:
+So, both these classes inherit the Base of Axis and in the constructor of both of these classes, the constructor of Base is called:
 ```ruby
 def initialize axes
   @axes = axes
@@ -225,7 +225,7 @@ def initialize axes
   @title_font_size = 25.0
 end
 ```
-This constructor sets various useful properties of X and Y axes to their default values. It takes the axes object as an input to store it into *axes* variable to store the axes object to which it belongs, next the *title* is set to empty and the *max_val* and the *min_val* are stored to nil which store the maximum and minimum value of the X and the Y axes, next the number of major and minor ticks (between two major ticks) are stored, then two arrays are initialized *texts* and *lines* (not actually used) to store the texts and lines (tick lines not actual axis lines) for the X and Y axes, then the variables *major_ticks* and *minor_ticks* are set to nil which are used as arrays to store XTick and YTick objects corresponding to major(and minor) ticks of X axis and major(and minor) ticks of Y axis respectively. Finally the font size of the title is set to 25 points.
+This constructor sets various useful properties of X and Y axes to their default values. It takes the axes object as an input to store it into *axes* variable to store the axes object to which it belongs, next the *title* is set to empty and the *max_val* and the *min_val* are stored to nil which store the maximum and minimum value of the X and the Y axes, next the number of major and minor ticks (between two major ticks) are stored, then two arrays are initialized *texts* and *lines* (not actually used) to store the texts and lines (tick lines not actual axis lines) for the X and Y axes, then the variables *major_ticks* and *minor_ticks* are set to nil which are used as arrays to store XTick and YTick objects corresponding to major(and minor) ticks of X-axis and major(and minor) ticks of Y-axis respectively. Finally, the font size of the title is set to 25 points.
   
 ## The Plot
 Now, we have defined the subplot i.e. the axes object in which we want to draw our plot. The next lines of code are:
@@ -277,7 +277,7 @@ def initialize(*)
   @marker_fill_color = nil
 end
 ```
-This first calls the base class which is inherited by Scatter, the initialize function is called. After that, different properties of the plot are set to default values which are stored in variables like marker size (set to 1), marker type (set to circle) which can be of different types like, traingle, plus, star, etc. (around 35 types available), marker border colour (set to black) and marker fill colour (set to nil). Now, the initialize function is:
+This first calls the base class which is inherited by Scatter, the initialize function is called. After that, different properties of the plot are set to default values which are stored in variables like marker size (set to 1), marker type (set to circle) which can be of different types like, triangle, plus, star, etc. (around 35 types available), marker border colour (set to black) and marker fill colour (set to nil). Now, the initialize function is:
 ```ruby
 def initialize axes
 super(axes.abs_x, axes.abs_y)
@@ -301,7 +301,7 @@ def initialize(abs_x, abs_y)
   @abs_y = abs_y
 end
 ```
-This initialized function sets the absolute values (i.e. in Rubyplot coordinates) of the origin of this axes object i.e. of this subplot (which is upper left corner for Magick backend).  
+This initialized function sets the absolute values (i.e. in Rubyplot coordinates) of the origin of this axes object i.e. of this subplot (which is the upper left corner for Magick backend).  
   
 ## The Block
 Now, the scatter object has been initialized and the block will be executed which sets the data to be plotted and other properties of the scatter plot. The block is:  
@@ -312,7 +312,7 @@ p.marker_border_color = :blue # defining border colour of the markers
 p.marker_fill_color = :blue # defining fill colour of the markers
 p.marker_type = :circle # defining marker type
 ```
-Here p is the scatter plot object. First the data is set to the *x1* and the *y1* arrays defined earlier:
+Here p is the scatter plot object. First, the data is set to the *x1* and the *y1* arrays defined earlier:
 ```ruby
 # Function in base of plots
 def data(x_values, y_values)
@@ -328,9 +328,9 @@ def label=(label)
 end
 ```
 This overwrites the value of *label* in *data* hash.  
-Next, marker border colour is set which is a variable of scatter plot which describes the colour of thr border of the markers. So, in this example the colour is set to blue i.e. the variable *marker_border_color* is set to the symbol *:blue*.  
-Next, marker fill colour is set which is a variable of scatter plot which describes the colour to be filled in the markers. So, in this example the colour is set to blue i.e. the variable *marker_fill_color* is set to the symbol *:blue*.  
-Finally the marker type is set to circle i.e. the variable *marker_type* is set to the symbol *:circle*.  
+Next, *marker_border_color* is set which is a variable of scatter plot which describes the colour of the border of the markers. So, in this example the colour is set to blue i.e. the variable *marker_border_color* is set to the symbol *:blue*.  
+Next, *marker_fill_color* is set which is a variable of scatter plot which describes the colour to be filled in the markers. So, in this example the colour is set to blue i.e. the variable *marker_fill_color* is set to the symbol *:blue*.  
+Finally, the marker type is set to circle i.e. the variable *marker_type* is set to the symbol *:circle*.  
   
 ## Axes properties
 Finally after setting the scatter plot properties, the properties of the subplot i.e. the axes object are set:
@@ -339,11 +339,11 @@ axes.title = "Nice plot" # defining title of the plot
 axes.x_title = "X data" # defining title of X axis
 axes.y_title = "Y data" # defining title of Y axis
 ```
-Axes object has these variables *title*, *x_title*, *y_title* which store a string which defines the title of the subplot, title of X axis and title of Y axis respectively.  
+Axes object has these variables *title*, *x_title*, *y_title* which store a string which defines the title of the subplot, title of X-axis and title of Y-axis respectively.  
   
-## Writing the Figure
-Till now we have only defined the properties and the data of the figure and have not actually plotted anything. Also notice that till now we haven't actually made of use of backend and have only used the frontend, one aim of Rubyplot is having a backend agnostic frontend i.e. frontend should not be dependent on backend.  
-Now the we finally call the write function of the figure which actually draws everything and stores the figure as an Image:
+## Writing Figure
+Till now we have only defined the properties and the data of the figure and have not actually plotted anything. Also notice that till now we haven't actually made of the use of backend and have only used the frontend, one aim of Rubyplot is having a backend-agnostic frontend i.e. frontend should not be dependent on the backend.  
+Now we finally call the write function of the figure which actually draws everything and stores the figure as an Image:
 ```ruby
 @figure.write("scatterplot.png") # Drawing the figure and saving it
 ```
@@ -364,7 +364,7 @@ def write(file_name, device: :file)
 end
 ```
 Now, we start using the backend (it is initialized) and setting its properties, first the variables *canvas_height* and *canvas_width* are sset as the height and width of the canvas (figure), then the *figure* variable points to the Figure object.  
-Now the function **set_background_gradient** is called which is exclusive to Magick backend and its purpose is to make the canvas i.e. an Magick::Image object (P.S. - In future this function will be shifted to the backend so that both backends are consistent).  
+Now the function **set_background_gradient** is called which is exclusive to Magick backend and its purpose is to make the canvas i.e. an Magick::Image object (P.S. - In future, this function will be shifted to the backend so that both backends are consistent).  
   
 ## Initializing the backend
 When any function or variable of the backend is called for the first time, the backend is initialized and its constructor is called:
@@ -373,7 +373,7 @@ def initialize
   @axes_map = {}
 end
 ```
-In Magick backend, during initialization an *axes_map* hash is defined which will later be used to store properties for X and Y axis corresponding to this particular axes which is currently being used.  
+In Magick backend, during initialization an *axes_map* hash is defined which will later be used to store properties for X and Y axis corresponding to this particular axes which are currently being used.  
   
 ## Setting up the background gradient
 Now, the **set_background_gradient** function is:
@@ -389,7 +389,7 @@ def set_background_gradient
 end
 ```
 This function calls the **set_base_image_gradient** function in the backend which creates the *base_image* variable which stores the Magick::Image object which is the canvas on which everything will be drawn, the canvas backgroung can have any solid colour or a gradient of two colours.   
-The first inputs given are the background top and botton colour for the background gradient of the figure (*theme_options* hash was set up while initializing the figure), then the width and height of the figure and finally the gradient direction is set which is nil currently and will get take on the default value later.  
+The first inputs given are the background top and bottom colour for the background gradient of the figure (*theme_options* hash was set up while initializing the figure), then the width and height of the figure and finally the gradient direction is set which is nil currently and will get take on the default value later.  
   
 Now, the **set_base_image_gradient** function is:
 ```ruby
@@ -397,7 +397,7 @@ def set_base_image_gradient(top_color, bottom_color, width, height, direct=:top_
   @base_image = render_gradient top_color, bottom_color, width, height, direct
 end
 ```
-So the inputs to this is as explained above and the direction of gradient is set to the symbol *:top_bottom*. So, the variable *base_image* is created which stores the Magick::Image object which is the figure, the value of *base_image* is returned by the function which is **render_gradient** which takes the same inputs as **set_base_image_gradient**, this function is:
+So the inputs to this are as explained above and the direction of the gradient is set to the symbol *:top_bottom*. So, the variable *base_image* is created which stores the Magick::Image object which is the figure, the value of *base_image* is returned by the function which is **render_gradient** which takes the same inputs as **set_base_image_gradient**, this function is:
 ```ruby
 # Render a gradient and return an Image.
 def render_gradient(top_color, bottom_color, width, height, direct)
@@ -439,7 +439,7 @@ PIXEL_MULTIPLIERS = {
 }.freeze
 ```
   
-## Setting up Output device
+## Setting up the Output device
 After setting up the background gradient, the **init_output_device** function is called:
 ```ruby
 Rubyplot.backend.init_output_device(file_name, device: :file)
@@ -682,7 +682,7 @@ def initialize(abs_x, abs_y)
   @abs_y = abs_y
 end
 ```
-which just sets the lower right coorindates of the legend box, next *axes* is set to its owner i.e. the subplot and then *border_color* of the legend box i.e. colour of the outer rectangle of the legend box i.e. colour of the box. Then the array *legends* is created which stores the legend objects. Next the function **configure_dimensions**  is called which sets the dimensions for the legend box:
+which just sets the lower right coordinates of the legend box, next *axes* is set to its owner i.e. the subplot and then *border_color* of the legend box i.e. the colour of the outer rectangle of the legend box i.e. the colour of the box. Then the array *legends* is created which stores the legend objects. Next, the function **configure_dimensions**  is called which sets the dimensions for the legend box:
 ```ruby
 def configure_dimensions
   @legends_height = @axes.plots.size * per_legend_height
@@ -714,7 +714,7 @@ def per_legend_height
   5
 end
 ```
-So, in **configure_dimensions** first the total height of legends is set which is number of plots * height per legend (which is set to 5 Rubyplot coordinates), then the length of the legends is width of the subplot * 0.2, Then the total height and wisth for the legend box is calculated i.e. margins are incorporated (each margin ratio is set to 0.1).  
+So, in **configure_dimensions** first the total height of legends is set which is number of plots * height per legend (which is set to 5 Rubyplot coordinates), then the length of the legends is width of the subplot * 0.2, Then the total height and width for the legend box is calculated i.e. margins are incorporated (each margin ratio is set to 0.1).  
   
 After fixing the legend box dimensions, the legends are created which are Legend objects using the **configure_legends** function, which is:
 ```ruby
@@ -732,7 +732,7 @@ def configure_legends
   end
 end
 ```
-This function creates a legend which is a Legend object having a square with colour of the data and its label for every plot stored in the *plots* array. So for each plot a Legend object is made and added to the *legends* array, any plot with empty label is skipped. The inputs given to create a new Legend object are first the owner of this legend i.e. the legend box, then the sbplot to which it belongs i.e. the axes object, then the label of the plot, colour of the plot and finally the x,y coordinate of the lower left corner of the legend in Rubyplot coordinates. The initialize function of Legend is:
+This function creates a legend which is a Legend object having a square with the colour of the data and its label for every plot stored in the *plots* array. So for each plot a Legend object is made and added to the *legends* array, any plot with an empty label is skipped. The inputs given to create a new Legend object are first the owner of this legend i.e. the legend box, then the subplot to which it belongs i.e. the axes object, then the label of the plot, colour of the plot and finally the x,y coordinate of the lower left corner of the legend in Rubyplot coordinates. The initialize function of Legend is:
 ```ruby
 def initialize(legend_box, axes, text:, color:,abs_x:,abs_y:)
   super(abs_x, abs_y)
@@ -849,8 +849,8 @@ def assign_y_ticks
   end
 end
 ```
-These functions decide the coorindates for the ticks according to the number of ticks required and then these function create an array to store the ticks which are *XTick* and *YTick* objects. The ticks are of two types (both for X and Y axes), minor tick and major tick which represent a smaller and a bigger tick relatively (the size of the major tick is twice the size of minor tick).  
-**P.S. - Currently the ticks are not implemented for Magick backend and changes are required in the frontend of ticks as well and hence ticks will be discussed in detial in a later blog.**  
+These functions decide the coordinates for the ticks according to the number of ticks required and then these functions create an array to store the ticks which are *XTick* and *YTick* objects. The ticks are of two types (both for X and Y axes), minor tick and major tick which represent a smaller and a bigger tick relatively (the size of the major tick is twice the size of minor tick).  
+**P.S. - Currently the ticks are not implemented for Magick backend and changes are required in the frontend of ticks as well and hence ticks will be discussed in detail in a later blog.**  
   
 Now, returning to the draw function of the axes, we actually start to draw the plots (Notice, till now we haven't actually drawn anything). So the next lines of code are:
 ```ruby
@@ -911,7 +911,7 @@ def configure_title
 end
 ```
 This function first checks if the title is empty and if it is the title is set to 'X axis' and 'Y axis' for X axis and Y axis respectively, this is done to set the default titles. After modifying the *title* variable if needed, a new Text object (which was discussed earlier) for the title is added to the *texts* array for both X and Y axes.  
-One thing to note is that roatation is given to the Text object for Y axis as text is to be printed vertically.  
+One thing to note is that rotation is given to the Text object for the Y-axis as the text is to be printed vertically.  
   
 After configuring the title, the backend functions **draw_x_axis** and **draw_y_axis** are called:
 ```ruby
@@ -938,9 +938,9 @@ def draw_y_axis(minor_ticks:, origin:, major_ticks:, major_ticks_count:)
 end
 ```
 The inputs given to the functions are the array for minor ticks (having XTick or YTick objects), the origin, the array for major ticks (having XTick or YTick objects) and finally the number of major ticks to be drawn.  
-The functions first check if the *axes_map* hash (initialized in the initialize function of the magick wrapper i.e. the backend) is empty (i.e. if they key for the current axes object stored in *active_axes* is not present) and if it is then a new key,value pair is created otherwise the value is added. The value for a key i.e. an subplot (axes) object is an array which stores the axes to which this value belongs, the origin of x axis and y axis.  
-Note that there is only one value array for both x axis and y axis for an axes object i.e. a subplot.  
-So, the origins are stored in a hash and after that in the **draw** function for both the axes, this command is called:
+The functions first check if the *axes_map* hash (initialized in the initialize function of the magick wrapper i.e. the backend) is empty (i.e., if the key for the current axes object stored in *active_axes* is not present) and if it is then a new key, value pair is created otherwise the value is added. The value for a key i.e. a subplot (axes) object is an array which stores the axes to which this value belongs, the origin of X-axis and Y-axis.  
+Note that there is only one value array for both X-axis and Y-axis for axes object i.e. a subplot.  
+So, the origins are stored in a hash and after that, in the **draw** function for both the axes, this command is called:
 ```ruby
 @texts.each(&:draw)
 ```
@@ -986,7 +986,7 @@ def draw_text(text,color: :default,font: nil,size:,
 end
 ```
 Apart from the self-explanatory, the other variables are *font_weight* which represents Magick's weight properties(currently not used), *halign* and *valign* whcih represent horizontal and vertical alignments respectively, rotation if the text is to be rotated  and the stroke which defines the pattern for the text (does not make a difference currently) and the absolute flag as abs.  
-This function first checks whether the text argument is given or not and only proceeds if it is given. Next the **within_window** function is called which sets up the area (the window) in which the drawing is to be done. This function takes a block as input which is just a collection of lines of code to be executed. The function is:
+This function first checks whether the text argument is given or not and only proceeds if it is given. Next, the **within_window** function is called which sets up the area (the window) in which the drawing is to be done. This function takes a block as input which is just a collection of lines of code to be executed. The function is:
 ```ruby
 def within_window(abs=false, &block)
   if abs
@@ -1028,13 +1028,13 @@ def within_window(abs=false, &block)
 end
 ```
 This function first checks the absolute flag and does nothing if it is true(as the coordinates are absolute and no shifting is required), if the absolute flag is false then the data used for drawing is in plot coordinates i.e. according to the data given by the user for the plot. So, if abs = false then there is a need to incorporate the margins for the figure as well as for the subplot and so the origin (upper left corner in magick) is shifted accordingly using Magick's **translate** function which takes input as the amount(in pixels) by which X and Y origin is to be shifted, here we are not actually shifting the canvas but instead just the origin of the three Magick::Draw objects *draw*, *text, *axes* which actually draw shapes/text/axes on the canvas.  
-So, the amount by which the objects are to be shifted is to be given in pixels as Magick only accepts pixels and hence the coodinates present in Rubyplot coordinates are first divided by the maximum Rubyplot coordinate to bring the coordinate in the range [0,1] and then it is multipled by the *canvas_width* to finally convert the coordinate into pixel value (remember the *canvas_width* was already scaled according to the *figsize_unit*). Similar operation is done for Y coordinate with a change that *top_margin* is incorporated as the origin for Magick backend is the upper left corner.  
+So, the amount by which the objects are to be shifted is to be given in pixels as Magick only accepts pixels and hence the coordinates present in Rubyplot coordinates are first divided by the maximum Rubyplot coordinate to bring the coordinate in the range [0,1] and then it is multiplied by the *canvas_width* to finally convert the coordinate into pixel value (remember the *canvas_width* was already scaled according to the *figsize_unit*). A similar operation is done for Y coordinate with a change that *top_margin* is incorporated as the origin for Magick backend is the upper left corner.  
   
 After translation, scaling is done using **scale** function of Magick::Draw object which takes input the factor by which X and Y coordinates are to be scaled. This ensures that the drawing is scaled according to the requirements.  
   
-After translation and scaling, the block is executed and the Draw object return to their original state by scaling and translating to the original state in which the Draw ojects were present.  
+After translation and scaling, the block is executed and the Draw object return to their original state by scaling and translating to the original state in which the Draw objects were present.  
   
-After the **within_window** function, the X and Y coordinates are transformed to convert them into pixel values to be used further using the functions **transform_x** and **transform_y** which take the inputs, the coordinate to be transormed and the absolute flag. These functions are:
+After the **within_window** function, the X and Y coordinates are transformed to convert them into pixel values to be used further using the functions **transform_x** and **transform_y** which take the inputs, the coordinate to be transformed and the absolute flag. These functions are:
 ```ruby
 # Transform X co-ordinate.
 def transform_x(x: , abs: false)
@@ -1054,7 +1054,7 @@ def transform_y(y: , abs: false)
   end
 end
 ```
-In these functions, if absolute flag is true i.e. the coordinates are in Rubyplot coordinates then similar to **within_window** function, the coordinates are first brought to the range [0,1] and then multiplied by the canvas dimensions to get the coordinates in pixels. The difference in Y coordinate is that in Magick the origin is the upper left corner but we want to make the origin as lower left corner and so the minimum Rubyplot coordinate actually refers to the highest point in the Figure and so we want to flip the position of points vertically and hence the coordinate is first subtracted from the maximum Rubyplot coorinates so that we get the desired plot.  
+In these functions, if the absolute flag is true i.e. the coordinates are in Rubyplot coordinates then similar to **within_window** function, the coordinates are first brought to the range [0,1] and then multiplied by the canvas dimensions to get the coordinates in pixels. The difference in Y coordinate is that in Magick the origin is the upper left corner but we want to make the origin as lower left corner and so the minimum Rubyplot coordinate actually refers to the highest point in the Figure and so we want to flip the position of points vertically and hence the coordinate is first subtracted from the maximum Rubyplot coordinates so that we get the desired plot.  
 Next, if the absolute flag is false i.e. the coordinates are not in Rubyplot coordinates and are according to the plot, the coordinate is brought to a range [0,1] by using minimum and maximum values of the data. And notice that similar to abs = true, the Y coordinate is scaled so that the position of points is flipped vertically. The **x_range** and **y_range** functions are:
 ```ruby
 def x_range
@@ -1067,7 +1067,7 @@ end
 ```
 These functions return the maximum and minimum values of X and Y axes across all the plots.  
   
-After these fucntions, the useful properties for *text* variable is set for drawing. Also, the *color* variable which stores the symbol for the colour is converted to its RGB value which is stored in the *COLOR_INDEX* hash present in Color module. Next, the font is set if present, then **pointsize** function sets the size of the text in points unit. Then after setting the remaining useful properties, the text is to be drawn in the *text* variable which is a Magick::Draw object. But before that the **modify_draw** function is called which modifies a Magick::Draw object (or an array of such objects) for a temporary period until the block which is given as the input is executed, it takes in the inputs as the Magick::Draw object (or an array of such objects) which is to be modified, the amount of X and Y shift in pixels and the rotation. The function is:
+After these functions, the useful properties for *text* variable is set for drawing. Also, the *color* variable which stores the symbol for the colour is converted to its RGB value which is stored in the *COLOR_INDEX* hash present in Color module. Next, the font is set if present, then **pointsize** function sets the size of the text in points unit. Then after setting the remaining useful properties, the text is to be drawn in the *text* variable which is a Magick::Draw object. But before that the **modify_draw** function is called which modifies a Magick::Draw object (or an array of such objects) for a temporary period until the block which is given as the input is executed, it takes in the inputs as the Magick::Draw object (or an array of such objects) which is to be modified, the amount of X and Y shift in pixels and the rotation. The function is:
 ```ruby
 def modify_draw(draw, x_shift: nil, y_shift: nil, scale_x: nil, scale_y: nil, rotation: nil, &block)
   draw = [draw] unless draw.respond_to? :each # Making draw iterable if not iterable
@@ -1092,7 +1092,7 @@ end
 This function first makes the *draw* local variable iterable if it is not an array, then for each iten in the array it translates, scales and rotates the Draw object, then it executes the block and then returns the Draw object to its original state.  
 One important thing to keep in mind is that the Draw object is rotated with respect to its origin.  
   
-So, we call the **modify_draw** function and then use the **text** of the Magick::Draw object to create a text on the required point. Here, we used the **modify_draw** fucntion because we wanted to rotate the text correctly. So, first we translated the Magick::Draw object's origin to where the text is to be drawn then we rotated the object with respect to the point where the text is to be drawn and then we drew the text at the point 0,0 which is actually the point where text is to be drawn as the origin of the Magick::Draw object is the point where the text was to be drawn.  
+So, we call the **modify_draw** function and then use the **text** of the Magick::Draw object to create a text on the required point. Here, we used the **modify_draw** function because we wanted to rotate the text correctly. So, first we translated the Magick::Draw object's origin to where the text is to be drawn then we rotated the object with respect to the point where the text is to be drawn and then we drew the text at the point 0,0 which is actually the point where text is to be drawn as the origin of the Magick::Draw object is the point where the text was to be drawn.  
 Also, in the string *text* the '%' is replaced with '%%' using the **gsub** function so that Ruby does not interpret '%' as a keyword.  
   
 So, now the **draw** function of the X and Y axis has been executed and we return to **draw** function of the subplot i.e. the axes.  
@@ -1116,7 +1116,7 @@ def draw
   end
 end
 ```
-This function only proceeds when there is atleast one Legend object is present in *legends* array. If *legends* array is not empty then first the **draw** function is called for *bounding_box* which is actually a Rectangle object whose **draw** function is:
+This function only proceeds when there is at least one Legend object is present in *legends* array. If *legends* array is not empty then first the **draw** function is called for *bounding_box* which is actually a Rectangle object whose **draw** function is:
 ```ruby
 def draw
   Rubyplot.backend.draw_rectangle(
@@ -1130,7 +1130,7 @@ def draw
   )
 end
 ```
-which simply calls the **draw_rectangle** function of the backend and the inputs given to it are the x,y coorinates of the lower left and uper right corners, the colour of the border and the colour to be filled in the rectangle and finally the absolute flag (which is true here).  
+which simply calls the **draw_rectangle** function of the backend and the inputs given to it are the x,y coordinates of the lower left and upper right corners, the colour of the border and the colour to be filled in the rectangle and finally the absolute flag (which is true here).  
 The **draw_rectangle** function is:
 ```ruby
 def draw_rectangle(x1:,y1:,x2:,y2:, border_color: :default,
@@ -1152,8 +1152,8 @@ def draw_rectangle(x1:,y1:,x2:,y2:, border_color: :default,
   end
 end
 ```
-Here, first **within_window** is called which works same as explained before, then the coordinates are transformed using **transform_x** and **transform_y** which work same as explained before. Then the colour of the border and the colour to be filled are set using the **stroke** and **fill** functions of Magick::Draw respectively. The *COLOR_INDEX* hash is used to provide the colour in the correct format. Then the border width is set using **stroke_width** function. Then opacity is set to 0 if no colour is to be filled i.e. *fill_color* is not given i.e. it is nil. Finally the **rectangle** function is called which takes in two opposite corners and draws the rectangle. And then the opacity is returned to 1 i.e. its original state.  
-P.S. - The rectangle is drawn in *draw* variable and text was drawn in *text* variable.  
+Here, first **within_window** is called which works the same as explained before, then the coordinates are transformed using **transform_x** and **transform_y** which work the same as explained before. Then the colour of the border and the colour to be filled are set using the **stroke** and **fill** functions of Magick::Draw respectively. The *COLOR_INDEX* hash is used to provide the colour in the correct format. Then the border width is set using **stroke_width** function. Then opacity is set to 0 if no colour is to be filled i.e. *fill_color* is not given i.e. it is nil. Finally, the **rectangle** function is called which takes in two opposite corners and draws the rectangle. And then the opacity is returned to 1 i.e. its original state.  
+P.S. - The rectangle is drawn in *draw* variable and the text was drawn in *text* variable.  
   
 Now, the **draw** function for each Legend object is called:
 ```ruby
@@ -1162,7 +1162,7 @@ def draw
   @text.draw
 end
 ```
-In this function the *legend_color_box* and *text* call their **draw** function which are actually Rectangle and Text objects. We have already discussed the explanation for drawing these objects.  
+In this function, the *legend_color_box* and *text* call their **draw** function which is actually Rectangle and Text objects. We have already discussed the explanation for drawing these objects.  
   
 Returning to the **draw** function of the axes, the final line of code is:
 ```ruby
@@ -1198,10 +1198,10 @@ def draw_markers(x:, y:, type: nil, fill_color: :default, border_color: :default
   end
 end
 ```
-In this function for each entry in the data (same for X or Y) a marker is drawn, so a loop is executed in which for each entry first the X and Y coordinates are tranformed using **transform_x** and **transform_y** functions (explained earlier). Then the size is multiplied by a *nominal_factor* to make the backends consistent. In GR backend, the size is multiplied by the nominal size generated on the graphics device(the value is nor disclosed) and so for Magick backend *nominal_factor* is chosen as 15 (found through trail and error by comparing the same figures for both backends). Now, the **within_window** function is called (explained earlier) and size is multiplied by the *nominal_factor*. 
+In this function for each entry in the data (same for X or Y) a marker is drawn, so a loop is executed in which for each entry first the X and Y coordinates are transformed using **transform_x** and **transform_y** functions (explained earlier). Then the size is multiplied by a *nominal_factor* to make the backends consistent. In GR backend, the size is multiplied by the nominal size generated on the graphics device(the value is not disclosed) and so for Magick backend *nominal_factor* is chosen as 15 (found through trial and error by comparing the same figures for both backends). Now, the **within_window** function is called (explained earlier) and size is multiplied by the *nominal_factor*. 
 Then the marker is drawn in the *draw* object using the *MARKER_TYPES* which stores lambdas for drawing the markers and so according to the *type* the lambda stored in *MARKER_TYPES* is called using **call**. Each of the Lambda takes in input the Magick::Draw object, the x,y coordinates (in pixels), the colour to be filled, the border colour and the size of the marker.  
   
-In this example the types of marker is *:circle* and the Lambda for it is:
+In this example, the types of the marker is *:circle* and the Lambda for it is:
 ```ruby
 MARKER_TYPES = {
   # Default type is circle
@@ -1216,14 +1216,14 @@ MARKER_TYPES = {
     draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
     draw.circle(x,y, x + size,y)
   },
-  ... # Code for rest of the markers is not shown beacuse of space constraints
+  ... # Code for rest of the markers is not shown because of space constraints
 }
 ```
-The *:circle* Lambda first sets the colour of the border and the colour to be filled and then it calls the **circle** function for the Magick::Draw object stored in *draw* local variable to draw a circle. The function takes in inputs as the x,y coordinates for the center and a point at the circumference (in pixel values). So, the marker is drawn in the *draw* variable.  
+The *:circle* Lambda first sets the colour of the border and the colour to be filled and then it calls the **circle** function for the Magick::Draw object stored in *draw* local variable to draw a circle. The function takes in inputs as the x,y coordinates for the centre and a point at the circumference (in pixel values). So, the marker is drawn in the *draw* variable.  
   
 We now return to the **write** function of the Figure.  
   
-## Writing the Figure
+## Writing Figure
 Now, the **write** function of the backend is called:
 ```ruby
 def write
@@ -1233,7 +1233,7 @@ def write
   @base_image.write(@file_name)
 end
 ```
-This function first calls the **draw_axes** which will draw the *axes* Magick::Draw object onto the Magick::Image object *base_image* which is the canvas. Then the **draw** funntion is called for the Magick::Draw objects *draw* and *text* and the input given is *base_image*, so the Magick::Draw objects are drawn onto the canvas i.e. Magick::Image object. And finally the **write** function is called for *base_image* which is a Magick::Image, the function takes the input a string which would be the name of the file(image) when saved and so the *base_image* is written onto the device.  
+This function first calls the **draw_axes** which will draw the *axes* Magick::Draw object onto the Magick::Image object *base_image* which is the canvas. Then the **draw** function is called for the Magick::Draw objects *draw* and *text* and the input is given is *base_image*, so the Magick::Draw objects are drawn onto the canvas i.e. Magick::Image object. And finally, the **write** function is called for *base_image* which is a Magick::Image, the function takes the input a string which would be the name of the file(image) when saved and so the *base_image* is written onto the device.  
 The **draw_axes** function is:
 ```ruby
 def draw_axes
@@ -1265,7 +1265,7 @@ def stop_output_device
   flush
 end
 ```
-This function first scales the canvas dimensions to its original values by calling **unscale_figure** which were scaled according to the *figsize_units* variable. Then the **flush** function is called which clears the memory by disposing data which is no longer useful.  
+This function first scales the canvas dimensions to its original values by calling **unscale_figure** which were scaled according to the *figsize_units* variable. Then the **flush** function is called which clears the memory by disposing of data which is no longer useful.  
   
 The **unscale_figure** function is:
 ```ruby
