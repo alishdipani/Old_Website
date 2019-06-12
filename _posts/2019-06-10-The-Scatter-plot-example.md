@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      The Scatter plot example
-date:       2019-06-06 21:32:18
+date:       2019-06-10 21:32:18
 summary:    Explaining the scatter plot example.
 categories: GSoC2019
 thumbnail: google
