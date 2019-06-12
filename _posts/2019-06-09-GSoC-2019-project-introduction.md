@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      GSoC 2019 project introduction
-date:       2019-05-20 21:32:18
+date:       2019-06-09 21:32:18
 summary:    Introducing my project for GSoC 2019.
 categories: GSoC2019
 thumbnail: google
@@ -21,11 +21,11 @@ P.S. - My proposals can be found here :
 2. Ruby Science Foundation [[Link]](https://docs.google.com/document/d/1UoAE2MQ0l67ZZ0UWjykmRZnCHO_u22FM2zlHfVYUyEQ/edit?usp=sharing) (Up-to-date proposal [[Link]](https://github.com/alishdipani/rubyplot/wiki/GSoC-2019-Proposal))  
   
 ## What is Rubyplot?  
-RubyPlot is a plotting library in Ruby for scientific development inspired by the library Matplotlib for Python. Users can create various types of plots like scatter plot, bar plot, etc. and can also create subplots which combine various of these plots. The long-term goal of the library is to build an efficient, scalable and user friendly library with a backend agnostic frontend to support various backends so that the library can be used on any device.  
+RubyPlot is a plotting library in Ruby for scientific development inspired by the library Matplotlib for Python. Users can create various types of plots like scatter plot, bar plot, etc. and can also create subplots which combine various of these plots. The long-term goal of the library is to build an efficient, scalable and user-friendly library with a backend-agnostic frontend to support various backends so that the library can be used on any device.  
 Currently, Rubyplot supports only GR backend and a limited number of plots.  
   
 ## How does Rubyplot work?  
-To give an overview of how does Rubyplot work, suppose you have a canvas(figure in Rubyplot) and you want to draw 4 paintings(subplots in Rubyplot which is an axes) on the canvas in a way that canvas area is divided into 4 equal squares and so in your mind you divide the canvas space into four parts(axes coordinates for each axes object are decided in Rubyplot). Now, you start to think about a painting(suppose, the first painting out of 4 paintings) and it's type like for example a still-life figure or a scenery, etc. (different plots in Rubyplot like scatter plot, bar plot, etc.) and so you fix the type of painting in your mind(specifying the type of plot in the axes object). After fixing the type you think about what all things will be in that painting(properties of a plot for example data-points, marker size and marker colour in a scatter plot). After fixing one painting you move on to think about the rest and you fix the contents of all those paintings too.  
+To give an overview of how does Rubyplot work, suppose you have a canvas(figure in Rubyplot) and you want to draw 4 paintings(subplots in Rubyplot which is an axes) on the canvas in a way that canvas area is divided into 4 equal squares and so in your mind you divide the canvas space into four parts(axes coordinates for each axes object are decided in Rubyplot). Now, you start to think about a painting(suppose, the first painting out of 4 paintings) and it's type like for example a still-life figure or a scenery, etc. (different plots in Rubyplot like scatter plot, bar plot, etc.) and so you fix the type of painting in your mind(specifying the type of plot in the axes object). After fixing the type you think about what all things will be in that painting(properties of a plot, for example, data-points, marker size and marker colour in a scatter plot). After fixing one painting you move on to think about the rest and you fix the contents of all those paintings too.  
 Till now you have fixed what all will be in the paintings and have not actually drawn anything(write (save) in Rubyplot).  
 Now, you draw the painting(call write in Rubyplot)(in Rubyplot when write is called everything is drawn on the corresponding area including shapes, text, X and Y axis,etc.).  
   
@@ -49,13 +49,13 @@ axes.y_title = "Y data" # defining title of Y axis
 @figure.write("scatterplot.png") # Drawing the figure and saving it
 ```
 
-Output of this is for GR backend is:  
+The output of this is for GR backend is:  
 ![Scatter-plot with GR backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_GR.png)
-Output of this is for Magick backend is:  
+The output of this is for Magick backend is:  
 ![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)
 
-P.S. - The version of library used to run this code is of the date 9 June and Magick backend was not suppoted at the time of start of my project.  
-So, currently Rubyplot supports GR fully and Magick backend partially(notice the ticks on axes are not implemented).
+P.S. - The version of the library used to run this code is of the date 9 June and Magick backend was not supported at the time of the start of my project.  
+So currently, Rubyplot supports GR fully and Magick backend partially(notice the ticks on axes are not implemented).
 
 ## My Project  
 My project is to add Magick backend and additional functionalities to Rubyplot. The outcomes of my project would be :
