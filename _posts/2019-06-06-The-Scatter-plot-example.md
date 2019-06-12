@@ -986,4 +986,236 @@ def draw_text(text,color: :default,font: nil,size:,
 end
 ```
 Apart from the self-explanatory, the other variables are *font_weight* which represents Magick's weight properties(currently not used), *halign* and *valign* whcih represent horizontal and vertical alignments respectively, rotation if the text is to be rotated  and the stroke which defines the pattern for the text (does not make a difference currently) and the absolute flag as abs.  
-This function first checks whether the text argument is given or not and only proceeds if it is given. Next the **within_window** function is called which 
+This function first checks whether the text argument is given or not and only proceeds if it is given. Next the **within_window** function is called which sets up the area (the window) in which the drawing is to be done. This function takes a block as input which is just a collection of lines of code to be executed. The function is:
+```ruby
+def within_window(abs=false, &block)
+  if abs
+    # Coordinates are given in rubyplot cordinates
+    # Transform function handles deciding the position
+    # in the figure
+    yield
+  else
+    # Coordinates are not in rubyplot coordinates
+    # Shifting to adjust incorporate the margin of the figure and axes
+    # border! method can be used for figure margin but that will disturb rubyplot coordinates
+    # i.e. rubyplot coordinates include the border spacing
+    x_shift = (@active_axes.abs_x + @active_axes.left_margin) * @canvas_width / @figure.max_x # in pixels
+    y_shift = (@active_axes.abs_y - @figure.bottom_spacing + @figure.top_spacing + @active_axes.top_margin) * @canvas_height / @figure.max_y # in pixels
+    @draw.translate(x_shift, y_shift)
+    @text.translate(x_shift, y_shift)
+    @axes.translate(x_shift, y_shift)
+
+    plottable_width = @active_axes.width - (@active_axes.left_margin + @active_axes.right_margin)
+    plottable_height = @active_axes.height - (@active_axes.bottom_margin + @active_axes.top_margin)
+    # Scaling
+    @draw.scale(plottable_width / @figure.max_x, plottable_height / @figure.max_y)
+    @text.scale(plottable_width / @figure.max_x, plottable_height / @figure.max_y)
+    @axes.scale(plottable_width / @figure.max_x, plottable_height / @figure.max_y)
+
+    # Calling the block
+    yield
+
+    # Rescaling
+    @draw.scale(@figure.max_x / plottable_width, @figure.max_y / plottable_height)
+    @text.scale(@figure.max_x / plottable_width, @figure.max_y / plottable_height)
+    @axes.scale(@figure.max_x / plottable_width, @figure.max_y / plottable_height)
+
+    # Reshifting to the original coordinates
+    @draw.translate(-1 * x_shift, -1 * y_shift)
+    @text.translate(-1 * x_shift, -1 * y_shift)
+    @axes.translate(-1 * x_shift, -1 * y_shift)
+  end
+end
+```
+This function first checks the absolute flag and does nothing if it is true(as the coordinates are absolute and no shifting is required), if the absolute flag is false then the data used for drawing is in plot coordinates i.e. according to the data given by the user for the plot. So, if abs = false then there is a need to incorporate the margins for the figure as well as for the subplot and so the origin (upper left corner in magick) is shifted accordingly using Magick's **translate** function which takes input as the amount(in pixels) by which X and Y origin is to be shifted, here we are not actually shifting the canvas but instead just the origin of the three Magick::Draw objects *draw*, *text, *axes* which actually draw shapes/text/axes on the canvas.  
+So, the amount by which the objects are to be shifted is to be given in pixels as Magick only accepts pixels and hence the coodinates present in Rubyplot coordinates are first divided by the maximum Rubyplot coordinate to bring the coordinate in the range [0,1] and then it is multipled by the *canvas_width* to finally convert the coordinate into pixel value (remember the *canvas_width* was already scaled according to the *figsize_unit*). Similar operation is done for Y coordinate with a change that *top_margin* is incorporated as the origin for Magick backend is the upper left corner.  
+  
+After translation, scaling is done using **scale** function of Magick::Draw object which takes input the factor by which X and Y coordinates are to be scaled. This ensures that the drawing is scaled according to the requirements.  
+  
+After translation and scaling, the block is executed and the Draw object return to their original state by scaling and translating to the original state in which the Draw ojects were present.  
+  
+After the **within_window** function, the X and Y coordinates are transformed to convert them into pixel values to be used further using the functions **transform_x** and **transform_y** which take the inputs, the coordinate to be transormed and the absolute flag. These functions are:
+```ruby
+# Transform X co-ordinate.
+def transform_x(x: , abs: false)
+  if abs
+    (@canvas_width.to_f * x.to_f / @figure.max_x.to_f)
+  else
+    ((x.to_f - @active_axes.x_range[0].to_f) / (@active_axes.x_range[1].to_f - @active_axes.x_range[0].to_f)) * @canvas_width.to_f
+  end
+end
+
+# Transform Y co-ordinate
+def transform_y(y: , abs: false)
+  if abs
+    (@canvas_height.to_f * (@figure.max_y.to_f - y.to_f) / @figure.max_y.to_f)
+  else
+    ((@active_axes.y_range[1].to_f - y.to_f) / (@active_axes.y_range[1].to_f - @active_axes.y_range[0].to_f)) * @canvas_height.to_f
+  end
+end
+```
+In these functions, if absolute flag is true i.e. the coordinates are in Rubyplot coordinates then similar to **within_window** function, the coordinates are first brought to the range [0,1] and then multiplied by the canvas dimensions to get the coordinates in pixels. The difference in Y coordinate is that in Magick the origin is the upper left corner but we want to make the origin as lower left corner and so the minimum Rubyplot coordinate actually refers to the highest point in the Figure and so we want to flip the position of points vertically and hence the coordinate is first subtracted from the maximum Rubyplot coorinates so that we get the desired plot.  
+Next, if the absolute flag is false i.e. the coordinates are not in Rubyplot coordinates and are according to the plot, the coordinate is brought to a range [0,1] by using minimum and maximum values of the data. And notice that similar to abs = true, the Y coordinate is scaled so that the position of points is flipped vertically. The **x_range** and **y_range** functions are:
+```ruby
+def x_range
+  [@x_axis.min_val, @x_axis.max_val]
+end
+
+def y_range
+  [@y_axis.min_val, @y_axis.max_val]
+end
+```
+These functions return the maximum and minimum values of X and Y axes across all the plots.  
+  
+After these fucntions, the useful properties for *text* variable is set for drawing. Also, the *color* variable which stores the symbol for the colour is converted to its RGB value which is stored in the *COLOR_INDEX* hash present in Color module. Next, the font is set if present, then **pointsize** function sets the size of the text in points unit. Then after setting the remaining useful properties, the text is to be drawn in the *text* variable which is a Magick::Draw object. But before that the **modify_draw** function is called which modifies a Magick::Draw object (or an array of such objects) for a temporary period until the block which is given as the input is executed, it takes in the inputs as the Magick::Draw object (or an array of such objects) which is to be modified, the amount of X and Y shift in pixels and the rotation. The function is:
+```ruby
+def modify_draw(draw, x_shift: nil, y_shift: nil, scale_x: nil, scale_y: nil, rotation: nil, &block)
+  draw = [draw] unless draw.respond_to? :each # Making draw iterable if not iterable
+  draw.each do |d|
+    d.translate(x_shift, y_shift) if x_shift && y_shift
+    d.rotate(rotation) if rotation
+    d.scale(scale_x, scale_y) if scale_x && scale_y
+  end
+
+  draw.each do |d|
+    yield(d)
+  end
+
+  draw.each do |d|
+    d.scale(1 / scale_x, 1 / scale_y) if scale_x && scale_y
+    d.rotate(90.0) if rotation
+    d.translate(-1 * x_shift, -1 * y_shift) if x_shift && y_shift
+  end
+  draw = draw[0] unless draw.respond_to? :each
+end
+```
+This function first makes the *draw* local variable iterable if it is not an array, then for each iten in the array it translates, scales and rotates the Draw object, then it executes the block and then returns the Draw object to its original state.  
+One important thing to keep in mind is that the Draw object is rotated with respect to its origin.  
+  
+So, we call the **modify_draw** function and then use the **text** of the Magick::Draw object to create a text on the required point. Here, we used the **modify_draw** fucntion because we wanted to rotate the text correctly. So, first we translated the Magick::Draw object's origin to where the text is to be drawn then we rotated the object with respect to the point where the text is to be drawn and then we drew the text at the point 0,0 which is actually the point where text is to be drawn as the origin of the Magick::Draw object is the point where the text was to be drawn.  
+Also, in the string *text* the '%' is replaced with '%%' using the **gsub** function so that Ruby does not interpret '%' as a keyword.  
+  
+So, now the **draw** function of the X and Y axis has been executed and we return to **draw** function of the subplot i.e. the axes.  
+  
+The next command is:
+```ruby
+@texts.each(&:draw)
+```
+which works in a similar way as described above (in **draw** of X and Y axes).  
+  
+Next, the code is:
+```ruby
+@legend_box.draw
+```
+which calls the **draw** function for *legend_box*:
+```ruby
+def draw
+  unless @legends.empty?
+    @bounding_box.draw
+    @legends.each(&:draw)
+  end
+end
+```
+This function only proceeds when there is atleast one Legend object is present in *legends* array. If *legends* array is not empty then first the **draw** function is called for *bounding_box* which is actually a Rectangle object whose **draw** function is:
+```ruby
+def draw
+  Rubyplot.backend.draw_rectangle(
+    x1: @x1,
+    y1: @y1,
+    x2: @x2,
+    y2: @y2,
+    border_color: @border_color,
+    fill_color: @fill_color,
+    abs: @abs
+  )
+end
+```
+which simply calls the **draw_rectangle** function of the backend and the inputs given to it are the x,y coorinates of the lower left and uper right corners, the colour of the border and the colour to be filled in the rectangle and finally the absolute flag (which is true here).  
+The **draw_rectangle** function is:
+```ruby
+def draw_rectangle(x1:,y1:,x2:,y2:, border_color: :default,
+        fill_color: nil, border_width: 1, border_type: nil, abs: false)
+    within_window(abs) do
+    x1 = transform_x(x: x1, abs: abs)
+    x2 = transform_x(x: x2, abs: abs)
+    y1 = transform_y(y: y1, abs: abs)
+    y2 = transform_y(y: y2, abs: abs)
+
+    @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+    @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
+    @draw.stroke_width border_width.to_f
+    # if fill_color is not given, the rectangle fill colour is transparent
+    # i.e. only edges are visible
+    @draw.fill_opacity 0 unless fill_color
+    @draw.rectangle x1, y1, x2, y2
+    @draw.fill_opacity 1 unless fill_color
+  end
+end
+```
+Here, first **within_window** is called which works same as explained before, then the coordinates are transformed using **transform_x** and **transform_y** which work same as explained before. Then the colour of the border and the colour to be filled are set using the **stroke** and **fill** functions of Magick::Draw respectively. The *COLOR_INDEX* hash is used to provide the colour in the correct format. Then the border width is set using **stroke_width** function. Then opacity is set to 0 if no colour is to be filled i.e. *fill_color* is not given i.e. it is nil. Finally the **rectangle** function is called which takes in two opposite corners and draws the rectangle. And then the opacity is returned to 1 i.e. its original state.  
+P.S. - The rectangle is drawn in *draw* variable and text was drawn in *text* variable.  
+  
+Now, the **draw** function for each Legend object is called:
+```ruby
+def draw
+  @legend_color_box.draw
+  @text.draw
+end
+```
+In this function the *legend_color_box* and *text* call their **draw** function which are actually Rectangle and Text objects. We have already discussed the explanation for drawing these objects.  
+  
+Returning to the **draw** function of the axes, the final line of code is:
+```ruby
+@plots.each(&:draw)
+```
+The **draw** function for each plot in *plots* array is called. In this example we have only one plot which is the scatter plot i.e. a Scatter object and hence the **draw** function of Scatter is called:
+```ruby
+def draw
+  Rubyplot.backend.draw_markers(
+    x: @data[:x_values],
+    y: @data[:y_values],
+    type: @marker_type,
+    fill_color: @marker_fill_color,
+    border_color: @marker_border_color,
+    size: [@marker_size] * @data[:x_values].size
+  )
+end
+```
+which simply calls the backend function **draw_markers** and the inputs given to it are the arrays containing the X and the Y data, the type of marker to be drawn, the colour to be filled in the marker and the border and finally an array of sizes of the markers(the size for all the markers is kept same). The **draw_markers** function is:
+```ruby
+def draw_markers(x:, y:, type: nil, fill_color: :default, border_color: :default, size: nil)
+  y.each_with_index do |iy, idx_y|
+    ix = transform_x(x: x[idx_y],abs: false)
+    iy = transform_y(y: iy, abs: false)
+    # in GR backend size is multiplied by
+    # nominal size generated on the graphics device
+    # so setting the nominal_factor
+    nominal_factor = 15
+    within_window do
+      size[idx_y] *= nominal_factor
+      MARKER_TYPES[type].call(@draw, ix, iy, fill_color, border_color, size[idx_y])
+    end
+  end
+end
+```
+In this function for each entry in the data (same for X or Y) a marker is drawn, so a loop is executed in which for each entry first the X and Y coordinates are tranformed using **transform_x** and **transform_y** functions (explained earlier). Then the size is multiplied by a *nominal_factor* to make the backends consistent. In GR backend, the size is multiplied by the nominal size generated on the graphics device(the value is nor disclosed) and so for Magick backend *nominal_factor* is chosen as 15 (found through trail and error by comparing the same figures for both backends). Now, the **within_window** function is called (explained earlier) and size is multiplied by the *nominal_factor*. 
+Then the marker is drawn in the *draw* object using the *MARKER_TYPES* which stores lambdas for drawing the markers and so according to the *type* the lambda stored in *MARKER_TYPES* is called using **call**. Each of the Lambda takes in input the Magick::Draw object, the x,y coordinates (in pixels), the colour to be filled, the border colour and the size of the marker.  
+  
+In this example the types of marker is *:circle* and the Lambda for it is:
+```ruby
+MARKER_TYPES = {
+  # Default type is circle
+  # Stroke width is set to 1
+  nil: ->(draw, x, y, fill_color, border_color, size) {
+    draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+    draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+    draw.circle(x,y, x + size,y)
+  },
+  circle: ->(draw, x, y, fill_color, border_color, size) {
+    draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+    draw.fill Rubyplot::Color::COLOR_INDEX[fill_color]
+    draw.circle(x,y, x + size,y)
+  },
+  ...
+}
+```
