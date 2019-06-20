@@ -40,7 +40,9 @@ The output using Magick backend is:
 ![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)  
   
 # Introduction
-An overview of what [qeew](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/2019-06-10-The-Scatter-plot-example.md#code-explanation)
+An overview of what  
+* TOC
+{:toc}
 
 # Code Explanation
 
