@@ -12,10 +12,11 @@ tags:
  - Rubyplot
 ---
 In the project introduction blog a scatter plot example was given, I will be explaining the technical details for that example which involves explaining the code for the library using **Magick backend**.  
+  
 **P.S. - This blog is targeted towards new developers who want to get familiar with the codebase of the library or anyone who is extremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot and rmagick.**  
 P.S. - The version of the library used for this example is of date 9 June.  
   
-The example code : 
+# The Example code
 ```ruby
 require 'Rubyplot'
 @xdata = [1, 2, 3, 4, 5] # Defining X data
@@ -36,7 +37,10 @@ axes.y_title = "Y data" # defining title of Y axis
 ```
   
 The output using Magick backend is:
-![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)
+![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)  
+  
+# Introduction
+An overview of what [qeew](https://github.com/alishdipani/alishdipani.github.io/blob/master/_posts/2019-06-10-The-Scatter-plot-example.md#code-explanation)
 
 # Code Explanation
 
