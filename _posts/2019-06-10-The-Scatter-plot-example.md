@@ -11,7 +11,12 @@ tags:
  - SciRuby
  - Rubyplot
 ---
-In the [project introduction blog](https://alishdipani.github.io/gsoc2019/2019/06/09/GSoC-2019-project-introduction/) a scatter plot example was given, I will be explaining the technical details for that example which involves explaining the code for the library using **Magick backend**.  
+# Table of Contents:
+* TOC
+{:toc}
+
+# Starting Note
+In the project introduction blog [Link](https://alishdipani.github.io/gsoc2019/2019/06/09/GSoC-2019-project-introduction/) a scatter plot example was given, I will be explaining the technical details for that example which involves explaining the code for the library using **Magick backend**.  
   
 **P.S. - This blog is targeted towards new developers who want to get familiar with the codebase of the library or anyone who is extremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot and rmagick.**  
 P.S. - The version of the library used for this example is of date 9 June.  
@@ -41,8 +46,6 @@ The output using Magick backend is:
   
 # Introduction
 An overview of what  
-* Table of Contents
-{:toc}
 
 # Code Explanation
 
