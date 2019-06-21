@@ -11,11 +11,11 @@ tags:
  - SciRuby
  - Rubyplot
 ---
-# Table of Contents:
+# Table of Contents
 * TOC
 {:toc}
 
-# Starting Note
+# Introduction
 In the project introduction blog [Link](https://alishdipani.github.io/gsoc2019/2019/06/09/GSoC-2019-project-introduction/) a scatter plot example was given, I will be explaining the technical details for that example which involves explaining the code for the library using **Magick backend**.  
   
 **P.S. - This blog is targeted towards new developers who want to get familiar with the codebase of the library or anyone who is extremely interested in technical code details as this blog is very technical and requires some familiarity with Rubyplot and rmagick.**  
@@ -44,7 +44,7 @@ axes.y_title = "Y data" # defining title of Y axis
 The output using Magick backend is:
 ![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)  
   
-# Introduction
+# An overview
 An overview of what  
 
 # Code Explanation
