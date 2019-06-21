@@ -12,8 +12,7 @@ tags:
  - Rubyplot
 ---
 **Table of Contents:**
-* TOC
-{:toc}
+* TOC {:toc}
 
 # Introduction
 Google Summer of Code (GSoC) is a prestigious global program which aims to bring more student developers into open source software development. This program is for 3 months during the summers.  
