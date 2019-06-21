@@ -1233,7 +1233,7 @@ The *:circle* Lambda first sets the colour of the border and the colour to be fi
   
 We now return to the **write** function of the Figure.  
   
-### Writing Figure
+### Writing Figure (Backend)
 Now, the **write** function of the backend is called:
 ```ruby
 def write
