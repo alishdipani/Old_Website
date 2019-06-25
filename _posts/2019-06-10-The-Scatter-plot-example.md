@@ -45,7 +45,13 @@ The output using Magick backend is:
 ![Scatter-Plot with Magick backend](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/GSoC_2019_project_introduction/scatter_Magick.png)  
   
 # An overview
-An overview of what the code does is   
+An overview of how the code works is that it first creates the canvas(figure) on which everything will be drawn, then the space for subplots is created in this figure and then the subplots are added. When a subplot is added, the type of the subplot (i.e. the plots in this particular subplot), the properties of the subplot, the data for the plots in this subplot, the title for the X axis, Y axis and the subplot itself etc. are defined. After setting the properties of all the subplots, the write function is called to actually draw and save the figure. During drawing everything is drawn including the Legendbox of the subplots.  
+  
+So, creating any figure in Rubyplot can be broken down into these steps:  
+1. Create the Figure with desired properties.  
+2. Define the number of subplots desired and thus the space for these subplots is created.  
+3. Create the subplots one by one and set the desired properties of all the subplots.  
+4. Call the `write` function to actually draw the Figure and thus the desired figure is created, drawn and saved.  
 
 # Code Explanation
 
@@ -312,7 +318,7 @@ end
 ```
 This initialized function sets the absolute values (i.e. in Rubyplot coordinates) of the origin of this axes object i.e. of this subplot (which is the upper left corner for Magick backend).  
   
-#### The Block
+#### The Block (properties of the scatter plot)
 Now, the scatter object has been initialized and the block will be executed which sets the data to be plotted and other properties of the scatter plot. The block is:  
 ```ruby
 p.data @x1, @y1 # setting data to be plotted
@@ -341,7 +347,7 @@ Next, *marker_border_color* is set which is a variable of scatter plot which des
 Next, *marker_fill_color* is set which is a variable of scatter plot which describes the colour to be filled in the markers. So, in this example the colour is set to blue i.e. the variable *marker_fill_color* is set to the symbol *:blue*.  
 Finally, the marker type is set to circle i.e. the variable *marker_type* is set to the symbol *:circle*.  
   
-## Axes properties
+## Axes properties (properties of the subplot)
 Finally after setting the scatter plot properties, the properties of the subplot i.e. the axes object are set:
 ```ruby
 axes.title = "Nice plot" # defining title of the plot
@@ -384,7 +390,7 @@ end
 ```
 In Magick backend, during initialization an *axes_map* hash is defined which will later be used to store properties for X and Y axis corresponding to this particular axes which are currently being used.  
   
-### Setting up the background gradient
+### Setting up the background gradient (creating the Figure)
 Now, the **set_background_gradient** function is:
 ```ruby
 def set_background_gradient
@@ -820,6 +826,7 @@ end
 ```
 This function creates the bounding box which is the outer rectangle of the legend box. The *bounding_box* is a Rectangle object (which was discussed earlier).  
   
+### X and Y ticks  
 Finally, the LegendBox object is created and we continue to the draw function of the axes i.e. the subplot.  
 Next the functions **assign_x_ticks** and **assign_y_ticks** are called which assign the ticks to the X and Y axes. The functions are:
 ```ruby
@@ -862,6 +869,7 @@ end
 These functions decide the coordinates for the ticks according to the number of ticks required and then these functions create an array to store the ticks which are *XTick* and *YTick* objects. The ticks are of two types (both for X and Y axes), minor tick and major tick which represent a smaller and a bigger tick relatively (the size of the major tick is twice the size of minor tick).  
 **P.S. - Currently the ticks are not implemented for Magick backend and changes are required in the frontend of ticks as well and hence ticks will be discussed in detail in a later blog.**  
   
+### X axis and Y axis
 Now, returning to the draw function of the axes, we actually start to draw the plots (Notice, till now we haven't actually drawn anything). So the next lines of code are:
 ```ruby
 @x_axis.draw
@@ -1174,6 +1182,7 @@ end
 ```
 In this function, the *legend_color_box* and *text* call their **draw** function which is actually Rectangle and Text objects. We have already discussed the explanation for drawing these objects.  
   
+### Drawing plots
 Returning to the **draw** function of the axes, the final line of code is:
 ```ruby
 @plots.each(&:draw)
