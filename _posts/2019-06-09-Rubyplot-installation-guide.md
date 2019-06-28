@@ -148,3 +148,10 @@ Append it in front of all tests which you want to run.
 5. Run this command:
 ```bash
 rspec --t=focus`
+```
+
+# Refrences
+1. [GRRuby](https://github.com/pgtgrly/GRruby-extension)  
+2. [Rubyplot](https://github.com/SciRuby/rubyplot)  
+3. [Rmagick](https://rmagick.github.io/)
+4. [GR](https://gr-framework.org/)
