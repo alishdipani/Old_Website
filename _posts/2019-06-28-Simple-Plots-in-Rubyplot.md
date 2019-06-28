@@ -11,13 +11,14 @@ tags:
  - SciRuby
  - Rubyplot
 ---
-This blog lists down a list of simple plots in Rubyplot with ImageMagick as backend and highlights the work done in Week 3 and 4 for GSoC 2019.  
+This blog lists down the simple plots in Rubyplot with ImageMagick as backend and highlights the work done in Week 3 and 4 for GSoC 2019.  
   
 **Table of Contents**
 * TOC
 {:toc}
 
 # Scatter plot
+
 # Area plot
 # Bar plot
 # Bubble plot
