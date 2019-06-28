@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      GSoC 2019 project introduction
-date:       2019-06-09 21:32:18
+date:       2019-06-08 21:32:18
 summary:    Introducing my project for GSoC 2019.
 categories: GSoC2019
 thumbnail: google
