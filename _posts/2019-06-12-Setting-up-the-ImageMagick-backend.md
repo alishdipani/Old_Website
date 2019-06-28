@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      Setting up the ImageMagick backend
-date:       2019-06-09 21:32:18
+date:       2019-06-12 21:32:18
 summary:    Explaining Basic functions used by ImageMagick backend
 categories: GSoC2019
 thumbnail: google
