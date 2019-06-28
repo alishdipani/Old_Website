@@ -12,6 +12,8 @@ tags:
  - Rubyplot
 ---
 This blog is a guide for Developer installation of Rubyplot including both GR and ImageMagick backends.  
+  
+# Table of Contents
 * TOC
 {:toc}
   
@@ -68,5 +70,81 @@ export RUBYPLOT_BACKEND="MAGICK" # For ImageMagick backend
 ```
   
 # Testing
-For testing Rubyplot follow these instructions:
+## Running all tests at once
+To run all the tests at once, run this command in the rubyplot folder:
+```bash
+rspec
+```
+## Running specific tests
+For running specific tests follow these instructions:
+1. Make sure you are in the rubyplot folder.  
+2. Change the backend to desired one by following step 10 of Installation.  
+3. Tests related to specific plots are present in `spec/axes_spec.rb` and tests general tests are present in `spec/figure_sprc.rb`.  
+4. Append `,focus:true` in front of the test(s) which you want to run, for example, the bubble plot tests are:
+```ruby
+context "#bubble!" do
+    it "plots a single bubble plot" do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.bubble! do |p|
+        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
+        p.label = "apples"
+        p.color = :blue
+      end
+      axes.x_range = [-40, 30]
+      axes.y_range = [-40, 25]
+      axes.title = "simple bubble plot."
+    end
 
+    it "plots multiple bubble plots on same axes." do 
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.bubble! do |p|
+        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
+        p.label = "apples"
+      end
+      axes.bubble! do |p|
+        p.data [20, 30, -6, -3], [-1, 5, -27, -3], [10.3, 10.0, 20.0, 10.0]
+        p.label = "peaches"
+      end
+      axes.title = "simple bubble plot."
+    end
+end
+```
+Append `,focus:true` in front of `context "#bubble!"` if you want to run every test in the context of bubble plot.  
+Or append `,focus:true` in front of any test which you want to run, for example, in front of `it "plots a single bubble plot"`.  
+An example for appended code is:
+```ruby
+context "#bubble!",focus:true do
+    it "plots a single bubble plot",focus:true do
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.bubble! do |p|
+        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
+        p.label = "apples"
+        p.color = :blue
+      end
+      axes.x_range = [-40, 30]
+      axes.y_range = [-40, 25]
+      axes.title = "simple bubble plot."
+    end
+
+    it "plots multiple bubble plots on same axes.",focus:true do 
+      @figure = Rubyplot::Figure.new
+      axes = @figure.add_subplot! 0,0
+      axes.bubble! do |p|
+        p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
+        p.label = "apples"
+      end
+      axes.bubble! do |p|
+        p.data [20, 30, -6, -3], [-1, 5, -27, -3], [10.3, 10.0, 20.0, 10.0]
+        p.label = "peaches"
+      end
+      axes.title = "simple bubble plot."
+    end
+end
+```
+Append it in front of all tests which you want to run.  
+5. Run this command:
+```bash
+rspec --t=focus`
