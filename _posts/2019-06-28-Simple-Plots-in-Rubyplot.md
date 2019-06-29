@@ -62,6 +62,7 @@ MARKER_TYPES = {
 }
 ```
 Each of these lambdas take the properties of the marker and draw it, for example the `circle` type draws a circle with size as its radius, the `plus` type draws two perpendicular lines in the shape of a plus sign (+) with the size as length of the lines.  
+A hash of lambdas is used instead of making a module or a class to avoid inconsistencies in backends as GR does not require functions for creating marker types and only requires the type of the marker, i.e. its internal functions take care of drawing the marker types. Also, generally Hashes are much faster than functions and hence hashes are preferred over a module or a class.  
   
 An example of scatter plot with code is:
 ```ruby
@@ -83,6 +84,8 @@ axes.y_title = "Y data"
 ```
 ![scatter plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/scatterplot.png)
 # Area plot
+The area plot draws a line passing through the points given as the input and colours the area under this line.  
+If only one set of values is given to the area plot as the data, for example [23, ]
 # Bar plot
 # Bubble plot
 # Candle-stick plot
