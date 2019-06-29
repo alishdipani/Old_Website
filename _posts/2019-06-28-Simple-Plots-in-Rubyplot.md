@@ -18,7 +18,7 @@ This blog lists down the simple plots in Rubyplot with ImageMagick as backend an
 {:toc}
 
 # Scatter plot
-
+The scatter plot draws markers at the position specified by the user, the inputs taken are size of the marker (`marker_size`), type of the marker, colour of the border of the marker and colour to be filled inside the marker.
 # Area plot
 # Bar plot
 # Bubble plot
