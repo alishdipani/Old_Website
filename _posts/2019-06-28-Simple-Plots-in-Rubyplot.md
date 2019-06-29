@@ -103,10 +103,10 @@ axes.title = "Area plot"
 ![area plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/areaplot.png)
   
 The area plot draws a line passing through the points given as the input and colours the area covered under this line.  
-If only one set of values is given to the area plot as the data, for example only [30, 36, 86, 39, 27, 31, 79, 88] is given then this set is considered as a set of Y coordinates of the points and X coordinates are set as o, 1, 2 ... (size of y values - 1) i.e. the coordinates are (0, 30),(1, 36),(2, 86),(3, 39),(4, 27),(5, 31),(6, 79),(7, 88).  
+If only one set of values is given to the area plot as the data, for example only [30, 36, 86, 39, 27, 31, 79, 88] is given then this set is considered as a set of Y coordinates of the points and X coordinates are set as 0, 1, 2 ... (size of y values - 1) i.e. the coordinates are (0, 30), (1, 36), (2, 86), (3, 39), (4, 27), (5, 31), (6, 79), (7, 88).  
   
 Now, this is the list of coordinates through which the line has to pass and the area under the curve is to be filled, but to draw this a polygon is needed in which the colour will be filled. TO create this polygon, we just need to append the starting point and end point of the X axis so that the polygon is completed. So, here in the example taken above the starting point of X axis is (minimum x value, minimum y value) i.e. (0, 27) and the end point of X axis is (maximum x value, minimum y value) i.e. (7, 27).  
-So, finally the coordinates for the polygon are (0, 30),(1, 36),(2, 86),(3, 39),(4, 27),(5, 31),(6, 79),(7, 88),(0, 27),(7, 27).  
+So, finally the coordinates for the polygon are (0, 30), (1, 36), (2, 86), (3, 39), (4, 27), (5, 31), (6, 79), (7, 88), (0, 27), (7, 27).  
 The code for appending these points is: 
 ```ruby
 x_poly_points = @data[:x_values].concat([@axes.x_axis.max_val, @axes.x_axis.min_val])
@@ -134,6 +134,21 @@ end
 Thsi function first transforms the coordiantes and then combines the coordiantes which were two different sets before (x values = [0, 1, 2, 3, 4, 5, 6, 7, 0, 7] and y values = [30, 36, 86, 39, 27, 31, 79, 88, 27, 27]), the `zip` Ruby function is used to combine the points (now coords = [[0, 30], [1, 36], [2, 86], [3, 39], [4, 27], [5, 31], [6, 79], [7, 88], [0, 27], [7, 27]]). After this the properties of the polygon are set and the coordinates are given as an input to the polygon function of rmagick, but first the coordiantes array is flattened (now coords = [0, 30, 1, 36, 2, 86, 3, 39, 4, 27, 5, 31, 6, 79, 7, 88, 0, 27, 7, 27]) so that input is converted into the way that polygon function accepts, the splat operator (\*) is used to give the coords array as an argument to the function. Finally, the opacity of `Magick::Draw` object is set again to 1 (initial value).
 
 # Bar plot
+An example of bar plot with code is:
+```ruby
+@figure = Rubyplot::Figure.new
+axes = @figure.add_subplot! 0,0
+axes.bar! do |p|
+  p.data [5,12,9,6,7]
+  p.label = "data1"
+  p.color = :neon_red
+end
+axes.title = "Bar plot"
+@figure.write('barplot.png')
+```
+![bar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/barplot.png)
+  
+
 # Bubble plot
 # Candle-stick plot
 # Histogram
