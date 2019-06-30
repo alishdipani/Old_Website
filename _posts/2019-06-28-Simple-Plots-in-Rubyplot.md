@@ -12,6 +12,7 @@ tags:
  - Rubyplot
 ---
 This blog lists down the simple plots in Rubyplot with ImageMagick as backend and highlights the work done in Week 3 and 4 for GSoC 2019.  
+P.S. - The version of Rubyplot used in this blog is dated 28th June.  
   
 **Table of Contents**
 * TOC
@@ -38,7 +39,7 @@ axes.y_title = "Y data"
 ```
 ![scatter plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/scatterplot.png)
   
-The scatter plot draws markers at the position specified by the user, the inputs taken are the X and Y coordinates for the markers (`data`), size of the marker (`marker_size`), type of the marker (`marker_type`), colour of the border of the marker (`marker_border_color`) and colour to be filled inside the marker (`marker_fill_color`).  
+The scatter plot draws markers at the position specified by the user, the inputs taken are the X and Y coordinates for the markers (`data`), the label(`label`) for this plot, size of the marker (`marker_size`), type of the marker (`marker_type`), colour of the border of the marker (`marker_border_color`) and colour to be filled inside the marker (`marker_fill_color`).  
 If the marker does not have a fill colour (example - plus, diagonal cross, dot) then the fill colour is set as the colour of the colour of the marker.  
 Scatter plot uses the backend function `draw_markers`:
 ```ruby
@@ -148,6 +149,7 @@ axes.title = "Bar plot"
 ```
 ![bar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/barplot.png)
   
+The bar plot draws bars which are rectangles with heights as the data given as the input.
 
 # Bubble plot
 # Candle-stick plot
