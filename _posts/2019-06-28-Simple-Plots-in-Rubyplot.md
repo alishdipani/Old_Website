@@ -152,8 +152,84 @@ axes.title = "Bar plot"
 The bar plot draws bars which are rectangles with heights as the data given as the input.
 
 # Bubble plot
+An example of scatter plot with code is:
+```ruby
+@figure = Rubyplot::Figure.new
+axes = @figure.add_subplot! 0,0
+axes.bubble! do |p|
+  p.data [-1, 19, -4, -23], [-35, 21, 23, -4], [4.5, 1.0, 2.1, 0.9]
+  p.label = "apples"
+  p.color = :blue
+end
+axes.x_range = [-40, 30]
+axes.y_range = [-40, 25]
+axes.title = "simple bubble plot."
+@figure.write('bubbleplot.png')
+```
 # Candle-stick plot
+An example of scatter plot with code is:
+```ruby
+@figure = Rubyplot::Figure.new
+axes = @figure.add_subplot! 0,0
+axes.candle_stick! do |p|
+  p.lows = [100, 110, 120, 130, 120, 110]
+  p.highs = [140, 150, 160, 170, 160, 150]
+  p.opens = [110, 120, 130, 140, 130, 120]
+  p.closes = [130, 140, 150, 160, 150, 140]
+end
+axes.title = "Simple candle stick plot."
+@figure.write('candlestickplot.png')
+```
 # Histogram
+An example of scatter plot with code is:
+```ruby
+@figure = Rubyplot::Figure.new
+axes = @figure.add_subplot! 0,0
+axes.histogram! do |p|
+  p.x = 100.times.map{ rand(10) }
+end
+@figure.write('histogram.png')
+```
 # Line plot
+An example of scatter plot with code is:
+```ruby
+@figure = Rubyplot::Figure.new
+axes = @figure.add_subplot! 0,0
+axes.line! do |p|
+  p.data [2, 4, 7, 9], [1,2,3,4]
+  p.label = "Marco"
+  p.color = :blue
+end
+axes.title = "A line graph."
+@figure.write('lineplot.png')
+```
 # Error-bar plot
+An example of scatter plot with code is:
+```ruby
+@figure = Rubyplot::Figure.new
+axes = @figure.add_subplot! 0,0
+axes.title = "Simple error bar plot with collection xerr and yerr."
+axes.error_bar! do |p|
+  p.data [1,2,3,4], [1,4,9,16]
+  p.xerr = [0.5,1.0,1.5,0.3]
+  p.yerr = [0.6,0.2,0.8,0.1]
+end
+@figure.write('errorbarplot.png')
+```
 # Box plot
+An example of scatter plot with code is:
+```ruby
+figure = Rubyplot::Figure.new
+axes = @figure.add_subplot! 0,0
+axes.title = "A simple box plot."
+axes.box_plot! do |p|
+  p.data [
+    [60,70,80,70,50],
+    [100,40,20,80,70],
+    [30, 10]
+  ]
+end
+axes.x_title = "foo"
+axes.y_title = "bar"
+@figure.write('boxplot.png')
+```
