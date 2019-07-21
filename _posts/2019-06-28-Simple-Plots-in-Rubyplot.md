@@ -149,7 +149,8 @@ axes.title = "Bar plot"
 ```
 ![bar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/barplot.png)
   
-The bar plot draws bars which are rectangles with heights as the data given as the input.
+The bar plot draws bars which are rectangles with heights as the data given as the input.  
+Th inputs taken
 
 # Bubble plot
 An example of scatter plot with code is:
