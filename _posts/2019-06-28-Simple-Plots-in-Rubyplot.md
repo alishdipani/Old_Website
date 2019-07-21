@@ -166,6 +166,8 @@ axes.y_range = [-40, 25]
 axes.title = "simple bubble plot."
 @figure.write('bubbleplot.png')
 ```
+![bubble plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/bubbleplot.png)
+
 # Candle-stick plot
 An example of scatter plot with code is:
 ```ruby
@@ -180,6 +182,8 @@ end
 axes.title = "Simple candle stick plot."
 @figure.write('candlestickplot.png')
 ```
+![candlestick plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/candlestickplot.png)
+
 # Histogram
 An example of scatter plot with code is:
 ```ruby
@@ -190,6 +194,8 @@ axes.histogram! do |p|
 end
 @figure.write('histogram.png')
 ```
+![histogram](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/histogram.png)
+
 # Line plot
 An example of scatter plot with code is:
 ```ruby
@@ -203,6 +209,8 @@ end
 axes.title = "A line graph."
 @figure.write('lineplot.png')
 ```
+![line plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/lineplot.png)
+
 # Error-bar plot
 An example of scatter plot with code is:
 ```ruby
@@ -216,6 +224,8 @@ axes.error_bar! do |p|
 end
 @figure.write('errorbarplot.png')
 ```
+![errorbar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/errorbarplot.png)
+
 # Box plot
 An example of scatter plot with code is:
 ```ruby
@@ -233,3 +243,4 @@ axes.x_title = "foo"
 axes.y_title = "bar"
 @figure.write('boxplot.png')
 ```
+![box plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/boxplot.png)
