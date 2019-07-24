@@ -150,7 +150,32 @@ axes.title = "Bar plot"
 ![bar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/barplot.png)
   
 The bar plot draws bars which are rectangles with heights as the data given as the input.  
-Th inputs taken
+Th inputs taken are the color of the bars(`color`), the data which is a single array for the sizes of the bars representing the Y values of the bars(`data`) and the space between the bars as a ratio(`spacing_ratio`) i.e. the range is [0,1] where 0 represents no space between the bars and 1 represents maximu  space between the bars which is equivalent to the maximum space alloted to a bar i.e. (total X range / number of bars).  
+The X values for the coordinates are set as 0,1,...number of Y values i.e. in this example when the data is given as [5,12,9,6,7], the coordinates for the bars are (0,5), (1,12), (2,9), (3,6) and (4,7) respectively.  
+  
+Now, the bars are rectangles which are stored in the `rectangles` array, the X and Y coordinates of lower left corner of these rectangles are stored in `abs_x_left` and `abs_y_left` respectively. The upper right corner coordinates are calculated by adding the width of the bar to the X coordinate of the lower left corner and seeting the Y coordinate to the height of the bar as set in the `data` by the user.  
+This is done when **draw** is called which calls the **setup_bar_rectangles** function:
+```ruby
+def draw
+  setup_bar_rectangles
+  @rectangles.each(&:draw)
+end
+
+def setup_bar_rectangles
+@data[:y_values].each_with_index do |iy, i|
+  @rectangles << Rubyplot::Artist::Rectangle.new(
+    self,
+    x1: @abs_x_left[i],
+    y1: @abs_y_left[i],
+    x2: @abs_x_left[i] + @bar_width,
+    y2: iy,
+    border_color: @data[:color],
+    fill_color: @data[:color]
+  )
+end
+```
+  
+This calculation of `abs_x_left` and `abs_y_left` is done by the multibars code which will be explained in the next blog.  
 
 # Bubble plot
 An example of scatter plot with code is:
