@@ -194,6 +194,30 @@ axes.title = "simple bubble plot."
 ```
 ![bubble plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/bubbleplot.png)
 
+The bubble plot draws circles with the size and the coordinates as specified by the user.  
+The inputs taken are the data which consists of three arrays for X coordinates, Y coordinates and the sizes of the bubbles respectively(`data`) and the color of the bubbles(`color`).  
+  
+In this example the X,Y coordinates and sizes for the bubbles respectively are (-1, -35), size = 4.5; (19 21), size = 1.0; (-4, 23), size = 2.1; (-23, -4), size = 0.9. The **draw** function creates and draws the `Circle` objects for the bubbles:
+```ruby
+def draw
+  @data[:x_values].each_with_index do |_, idx|
+    Rubyplot::Artist::Circle.new(
+      self,
+      x: @data[:x_values][idx],
+      y: @data[:y_values][idx],
+      radius: @data[:z_values][idx],
+      fill_opacity: 0.5,
+      color: @data[:color],
+      border_width: 1,
+      abs: false
+    ).draw
+  end
+end
+```
+Here, for bubble plot, the border width of the circles is set to 1 pixel. The opacity of the circles is hardcoded to **0.5** for visibility of overlapping bubbles.  
+P.S. - Later, the opacity of the bubble will be taken as an optional input(`fill_opacity`) with the default value set to **0.5**.
+
+
 # Candle-stick plot
 An example of scatter plot with code is:
 ```ruby
