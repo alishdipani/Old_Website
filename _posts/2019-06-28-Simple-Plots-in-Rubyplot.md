@@ -19,7 +19,7 @@ P.S. - The version of Rubyplot used in this blog is dated 28th June.
 {:toc}
 
 # Scatter plot
-An example of scatter plot with code is:
+An example of Scatter plot with code is:
 ```ruby
 @x1 = [1, 2, 3, 4, 5]
 @y1 = [11, 2, 33, 4, 65]
@@ -104,6 +104,8 @@ axes.title = "Area plot"
 ![area plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/areaplot.png)
   
 The area plot draws a line passing through the points given as the input and colours the area covered under this line.  
+The inputs taken are the data as a compulsory array containing Y coordinate values of the points and an optional array containing X coordinate values of the points(`data`) and the color of the plot(`color`).  
+  
 If only one set of values is given to the area plot as the data, for example only [30, 36, 86, 39, 27, 31, 79, 88] is given then this set is considered as a set of Y coordinates of the points and X coordinates are set as 0, 1, 2 ... (size of y values - 1) i.e. the coordinates are (0, 30), (1, 36), (2, 86), (3, 39), (4, 27), (5, 31), (6, 79), (7, 88).  
   
 Now, this is the list of coordinates through which the line has to pass and the area under the curve is to be filled, but to draw this a polygon is needed in which the colour will be filled. TO create this polygon, we just need to append the starting point and end point of the X axis so that the polygon is completed. So, here in the example taken above the starting point of X axis is (minimum x value, minimum y value) i.e. (0, 27) and the end point of X axis is (maximum x value, minimum y value) i.e. (7, 27).  
@@ -135,7 +137,7 @@ end
 Thsi function first transforms the coordiantes and then combines the coordiantes which were two different sets before (x values = [0, 1, 2, 3, 4, 5, 6, 7, 0, 7] and y values = [30, 36, 86, 39, 27, 31, 79, 88, 27, 27]), the `zip` Ruby function is used to combine the points (now coords = [[0, 30], [1, 36], [2, 86], [3, 39], [4, 27], [5, 31], [6, 79], [7, 88], [0, 27], [7, 27]]). After this the properties of the polygon are set and the coordinates are given as an input to the polygon function of rmagick, but first the coordiantes array is flattened (now coords = [0, 30, 1, 36, 2, 86, 3, 39, 4, 27, 5, 31, 6, 79, 7, 88, 0, 27, 7, 27]) so that input is converted into the way that polygon function accepts, the splat operator (\*) is used to give the coords array as an argument to the function. Finally, the opacity of `Magick::Draw` object is set again to 1 (initial value).
 
 # Bar plot
-An example of bar plot with code is:
+An example of Bar plot with code is:
 ```ruby
 @figure = Rubyplot::Figure.new
 axes = @figure.add_subplot! 0,0
@@ -178,7 +180,7 @@ end
 This calculation of `abs_x_left` and `abs_y_left` is done by the multibars code which will be explained in the next blog.  
 
 # Bubble plot
-An example of scatter plot with code is:
+An example of Bubble plot with code is:
 ```ruby
 @figure = Rubyplot::Figure.new
 axes = @figure.add_subplot! 0,0
@@ -219,7 +221,7 @@ P.S. - Later, the opacity of the bubble will be taken as an optional input(`fill
 
 
 # Candle-stick plot
-An example of scatter plot with code is:
+An example of Candle-stick plot with code is:
 ```ruby
 @figure = Rubyplot::Figure.new
 axes = @figure.add_subplot! 0,0
@@ -234,8 +236,39 @@ axes.title = "Simple candle stick plot."
 ```
 ![candlestick plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/candlestickplot.png)
 
+The candle-stick plot draws rectangles i.e. bars (candle) with a line (stick) passing through the center of the rectangles parallel to the Y axis.  
+The inputs taken are arrays for lower Y coordinate of the rectangles(`opens`) and upper Y coordinate of the rectangles(`closes`), arrays for lower Y coordinate of the lines(`lows`) and the upper Y coordinate of the lines(`highs`), the colour of the rectangles(`color`), width of the rectangles(`bar_width`) and the color of the border of the bars(`border_color`).  
+  
+The X coordinates of the lower left corner of the bar and the line are stored in `x_left_candle` and `x_low_stick` respectively. The **draw** function calculates the remaining dimensions (similar to the Bar plot) of the lines and rectangles and creates and draws the `Line2D` and `Rectangle` objects for lines and rectangles respectively:
+```ruby
+def draw
+ @x_low_stick.each_with_index do |ix_stick, i|
+   Rubyplot::Artist::Line2D.new(
+     self,
+     x: [ix_stick, ix_stick],
+     y: [@lows[i], @highs[i]]
+   ).draw
+ end
+ 
+ @x_left_candle.each_with_index do |ix_candle, i|
+   Rubyplot::Artist::Rectangle.new(
+     self,
+     x1: ix_candle,
+     y1: @opens[i],
+     x2: ix_candle + @bar_width,
+     y2: @closes[i],
+     border_color: @border_color,
+     fill_color: @data[:color]
+   ).draw
+ end
+end
+```
+  
+The `x_left_candle` and `x_low_stick` are calculated using the multi_candle_stick code which will be explained in the next blog.
+
+
 # Histogram
-An example of scatter plot with code is:
+An example of Histogram with code is:
 ```ruby
 @figure = Rubyplot::Figure.new
 axes = @figure.add_subplot! 0,0
@@ -247,7 +280,7 @@ end
 ![histogram](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/histogram.png)
 
 # Line plot
-An example of scatter plot with code is:
+An example of Line plot with code is:
 ```ruby
 @figure = Rubyplot::Figure.new
 axes = @figure.add_subplot! 0,0
@@ -261,8 +294,27 @@ axes.title = "A line graph."
 ```
 ![line plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/lineplot.png)
 
+The Line plot draws a line between consecutive points specified by the user and thus draws a line passing though the points taken as input.  
+The input taken by the Line plot are type of the line(`line_type`), width of the line(`line_width`), the color of the line(`line_color`) and the data having a compulsory array having Y coordinate values for the points and an optional array having X coordinate values(`data`) and the label of the plot(`label`).  
+  
+If only one array is given to the line plot as the data then the X coordinate values are calculated as 0,1,2...number of Y values. This is similar to the Area plot.  
+The **draw** function calls the **draw_lines** backend function to create the lines:
+```ruby
+def draw
+  Rubyplot.backend.draw_lines(
+    x: @data[:x_values],
+    y: @data[:y_values],
+    width: @line_width,
+    type: @line_type,
+    color: @line_color
+  )
+end
+```
+
+
+
 # Error-bar plot
-An example of scatter plot with code is:
+An example of Error-bar plot with code is:
 ```ruby
 @figure = Rubyplot::Figure.new
 axes = @figure.add_subplot! 0,0
@@ -277,7 +329,7 @@ end
 ![errorbar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/errorbarplot.png)
 
 # Box plot
-An example of scatter plot with code is:
+An example of Box plot with code is:
 ```ruby
 figure = Rubyplot::Figure.new
 axes = @figure.add_subplot! 0,0
