@@ -41,7 +41,22 @@ axes.y_title = "Y data"
   
 The scatter plot draws markers at the position specified by the user, the inputs taken are the X and Y coordinates for the markers (`data`), the label(`label`) for this plot, size of the marker (`marker_size`), type of the marker (`marker_type`), colour of the border of the marker (`marker_border_color`) and colour to be filled inside the marker (`marker_fill_color`).  
 If the marker does not have a fill colour (example - plus, diagonal cross, dot) then the fill colour is set as the colour of the colour of the marker.  
-Scatter plot uses the backend function `draw_markers`:
+  
+**draw** function for scatter plot is:
+```ruby
+def draw
+  @marker_fill_color = :default if @marker_fill_color.nil?
+  Rubyplot.backend.draw_markers(
+    x: @data[:x_values],
+    y: @data[:y_values],
+    type: @marker_type,
+    fill_color: @marker_fill_color,
+    border_color: @marker_border_color,
+    size: [@marker_size] * @data[:x_values].size
+  )
+end
+```
+Here, first the marker fill colour is set to default colour if it is `nil` the the **draw_markers** function is called:
 ```ruby
 def draw_markers(x:, y:, type: :default, fill_color: :default, border_color: :default, size: nil)
   y.each_with_index do |iy, idx_y|
@@ -178,6 +193,43 @@ end
 ```
   
 This calculation of `abs_x_left` and `abs_y_left` is done by the multibars code which will be explained in the next blog.  
+  
+The **draw** function of the `Ractangle` object is:
+```ruby
+def draw
+  Rubyplot.backend.draw_rectangle(
+    x1: @x1,
+    y1: @y1,
+    x2: @x2,
+    y2: @y2,
+    border_color: @border_color,
+    fill_color: @fill_color,
+    abs: @abs
+  )
+end
+```
+It calls the **draw_rectangle** backend function and passes the information about the rectangle:
+```ruby
+def draw_rectangle(x1:,y1:,x2:,y2:, border_color: :default,
+  fill_color: nil, border_width: 1, border_type: nil, abs: false)
+  within_window(abs) do
+    x1 = transform_x(x: x1, abs: abs)
+    x2 = transform_x(x: x2, abs: abs)
+    y1 = transform_y(y: y1, abs: abs)
+    y2 = transform_y(y: y2, abs: abs)
+
+    @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+    @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
+    @draw.stroke_width border_width.to_f
+    # if fill_color is not given, the rectangle fill colour is transparent
+    # i.e. only edges are visible
+    @draw.fill_opacity 0 unless fill_color
+    @draw.rectangle x1, y1, x2, y2
+    @draw.fill_opacity 1 unless fill_color
+  end
+end
+```
+Here, first the coordinates are transformed and then the properties of the rectangle are set and if `fill_color` is not given then a hollow rectangle is drawn by setting the `fill_opacity` to 0. Finally, `Magick::Draw`'s **rectangle** function is used to draw the rectangle. If the fill_color is not given then the `fill_opacity` is reset to 1.
 
 # Bubble plot
 An example of Bubble plot with code is:
@@ -217,7 +269,41 @@ def draw
 end
 ```
 Here, for bubble plot, the border width of the circles is set to 1 pixel. The opacity of the circles is hardcoded to **0.5** for visibility of overlapping bubbles.  
-P.S. - Later, the opacity of the bubble will be taken as an optional input(`fill_opacity`) with the default value set to **0.5**.
+P.S. - Later, the opacity of the bubble will be taken as an optional input(`fill_opacity`) with the default value set to **0.5**.  
+  
+The **draw** function for the `Circle` object is:
+```ruby
+def draw
+  Rubyplot.backend.draw_circle(
+    x: @x,
+    y: @y,
+    radius: @radius,
+    border_type: :solid,
+    border_width: @border_width,
+    fill_color: @color,
+    border_color: @color,
+    fill_opacity: @fill_opacity
+  )
+end
+```
+It calls the backend function **draw_circle** and passes the information about the circle:
+```ruby
+def draw_circle(x:, y:, radius:, border_type: nil, border_width: 1.0, fill_color: nil,
+  border_color: :default, fill_opacity: 0.0)
+  within_window do
+    x = transform_x x: x
+    y = transform_y y: y
+
+    @draw.stroke_width border_width
+    @draw.stroke Rubyplot::Color::COLOR_INDEX[border_color]
+    @draw.fill Rubyplot::Color::COLOR_INDEX[fill_color] if fill_color
+    @draw.fill_opacity fill_opacity
+    @draw.circle(x,y,x - (radius * NOMINAL_FACTOR_CIRCLE),y)
+  end
+end
+```
+First the coordinates are transformed, then the properties of the circle are set and finally the `Magick::Draw`'s **circle** function is called to draw the circle.  
+Here the radius of the circle is multiplied by a nominal factor in order to match the Magick backend and GR backend sizes. The nominal factor `NOMINAL_FACTOR_CIRCLE` is hardcoded to **27.5**.
 
 
 # Candle-stick plot
@@ -297,7 +383,7 @@ axes.title = "A line graph."
 The Line plot draws a line between consecutive points specified by the user and thus draws a line passing though the points taken as input.  
 The input taken by the Line plot are type of the line(`line_type`), width of the line(`line_width`), the color of the line(`line_color`) and the data having a compulsory array having Y coordinate values for the points and an optional array having X coordinate values(`data`) and the label of the plot(`label`).  
   
-If only one array is given to the line plot as the data then the X coordinate values are calculated as 0,1,2...number of Y values. This is similar to the Area plot.  
+If only one array is given to the line plot as the data then the X coordinate values are calculated as 0,1,2...(number of Y - 1) values. This is similar to the Area plot.  
 The **draw** function calls the **draw_lines** backend function to create the lines:
 ```ruby
 def draw
