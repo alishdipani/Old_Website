@@ -11,12 +11,13 @@ tags:
  - SciRuby
  - Rubyplot
 ---
-This blog is a guide for Developer installation of Rubyplot and testing including both GR and ImageMagick backends.  
-  
-# Table of Contents
+**Table of Contents**
 * TOC
 {:toc}
-  
+
+# Introduction
+This blog is a guide for Developer installation of Rubyplot and testing including both GR and ImageMagick backends.  
+
 # Installation
 P.S.- Make sure you have installed Ruby and have updated it to the latest version.  
   
