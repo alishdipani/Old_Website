@@ -10,13 +10,14 @@ tags:
  - Ruby
  - SciRuby
  - Rubyplot
----
-This blog lists down the simple plots in Rubyplot with ImageMagick as backend and highlights the work done in Week 3 and 4 for GSoC 2019.  
-P.S. - The version of Rubyplot used in this blog is dated 28th June.  
-  
+--- 
 **Table of Contents**
 * TOC
 {:toc}
+
+# Introduction
+This blog lists down the simple plots in Rubyplot with ImageMagick as backend and highlights the work done in Week 3 and 4 for GSoC 2019.  
+P.S. - The version of Rubyplot used in this blog is dated 28th June.  
 
 # Scatter plot
 An example of Scatter plot with code is:
