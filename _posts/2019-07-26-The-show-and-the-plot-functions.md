@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      The show and the plot function
+title:      The show and the plot functions
 date:       2019-07-26 21:32:18
 summary:    Multi plots in Rubyplot
 categories: GSoC2019
