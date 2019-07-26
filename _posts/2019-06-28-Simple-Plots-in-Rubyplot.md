@@ -416,6 +416,17 @@ end
 ```
 ![histogram](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/histogram.png)
 
+Histogram draws rectangles(bars) which represent the frequency of a label(i.e. an object, a range of numbers, etc.)  
+The inputs taken are the color of the bars(`color`), the label of the plot(`label`), width of the bars(`bar_width`), an array of numbers as the data(`x`), an optional number representing number of bins or an array of increasing numbers representing bins over which the frequency will be calculated(`bins`).  
+  
+So, bins can be set in three ways:
+1. If bins are not specified i.e. not given as an input then number of bins are set as number of unique numbers in the data, here in the example(assuming each number from 0 to 9 is present) the number of bins will be 10. The subdivisions(Integer) is calculated which is the difference maximum value and minimum value in data divided by the number of bins. So, here in the example subdivisions = (9-0)/10 = 0.9 = 0 (as subdivisions is an Integer).  
+Then the bins array is set as an array having numbers starting from the minimum value in the data added with subdivisions over and over again until the maximum value in the data and finally the largest unique number added with ubdivisions is appended to the bins array. So, the bins array is [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] and hence the bins are 0-1, 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9 and 9-10. The bins are inclusive of the starting number.
+2. If bins are given as the number of bins i.e. an Integer representing the number of bins then similarly to case 1, the bins are calculated.  
+3. If bins are given directly i.e. an array is given.  
+  
+After calculating the bins, the combined frequencies of the bins are calculated which are the heights of the bars for each bin. Hence, the `Rectangle` objects are drawn(as explained previously) with each bar representing a bin and the height representing the frequency of the bin.
+
 # Line plot
 An example of Line plot with code is:
 ```ruby
@@ -476,3 +487,4 @@ axes.y_title = "bar"
 @figure.write('boxplot.png')
 ```
 ![box plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/boxplot.png)
+
