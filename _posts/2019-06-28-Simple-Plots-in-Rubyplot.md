@@ -453,6 +453,11 @@ end
 ```
 ![errorbar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/errorbarplot.png)
 
+Error-bar plot draws a line plot for the data taken and draws lines for errors at the given points.  
+The inputs taken are two arrays for X coordinate values and Y coordinate values respectively(`data`), label of the plot(`label`), colour of the line and the error lines(`color`), an array for X error values(`xerr`) and an array for Y error values(`yerr`).  
+  
+The line and the errors are all `Line2D` objects which are explained previously. The coordinates for the error lines are calculated by adding and subtraicting the error to the coordinates i.e. suppose at the first point (1,1) the X error is 0.5 then the X error line will be between the points (0.5,1) and (0.5,1) and similarly the Y error is 0.6 then the Y error line is between the points (1,0.4) and (1,1.6).
+
 # Box plot
 An example of Box plot with code is:
 ```ruby
