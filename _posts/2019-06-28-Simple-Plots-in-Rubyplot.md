@@ -119,7 +119,7 @@ axes.title = "Area plot"
 ![area plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/areaplot.png)
   
 The area plot draws a line passing through the points given as the input and colours the area covered under this line.  
-The inputs taken are the data as a compulsory array containing Y coordinate values of the points and an optional array containing X coordinate values of the points(`data`) and the color of the plot(`color`).  
+The inputs taken are the data as a compulsory array containing Y coordinate values of the points and an optional array containing X coordinate values of the points(`data`), the label of the plot(`label`) and the color of the plot(`color`).  
   
 If only one set of values is given to the area plot as the data, for example only [30, 36, 86, 39, 27, 31, 79, 88] is given then this set is considered as a set of Y coordinates of the points and X coordinates are set as 0, 1, 2 ... (size of y values - 1) i.e. the coordinates are (0, 30), (1, 36), (2, 86), (3, 39), (4, 27), (5, 31), (6, 79), (7, 88).  
   
@@ -167,7 +167,7 @@ axes.title = "Bar plot"
 ![bar plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/barplot.png)
   
 The bar plot draws bars which are rectangles with heights as the data given as the input.  
-Th inputs taken are the color of the bars(`color`), the data which is a single array for the sizes of the bars representing the Y values of the bars(`data`) and the space between the bars as a ratio(`spacing_ratio`) i.e. the range is [0,1] where 0 represents no space between the bars and 1 represents maximu  space between the bars which is equivalent to the maximum space alloted to a bar i.e. (total X range / number of bars).  
+Th inputs taken are the color of the bars(`color`), the label of the plot(`label`), the data which is a single array for the sizes of the bars representing the Y values of the bars(`data`) and the space between the bars as a ratio(`spacing_ratio`) i.e. the range is [0,1] where 0 represents no space between the bars and 1 represents maximum space between the bars which is equivalent to the maximum space alloted to a bar i.e. (total X range / number of bars).  
 The X values for the coordinates are set as 0,1,...number of Y values i.e. in this example when the data is given as [5,12,9,6,7], the coordinates for the bars are (0,5), (1,12), (2,9), (3,6) and (4,7) respectively.  
   
 Now, the bars are rectangles which are stored in the `rectangles` array, the X and Y coordinates of lower left corner of these rectangles are stored in `abs_x_left` and `abs_y_left` respectively. The upper right corner coordinates are calculated by adding the width of the bar to the X coordinate of the lower left corner and seeting the Y coordinate to the height of the bar as set in the `data` by the user.  
@@ -249,7 +249,7 @@ axes.title = "simple bubble plot."
 ![bubble plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/bubbleplot.png)
 
 The bubble plot draws circles with the size and the coordinates as specified by the user.  
-The inputs taken are the data which consists of three arrays for X coordinates, Y coordinates and the sizes of the bubbles respectively(`data`) and the color of the bubbles(`color`).  
+The inputs taken are the data which consists of three arrays for X coordinates, Y coordinates and the sizes of the bubbles respectively(`data`), the label of the plot(`label`) and the color of the bubbles(`color`).  
   
 In this example the X,Y coordinates and sizes for the bubbles respectively are (-1, -35), size = 4.5; (19 21), size = 1.0; (-4, 23), size = 2.1; (-23, -4), size = 0.9. The **draw** function creates and draws the `Circle` objects for the bubbles:
 ```ruby
@@ -323,7 +323,7 @@ axes.title = "Simple candle stick plot."
 ![candlestick plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/candlestickplot.png)
 
 The candle-stick plot draws rectangles i.e. bars (candle) with a line (stick) passing through the center of the rectangles parallel to the Y axis.  
-The inputs taken are arrays for lower Y coordinate of the rectangles(`opens`) and upper Y coordinate of the rectangles(`closes`), arrays for lower Y coordinate of the lines(`lows`) and the upper Y coordinate of the lines(`highs`), the colour of the rectangles(`color`), width of the rectangles(`bar_width`) and the color of the border of the bars(`border_color`).  
+The inputs taken are arrays for lower Y coordinate of the rectangles(`opens`) and upper Y coordinate of the rectangles(`closes`), arrays for lower Y coordinate of the lines(`lows`) and the upper Y coordinate of the lines(`highs`), the colour of the rectangles(`color`), width of the rectangles(`bar_width`), the label of the plot(`label`) and the color of the border of the bars(`border_color`).  
   
 The X coordinates of the lower left corner of the bar and the line are stored in `x_left_candle` and `x_low_stick` respectively. The **draw** function calculates the remaining dimensions (similar to the Bar plot) of the lines and rectangles and creates and draws the `Line2D` and `Rectangle` objects for lines and rectangles respectively:
 ```ruby
@@ -350,8 +350,59 @@ def draw
 end
 ```
   
-The `x_left_candle` and `x_low_stick` are calculated using the multi_candle_stick code which will be explained in the next blog.
-
+The `x_left_candle` and `x_low_stick` are calculated using the multi_candle_stick code which will be explained in the next blog.  
+  
+The `Rectangle` object is explained previously. For, the line(stick), a `Line2D` object is created and drawn with default colour which is black. The `Line2D` object is a straight line between two points. The **draw** function for `Line2D` is:
+```ruby
+def draw
+  Rubyplot.backend.draw_lines(x: @x, y: @y,
+    width: @width, color: @color, opacity: @opacity, type: @type)
+end
+```
+This passes the properties of the line to the backend function **draw_lines**, which is:
+```ruby
+def draw_lines(x:, y:, width: 2.0, type: :default, color: :default, opacity: 1.0)
+  within_window do
+    y.each_with_index do |_, idx_y|
+      if idx_y < (y.length - 1)
+        x1 = transform_x(x: x[idx_y], abs: false)
+        y1 = transform_y(y: y[idx_y], abs: false)
+        x2 = transform_x(x: x[idx_y + 1], abs: false)
+        y2 = transform_y(y: y[idx_y + 1], abs: false)
+        LINE_TYPES[type].call(@draw, x1, y1, x2, y2, width, color, opacity)
+      end
+    end
+  end
+end
+```
+It iterates over the array of X values and Y values and draws straight lines between the consecutive points i.e. the current point and the point stored in the next index of the arrays. After transforming the points, based on the line type, the values are passed to a hash of lambdas(just like scatter plot markers) for drawinf the line. The hash is:
+```ruby
+LINE_TYPES = {
+  # Default type is solid
+  default: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+    draw.fill_opacity opacity
+    draw.stroke_width width
+    draw.fill Rubyplot::Color::COLOR_INDEX[color]
+    draw.line x1, y1, x2, y2
+  },
+  solid: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+    draw.fill_opacity opacity
+    draw.stroke_width width
+    draw.fill Rubyplot::Color::COLOR_INDEX[color]
+    draw.line x1, y1, x2, y2
+  },
+  dashed: ->(draw, x1, y1, x2, y2, width, color, opacity) {
+    raise NotImplementedError, 'This line has not yet been implemented'
+  }
+  # Rest of the code omitted due to space constraint
+}
+```
+Each of these lambdas take the properties of the lines and draw it.  
+  
+The line types available are solid, dashed, dotted, dashed_dotted, dash_2_dot, dash_3_dot, long_dash, long_short_dash, spaced_dash, spaced_dot, double_dot and triple dot. The default type of line is solid.  
+Till now, only solid line type is implemented for Magick backend, rest all will be implemented soon.  
+  
+Hence, the `Rectangle` and `Line2D` objects are drawn which are the candle and the stick respectively.
 
 # Histogram
 An example of Histogram with code is:
@@ -380,24 +431,12 @@ axes.title = "A line graph."
 ```
 ![line plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/lineplot.png)
 
-The Line plot draws a line between consecutive points specified by the user and thus draws a line passing though the points taken as input.  
+The Line plot draws a line between consecutive points specified by the user and thus draws a line passing through the points taken as input.  
 The input taken by the Line plot are type of the line(`line_type`), width of the line(`line_width`), the color of the line(`line_color`) and the data having a compulsory array having Y coordinate values for the points and an optional array having X coordinate values(`data`) and the label of the plot(`label`).  
   
 If only one array is given to the line plot as the data then the X coordinate values are calculated as 0,1,2...(number of Y - 1) values. This is similar to the Area plot.  
-The **draw** function calls the **draw_lines** backend function to create the lines:
-```ruby
-def draw
-  Rubyplot.backend.draw_lines(
-    x: @data[:x_values],
-    y: @data[:y_values],
-    width: @line_width,
-    type: @line_type,
-    color: @line_color
-  )
-end
-```
 
-
+The **draw** function calls the **draw_lines** backend function to create the lines, which is as explained before and hence the Line plot is drawn.
 
 # Error-bar plot
 An example of Error-bar plot with code is:
