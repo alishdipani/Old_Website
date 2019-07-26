@@ -488,3 +488,4 @@ axes.y_title = "bar"
 ```
 ![box plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/boxplot.png)
 
+
