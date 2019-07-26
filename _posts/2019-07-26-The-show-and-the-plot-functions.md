@@ -11,7 +11,7 @@ tags:
  - SciRuby
  - Rubyplot
 ---
-# Table of Contents
+**Table of Contents**
 * TOC
 {:toc}
 
