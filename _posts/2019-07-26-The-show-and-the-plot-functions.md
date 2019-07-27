@@ -172,3 +172,49 @@ Similar to teh GR backend, depending on the output device, different inbuilt Ima
 Finally, the **flush** function is called and the memory is cleared.  
 
 # plot
+In the current state, Line and Scatter plots exist as two different kinds of plots. However, the crux of plotting both of these is exactly the same, the only difference being that in one kind of plot we have straight lines connected to co-ordinates while in the other the co-ordinates are simply 'decorated'. Thus can be many combinations of these plots, which can be combined together under a single 'plot' interface.  
+  
+So, to combine these plots, the **plot** function is created which is considered a `BasicPlot` in Rubyplot. It is called just like the other plots i.e. scatter plot, line plot, etc. The plot function can draw both scatter plot and line plot even simultaneously.  
+  
+The inputs taken are the label of the plot(`label`), the optional type, size, fill colour and border colour of the marker(`marker_type`, `marker_size`, `marker_fill_color`, `marker_border_color` respectively), the optional type, colour, width, opacity of the line(`line_type`, `line_color`, `line_width`, `line_opacity` respectively), and the `fmt` argument which specifies the colour, line type and marker type in short.  
+  
+## fmt argument
+Inspired by matplotlib, the fmt argument is a string of characters representing the colours in the plot, the type of the marker and the line. The characters for colour are:  
+  
+| characters    | colour    |
+| ------------- |:-------------:|
+| b | blue |  
+| g | green |  
+| r | red |  
+| c | cyan |  
+| m | magenta |  
+| y | yellow |  
+| k | black |  
+| w | white |
+  
+The characters for marker types are:  
+  
+| characters    | marker type    |
+| ------------- |:-------------:|
+| . | blue |  
+| , | green |  
+| o | red |  
+| v | cyan |  
+| ^ | magenta |  
+| < | yellow |  
+| > | black |  
+| 1 | white |
+| 2 | blue |  
+| 3 | green |  
+| 4 | red |  
+| s | cyan |  
+| p | magenta |  
+| * | yellow |  
+| h | black |  
+| H | white |
+| + | blue |  
+| x | green |  
+| D | red |  
+| d | cyan |  
+| \| | magenta |  
+| _ | yellow |  
