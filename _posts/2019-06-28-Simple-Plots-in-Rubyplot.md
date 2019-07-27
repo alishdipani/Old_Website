@@ -489,4 +489,5 @@ axes.y_title = "bar"
 ```
 ![box plot](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/Simple_Plots_in_Rubyplot/boxplot.png)
 
+The box plot will be explained in the next blog in the multi box plot section.
 
