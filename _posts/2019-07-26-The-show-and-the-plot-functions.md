@@ -179,7 +179,8 @@ So, to combine these plots, the **plot** function is created which is considered
 The inputs taken are the label of the plot(`label`), the optional type, size, fill colour and border colour of the marker(`marker_type`, `marker_size`, `marker_fill_color`, `marker_border_color` respectively), the optional type, colour, width, opacity of the line(`line_type`, `line_color`, `line_width`, `line_opacity` respectively), and the `fmt` argument which specifies the colour, line type and marker type in short.  
   
 ## fmt argument
-Inspired by matplotlib, the fmt argument is a string of characters representing the colours in the plot, the type of the marker and the line. The characters for colour are:  
+Inspired by matplotlib, the fmt argument is a string of characters representing the colours in the plot, the type of the marker and the line.  
+The characters for colour are:  
   
 | characters    | colour    |
 | ------------- |:-------------:|
@@ -218,3 +219,122 @@ The characters for marker types are:
 | d | diamond |  
 | \| | vline |  
 | _ | hline |  
+
+The characters for line types are:  
+  
+| characters    | line type    |
+| ------------- |:-------------:|
+| -- | dashed |  
+| -. | dashed_dotted |  
+| - | solid |  
+| : | dotted |  
+  
+The fmt argument detects the characters and sets the corresponding variables, possibly overwriting them. The characters can be in any order. The colour of the fmt sets every colour to the given input i.e. the marker fill colour, marker border colour and the line colour.  
+To set the variables, a hash having characters as keys and symbol as the value is iterated over the keys checking that the character is present in the string or not. The code for taking fmt argument as an input is:
+```ruby
+COLOR_TYPES_FMT = {
+  'b' => :blue,
+  'g' => :green,
+  'r' => :red,
+  'c' => :cyan,
+  'm' => :magenta,
+  'y' => :yellow,
+  'k' => :black,
+  'w' => :white
+}.freeze
+
+MARKER_TYPES_FMT = {
+  '.' => :dot,
+  ',' => :omark,
+  'o' => :circle,
+  'v' => :traingle_down,
+  '^' => :traingle_up,
+  '<' => :solid_tri_left,
+  '>' => :solid_tri_right,
+  '1' => :solid_triangle_down,
+  '2' => :solid_triangle_up,
+  '3' => :solid_tri_left,
+  '4' => :solid_tri_right,
+  's' => :square,
+  'p' => :pentagon,
+  '*' => :star,
+  'h' => :hexagon,
+  'H' => :heptagon,
+  '+' => :plus,
+  'x' => :diagonal_cross,
+  'D' => :solid_diamond,
+  'd' => :diamond,
+  '|' => :vline,
+  '_' => :hline
+}.freeze
+
+LINE_TYPES_FMT ={
+  '--' => :dashed,
+  '-.' => :dashed_dotted,
+  '-' => :solid,
+  ':' => :dotted
+}.freeze
+
+def fmt=(fmt)
+  unless fmt.is_a? String
+    raise TypeError, 'fmt argument takes a String input'
+  end
+
+  COLOR_TYPES_FMT.each do |symbol, color|
+    if fmt.include? symbol
+      @marker_fill_color = color
+      @marker_border_color = color
+      @line_color = color
+      break
+    end
+  end
+
+  LINE_TYPES_FMT.each do |symbol, line_type|
+    if fmt.include? symbol
+      @line_type = line_type
+      break
+    end
+  end
+
+  MARKER_TYPES_FMT.each do |symbol, marker_type|
+    if fmt.include? symbol
+      @marker_type = marker_type
+      break
+    end
+  end
+end
+```
+First the type of the fmt argument is checked, then the hashes are iterated over for colour, marker type and line type. As soon as a character is matched, the iteration stops. The symbols in line type hash are stored in priority of detection i.e. `--` and `-.` are checked before `-` so that `-.` and `--` are not mistaken for `-`.
+  
+After setting all the properties of the plot, the **draw** function is called.  
+  
+## draw
+The draw function is:
+```ruby
+def draw
+  # Default marker fill color
+  @marker_fill_color = :default if @marker_fill_color.nil?
+  # defualt type of plot is solid line
+  @line_type = :solid if @line_type.nil? && @marker_type.nil?
+  Rubyplot::Artist::Line2D.new(
+    self,
+    x: @data[:x_values],
+    y: @data[:y_values],
+    type: @line_type,
+    # type: line_style[1].to_sym,
+    color: @line_color,
+    opacity: @line_opacity,
+    width: @line_width
+  ).draw if @line_type
+  Rubyplot.backend.draw_markers(
+    x: @data[:x_values],
+    y: @data[:y_values],
+    type: @marker_type,
+    fill_color: @marker_fill_color,
+    border_color: @marker_border_color,
+    size: [@marker_size] * @data[:x_values].size
+  ) if @marker_type
+end
+```
+First the marker fill colour is set to default if it is not specified by the user, then if none of the marker type or line type is specified then the line type is set to solid and marker type is `nil` i.e. the default plot type is solid line.  
+Finally, if the line type is given then a `Line2D` object is created and drawn and if the marker type is given then the **draw_markers** backend function is called to draw the markers.
