@@ -337,4 +337,57 @@ def draw
 end
 ```
 First the marker fill colour is set to default if it is not specified by the user, then if none of the marker type or line type is specified then the line type is set to solid and marker type is `nil` i.e. the default plot type is solid line.  
-Finally, if the line type is given then a `Line2D` object is created and drawn and if the marker type is given then the **draw_markers** backend function is called to draw the markers.
+Finally, if the line type is given then a `Line2D` object is created and drawn and if the marker type is given then the **draw_markers** backend function is called to draw the markers.  
+  
+Some examples of the plot function are given below.  
+  
+## Examples
+### 1
+```ruby
+@figure = Rubyplot::Figure.new(height: 40, width: 40, figsize_unit: :cm)
+axes = @figure.add_subplot! 0,0
+axes.plot! do |p|
+  p.marker_type = :plus
+  p.line_type = :solid
+  d = (0..360).step(5).to_a
+  p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+end
+axes.title = "Simple sine wave plot."
+@figure.write('plot1.png')
+```
+Backend: Magick  
+
+![plot1](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/The_show_and_the_plot_functions/plot1.png)
+
+### 2
+```ruby
+@figure = Rubyplot::Figure.new(height: 40, width: 40, figsize_unit: :cm)
+axes = @figure.add_subplot! 0,0
+axes.plot! do |p|
+  p.line_type = :solid
+  p.fmt = 'y-.'
+  d = (0..360).step(5).to_a
+  p.data d, d.map { |a| Math.sin(a * Math::PI / 180) }
+end
+axes.title = "Simple sine wave plot."
+@figure.write('plot2.png')
+```
+Backend: GR  
+Here, the fmt argument sets the colour and overwrites the line type.  
+
+![plot2](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/The_show_and_the_plot_functions/plot2.png)
+  
+### 3
+```ruby
+@figure = Rubyplot::Figure.new(height: 80, width: 80)
+axes = @figure.add_subplot! 0,0
+axes.plot! do |p|
+  p.fmt = 'rD'
+  p.data (0..150).to_a, (-100..50).to_a
+end
+axes.title = "simple plot with dots."
+@figure.write('plot3.png')
+```
+Backend: Magick  
+
+![plot3](https://raw.githubusercontent.com/alishdipani/alishdipani.github.io/master/_posts/Resources/The_show_and_the_plot_functions/plot3.png)
