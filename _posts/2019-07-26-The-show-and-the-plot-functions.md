@@ -196,25 +196,25 @@ The characters for marker types are:
   
 | characters    | marker type    |
 | ------------- |:-------------:|
-| . | blue |  
-| , | green |  
-| o | red |  
-| v | cyan |  
-| ^ | magenta |  
-| < | yellow |  
-| > | black |  
-| 1 | white |
-| 2 | blue |  
-| 3 | green |  
-| 4 | red |  
-| s | cyan |  
-| p | magenta |  
-| * | yellow |  
-| h | black |  
-| H | white |
-| + | blue |  
-| x | green |  
-| D | red |  
-| d | cyan |  
-| \| | magenta |  
-| _ | yellow |  
+| . | dot |  
+| , | omark |  
+| o | circle |  
+| v | traingle_down |  
+| ^ | traingle_up |  
+| < | solid_tri_left |  
+| > | solid_tri_right |  
+| 1 | solid_triangle_down |
+| 2 | solid_triangle_up |  
+| 3 | solid_tri_left |  
+| 4 | solid_tri_right |  
+| s | square |  
+| p | pentagon |  
+| * | star |  
+| h | hexagon |  
+| H | heptagon |
+| + | plus |  
+| x | diagonal_cross |  
+| D | solid_diamond |  
+| d | diamond |  
+| \| | vline |  
+| _ | hline |  
