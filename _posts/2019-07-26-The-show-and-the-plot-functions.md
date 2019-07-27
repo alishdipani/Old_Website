@@ -54,6 +54,121 @@ The `device` argument and backend variable(`output_device`) represent the device
 2. `:file` which represents a file on which the Figure will be saved for the **write** function.  
   
 ## Backend functions
+The important backend functions which needed to be updated for **show** function are **init_output_device**, **show** and **stop_output_device**. These functions are explained below:  
+  
+### init_output_device
+This function is used to initialize the Figure and it's properties, for each backend, the functions are:  
+#### GR
+The function is:
+```ruby
+def init_output_device file_name, device: :file
+  @file_name = file_name
+  @output_device = device
+  Rubyplot::GR.clearws
 
+  Rubyplot::GR.beginprint(@file_name) if @output_device == :file
+end
+```
+The file name and the output device are stored and then the work space i.e. the Figure or the Canvas is cleared and finally the printing (i.e. writing) is started if the device is `:file` i.e. when the **write** function is called.  
+  
+#### Magick
+The function is:
+```ruby
+def init_output_device file_name = nil, device: :file
+  @canvas_width, @canvas_height = scale_figure(@canvas_width, @canvas_height)
+  @draw = Magick::Draw.new
+  @axes = Magick::Draw.new
+  @text = Magick::Draw.new
+  if @base_image.nil?
+    top_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][0]]
+    bottom_color = Rubyplot::Color::COLOR_INDEX[@figure.theme_options[:background_colors][1]]
+    direction = @figure.theme_options[:background_direction]
+
+    @base_image = render_gradient top_color, bottom_color, @canvas_width, @canvas_height, direction
+  else
+    @base_image.erase!
+  end
+  @output_device = device
+  @file_name = file_name if @output_device == :file
+end
+```
+For consistency between the backends, the **setip_background_graient** function was merged into this function.  
+So, first the Figure dimensions are scaled according to the unit of the dimensions. Then the `Magick::Draw` objects are initialized for drawing. Then, if the `base_image` is already not initialized, it is created by calling the **render_gradient**, otherwise it is just cleared. Finally, the output device is stored and file name is stored if the device is `:file`i.e. when the **write** function is called.  
+  
+### write and show
+Both these functions have the same task to draw everything on the Figure and hence they are similar:  
+#### GR
+```ruby
+def write
+  draw
+end
+
+def show
+  draw
+end
+
+def draw
+  draw_axes
+end
+```
+For GR backend, these functions only draw the X and the Y axes y calling the **draw** function which calls the **draw_axes** function. The remaining drawing will be done later.  
+
+#### Magick
+```ruby
+def write
+  @draw.draw(@base_image)
+  @text.draw(@base_image)
+  draw_axes
+end
+
+def show
+  @draw.draw(@base_image)
+  @text.draw(@base_image)
+  draw_axes
+end
+```
+For Magick backend, first the plot is drawn, then the text and finally the X and the Y axes.  
+  
+### stop_output_device
+This function is used to finish the drawing and clear the memory.  
+#### GR
+```ruby
+def stop_output_device
+  case @output_device
+  when :file
+    Rubyplot::GR.endprint
+  when :window
+    Rubyplot::GR.updatews
+  end
+  flush
+end
+
+def flush
+  @axes_map = {}
+  @file_name = nil
+end
+```
+For GR backend, depending on the output device different functions are called to finish thedrawing. If **write** function was called i.e. output device is `:file` then `Rubyplot::GR.endprint` is called  to end the printing i.e. saving of the Figure. Otherwise, if the **show** function was called i.e. output device is `:window` the `Rubyplot::GR.updatews`(which calls the GR inbuilt function `updatews()`) is called which updates the workspace and opens a pop-up window to show the completed Figure.  
+Finally, the **flush** function is called which clears the memory.  
+#### Magick
+```ruby
+def stop_output_device
+  case @output_device
+  when :file
+    @base_image.write(@file_name)
+  when :window
+    @base_image.display
+  end
+  @canvas_width, @canvas_height = unscale_figure(@canvas_width, @canvas_height)
+  flush
+end
+
+def flush
+  @axes_map = {}
+  @file_name = nil
+end
+```
+Similar to teh GR backend, depending on the output device, different inbuilt ImageMagick functions are called. If **write** function was called i.e. the output device is `:file` then **write** inbuilt function is called which saves i.e. writes the Figure in a file. Otherwise, if the **show** function was called i.e. the output device is `:window` then **display** function is called which displays the completed Figure on a piop-up window.  
+Finally, the **flush** function is called and the memory is cleared.  
 
 # plot
