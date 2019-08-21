@@ -425,7 +425,8 @@ So, bins can be set in three ways:
 Then the bins array is set as an array having numbers starting from the minimum value in the data added with subdivisions over and over again until the maximum value in the data and finally the largest unique number added with ubdivisions is appended to the bins array. So, the bins array is [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] and hence the bins are 0-1, 1-2, 2-3, 3-4, 4-5, 5-6, 6-7, 7-8, 8-9 and 9-10. The bins are inclusive of the starting number.
 2. If bins are given as the number of bins i.e. an Integer representing the number of bins then similarly to case 1, the bins are calculated.  
 3. If bins are given directly i.e. an array is given.  
-  
+Example - [1,4,7,10] then the bins will be [1,4), [4,7), [7,10] i.e. the startig value is included and the ending value is excluded unless it's the end of values i.e. bins array.  
+
 After calculating the bins, the combined frequencies of the bins are calculated which are the heights of the bars for each bin. Hence, the `Rectangle` objects are drawn(as explained previously) with each bar representing a bin and the height representing the frequency of the bin.
 
 # Line plot
