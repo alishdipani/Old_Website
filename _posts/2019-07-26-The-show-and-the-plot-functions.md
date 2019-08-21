@@ -224,7 +224,7 @@ The characters for line types are:
   
 | characters    | line type    |
 | ------------- |:-------------:|
-| -- | dashed |  
+| --(two consecutive -) | dashed |  
 | -. | dashed_dotted |  
 | - | solid |  
 | : | dotted |  
