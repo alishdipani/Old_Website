@@ -14,3 +14,13 @@ tags:
 **Table of Contents**
 * TOC
 {:toc}
+
+# IRuby integration
+
+## What are IRuby notebooks?
+IRuby is a Ruby kernel for Jupyter project. Similar to IPython notebooks, it is a interactive computational environment where you can combine code execution, text, mathematics, plots and rich media into a single document. It can run on any browser.  
+An example is - 
+
+## Integration of Rubyplot with IRuby notebooks
+
+### inline plots
