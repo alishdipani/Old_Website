@@ -15,6 +15,9 @@ tags:
 * TOC
 {:toc}
 
+# Introduction
+This blog explains the integration of Rubyplot with IRuby notebooks and ticks in Rubyplot and highlights the work done during Week 9, 10, 11 and 12 for GSoC 2019.
+
 # IRuby integration
 
 ## What are IRuby notebooks?
@@ -24,3 +27,10 @@ An example is -
 ## Integration of Rubyplot with IRuby notebooks
 
 ### inline plots
+
+
+# Ticks
+
+## Major ticks
+
+## Minor ticks
