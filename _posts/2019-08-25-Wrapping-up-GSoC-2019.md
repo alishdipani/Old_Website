@@ -135,7 +135,7 @@ Finally, I created a tutorial for the library which also contains template codes
 # Resources(blogs, code, etc.)
 - Daily updates can be found [here](https://discourse.ruby-data.org/t/gsoc-2019-project-rubyplot-discussion/57)
 - Proposal can be found [here](https://github.com/alishdipani/rubyplot/wiki/GSoC-2019-Proposal)
-- Tutorial notebook can be found [here](https://github.com/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial(Magick).ipynb) and can be viewed online [here](https://nbviewer.jupyter.org/github/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial(Magick).ipynb)
+- Tutorial notebook can be found [here](https://github.com/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial(Magick).ipynb) and can be viewed online(rendered) [here](https://nbviewer.jupyter.org/github/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial%28Magick%29.ipynb)
 - Rubyplot Github Repository can be found [here](https://github.com/SciRuby/rubyplot)
 - All my work can be found in these PRs: [PR#45](https://github.com/SciRuby/rubyplot/pull/45) and [PR#52](https://github.com/SciRuby/rubyplot/pull/52)
 - Other blogs can be found here:
