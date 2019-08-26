@@ -122,17 +122,44 @@ During Phase 1, I focused on setting up the ImageMagick backend which involved t
 After this, I worked on the scatter plot, which was the first plot I ever worked on. This plot had a very particular and interesting problem, which was that different types of markers were internally implemented in the GR backend, but for ImageMagick backend, I had to implement everything using basic shapes like circles, lines, polygons and rectangles. To solve this I created a hash of lambdas which had the code to create different types of markers using the basic shapes.  
 After this I implemented all the simple plots which Rubyplot supports, these are line plot, area plot, bar plot, histogram, box plot, bubble plot, candle-stick plot and error-bar plot.  
   
+So, during Phase 1, I completed the following deliverables -  
+1. Set up the ImageMagick backend to have the basic functionality.  
+2. Implemented and tested the simple plots in Rubyplot which are scatter plot, line plot, area plot, bar plot, histogram, box plot, bubble plot, candle-stick plot and error-bar plot.  
+  
+Code for Phase 1 can be found [here](https://github.com/SciRuby/rubyplot/pull/45/files/01a26777175c83e3e44a33d5ac5d6544b8ff9353..95f24730e04eb13460ed088dcf7569848b66a2ea).  
+  
 ## Phase 2
 I started Phase 2 by implementing the multi plots which are multi stack-bar plot, multi-bar plot, multi-box plot and multi candle-stick plot.  
 Next, I implemented the `plot` function which is a combination of scatter plot and line plot, using the plot function the user can easily create a scatter plot or a line plot or a combination of both. The most interesting feature of the `plot` function is the `fmt` argument which sets the marker type, line type and the colour of the plot using just characters, so instead of writing the name of the type and setting the variables, the user can simply input a string in `fmt` argument which has the characters for corresponding marker type, line type and colour.  
 Next was to implement the `show` function which is an alternative to `write` function. It draws the Figure and shows it on a temporary pop-up window without the need of saving the Figure on the device, this allows the user to test the code quickly and easily. This was done by using internal functions of the backends which are `display` for ImageMagick and `gr_updatews` for GR.  
+  
+So, during Phase 2, I completed the following deliverables -  
+1. Implemented and tested the multi plots in Rubyplot which are multi stack-bar plot, multi-bar plot, multi-box plot and multi candle-stick plot.  
+2. Implemented and tested the `plot` function with fmt argument.  
+3. Implemented and tested the `show` function.  
+  
+Code for Phase 2 can be found [here](https://github.com/SciRuby/rubyplot/pull/45/files/36497cc3fdb6b9eddaee51777509d1f388a8ba4a..f918e9c9f390cfa96e453f3db610eeaa8f3acbed) and [here](https://github.com/SciRuby/rubyplot/pull/52/files/21d2450229ce8508f8a906914fd4bf47e1c62fa3..5947c911d290f34a09effca5ce3e866519b8c5db).
   
 ## Phase 3
 During Phase 3, I integrated Rubyplot with the IRuby notebooks which allow the user to draw figures inside the notebook just by using the `show` function, through this integration the user can quickly and easily test the code step by step before running the whole codebase.  
 I also implemented ticks for ImageMagick backend.  
 Finally, I created a tutorial for the library which also contains template codes for all the plots which a user can easily get familiar with the working of the library and start using it.  
   
+So, during Phase 3, I completed the following deliverables -  
+1. Integrated Rubyplot with IRuby notebooks with the support for inline plotting.  
+2. Implemented and tested ticks for Magick backend.  
+3. Created the tutorial for Rubyplot.  
+  
+Code for Phase 3 can be found [here](https://github.com/SciRuby/rubyplot/pull/52/files/ca2aa7397581eaf92b64522361e3565f032e6250..3624962d8f96e3611c6bbc55a5c2c8aa1a299e27).
+  
 # Resources(blogs, code, etc.)
+  
+## Previous Work
+- GSoC 2018 project GRRuby by Pranav Garg can be found [here](https://github.com/pgtgrly/GRruby-extension)
+- GSoC 2018 project Ruby Matplotlib by Arafat Dad Khan can be found [here](https://github.com/Arafatk/magick-rubyplot)
+- A talk on Rubyplot by Pranav Garg in RubyConf 2018 can be found [here](https://youtu.be/7QBkckZ1aNQ)
+  
+## My work
 - Daily updates can be found [here](https://discourse.ruby-data.org/t/gsoc-2019-project-rubyplot-discussion/57)
 - Proposal can be found [here](https://github.com/alishdipani/rubyplot/wiki/GSoC-2019-Proposal)
 - Tutorial notebook can be found [here](https://github.com/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial(Magick).ipynb) and can be viewed online(rendered) [here](https://nbviewer.jupyter.org/github/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial%28Magick%29.ipynb)
