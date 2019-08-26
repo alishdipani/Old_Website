@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      Wrapping up GSoC-2019
+title:      Wrapping up GSoC 2019
 date:       2019-08-22 21:32:18
 summary:    the final blog.
 categories: GSoC2019
