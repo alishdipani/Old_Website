@@ -132,6 +132,21 @@ During Phase 3, I integrated Rubyplot with the IRuby notebooks which allow the u
 I also implemented ticks for ImageMagick backend.  
 Finally, I created a tutorial for the library which also contains template codes for all the plots which a user can easily get familiar with the working of the library and start using it.  
   
+# Resources(blogs, code, etc.)
+- Daily updates can be found [here]()
+- Proposal can be found [here]()
+- Tutorial notebook can be found [here]() and can be viewed online [here]()
+- Rubyplot Github Repository can be found [here]()
+- All my work can be found in these PRs: [PR#45](https://github.com/SciRuby/rubyplot/pull/45) and [PR#52](https://github.com/SciRuby/rubyplot/pull/52)
+- Other blogs can be found here:
+  1. [GSoC 2019 project introduction](https://alishdipani.github.io/gsoc2019/2019/06/08/GSoC-2019-project-introduction/)
+  2. [Rubyplot installation guide](https://alishdipani.github.io/gsoc2019/2019/06/09/Rubyplot-installation-guide/)
+  3. [The Scatter plot example](https://alishdipani.github.io/gsoc2019/2019/06/10/The-Scatter-plot-example/)
+  4. [Simple Plots in Rubyplot](https://alishdipani.github.io/gsoc2019/2019/06/28/Simple-Plots-in-Rubyplot/)
+  5. [Multi plots in Rubyplot](https://alishdipani.github.io/gsoc2019/2019/07/13/Multi-plots-in-Rubyplot/)
+  6. [The show and the plot functions](https://alishdipani.github.io/gsoc2019/2019/07/26/The-show-and-the-plot-functions/)
+  7. [IRuby integration and ticks](https://alishdipani.github.io/gsoc2019/2019/08/22/IRuby-integration-and-ticks/)
+  
 # Future Work
 I plan to keep contributing to Rubyplot and also start contributing to other projects of SciRuby.  
 Future work to be done for Rubyplot is to write documentation, add more tests, add more types of plots, add more backends, make the plots interactive and in future add the feature for plotting 3-Dimensional graphs which would also be interactive.  
