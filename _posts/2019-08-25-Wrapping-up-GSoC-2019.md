@@ -133,10 +133,10 @@ I also implemented ticks for ImageMagick backend.
 Finally, I created a tutorial for the library which also contains template codes for all the plots which a user can easily get familiar with the working of the library and start using it.  
   
 # Resources(blogs, code, etc.)
-- Daily updates can be found [here]()
-- Proposal can be found [here]()
-- Tutorial notebook can be found [here]() and can be viewed online [here]()
-- Rubyplot Github Repository can be found [here]()
+- Daily updates can be found [here](https://discourse.ruby-data.org/t/gsoc-2019-project-rubyplot-discussion/57)
+- Proposal can be found [here](https://github.com/alishdipani/rubyplot/wiki/GSoC-2019-Proposal)
+- Tutorial notebook can be found [here](https://github.com/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial(Magick).ipynb) and can be viewed online [here](https://nbviewer.jupyter.org/github/alishdipani/rubyplot/blob/master/tutorial/magick/Rubyplot_Tutorial(Magick).ipynb)
+- Rubyplot Github Repository can be found [here](https://github.com/SciRuby/rubyplot)
 - All my work can be found in these PRs: [PR#45](https://github.com/SciRuby/rubyplot/pull/45) and [PR#52](https://github.com/SciRuby/rubyplot/pull/52)
 - Other blogs can be found here:
   1. [GSoC 2019 project introduction](https://alishdipani.github.io/gsoc2019/2019/06/08/GSoC-2019-project-introduction/)
